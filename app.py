@@ -49,8 +49,8 @@ for key, val in defaults.items():
 # --- 開始探索按鈕 ---
 if not st.session_state.show_module_one:
     if st.button("🚀 開始探索我的傳承藍圖"):
-            st.session_state.show_module_one = True
-            st.rerun()
+        st.session_state.show_module_one = True
+        st.rerun()
     st.stop()
 
 # --- 模組一 ---
@@ -60,11 +60,9 @@ if st.session_state.show_module_one and not st.session_state.submitted:
     st.markdown("我們陪您一起梳理這段歷程，為後人留下的不只是成果，更是一種精神。")
 
     if not st.session_state.started:
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            if st.button("開始進入模組一"):
-                st.session_state.started = True
-                st.rerun()
+        if st.button("開始進入模組一"):
+            st.session_state.started = True
+            st.rerun()
 
     if st.session_state.started:
         st.markdown("### 最近，您常想些什麼？")
@@ -81,13 +79,11 @@ if st.session_state.show_module_one and not st.session_state.submitted:
             ]
         )
         custom_input = st.text_area("還有什麼最近常出現在您心裡的？（可以不填）")
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            if st.button("繼續"):
-                st.session_state.options = options
-                st.session_state.custom_input = custom_input
-                st.session_state.submitted = True
-                st.rerun()
+        if st.button("繼續"):
+            st.session_state.options = options
+            st.session_state.custom_input = custom_input
+            st.session_state.submitted = True
+            st.rerun()
 
 # --- 模組二 ---
 if st.session_state.submitted and not st.session_state.module_two_done:
@@ -101,13 +97,11 @@ if st.session_state.submitted and not st.session_state.module_two_done:
     key_issues = st.multiselect("哪一兩件對您來說最重要？", combined, max_selections=2)
     reason = st.text_area("為什麼這件事對您來說特別重要？")
 
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("完成這一段思考"):
-            st.session_state.key_issues = key_issues
-            st.session_state.reason = reason
-            st.session_state.module_two_done = True
-            st.rerun()
+    if st.button("完成這一段思考"):
+        st.session_state.key_issues = key_issues
+        st.session_state.reason = reason
+        st.session_state.module_two_done = True
+        st.rerun()
 
 # --- 模組三 ---
 if st.session_state.module_two_done and not st.session_state.module_three_done:
@@ -126,13 +120,11 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
     )
     custom_dir = st.text_area("其他想補充的方向？（可以不填）")
 
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("完成方向探索"):
-            st.session_state.directions = direction_choices
-            st.session_state.custom_direction = custom_dir
-            st.session_state.module_three_done = True
-            st.rerun()
+    if st.button("完成方向探索"):
+        st.session_state.directions = direction_choices
+        st.session_state.custom_direction = custom_dir
+        st.session_state.module_three_done = True
+        st.rerun()
 
 # --- 模組四 ---
 if st.session_state.module_three_done and not st.session_state.module_four_done:
@@ -145,17 +137,16 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
         with st.expander(s["title"]):
             st.write(s["details"])
 
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("完成策略探索"):
-            st.session_state.module_four_done = True
-            st.rerun()
+    if st.button("完成策略探索"):
+        st.session_state.module_four_done = True
+        st.rerun()
 
 # --- 模組五：預約諮詢 ---
-st.markdown("---")
-st.markdown("## 模組五：預約諮詢")
+if st.session_state.module_four_done:
+    st.markdown("---")
+    st.markdown("## 模組五：預約諮詢")
 
-st.markdown("""
+    st.markdown("""
 看到這裡，代表您已經為未來邁出珍貴的一步。  
 或許腦海裡已經浮現了一些想做的安排、一些想問的事。  
 
@@ -163,7 +154,7 @@ st.markdown("""
 讓這些想法，有機會慢慢成真。
 """)
 
-st.markdown("""
+    st.markdown("""
 📩 或您也可以直接來信，我們會親自為您安排：  
 📌 永傳家族辦公室｜[https://gracefo.com/](https://gracefo.com/)  
 📧 Email｜[123@gracefo.com](mailto:123@gracefo.com)

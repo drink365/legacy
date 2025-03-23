@@ -8,7 +8,7 @@ st.set_page_config(
 )
 
 # --- 品牌 LOGO 顯示 ---
-st.image("logo.png", use_column_width=True)
+st.image("logo.png", width=300)
 
 # --- 傳承開場語 ---
 st.markdown("""

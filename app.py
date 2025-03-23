@@ -9,7 +9,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- 品牌 LOGO 顯示（置中 Base64） ---
+# --- LOGO 顯示 ---
 def load_logo_base64(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
@@ -22,7 +22,7 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# --- 傳承開場語 ---
+# --- 開場語 ---
 st.markdown("""
 <br>
 <div style='text-align: center; font-size: 20px; font-weight: bold;'>
@@ -46,18 +46,15 @@ for key, val in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
-# --- 探索起點按鈕 ---
+# --- 開始整理按鈕（小一點、置中）---
 if not st.session_state.show_module_one:
-    st.markdown("""
-    <div style='text-align: center;'>
-        <button onclick="window.location.reload()" style='padding: 0.4em 1em; font-size: 14px; border-radius: 6px; background-color: #4CAF50; color: white; border: none;'>開始整理</button>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("開始整理"):
-        st.session_state.show_module_one = True
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("開始整理"):
+            st.session_state.show_module_one = True
 
 # --- 模組一 ---
-if st.session_state.show_module_one:
+if st.session_state.show_module_one and not st.session_state.submitted:
     st.markdown("---")
     st.markdown("## 模組一：經營的是事業，留下的是故事")
     st.markdown("我們陪您一起梳理這段歷程，為後人留下的不只是成果，更是一種精神。")
@@ -66,10 +63,8 @@ if st.session_state.show_module_one:
         if st.button("開始進入模組一"):
             st.session_state.started = True
 
-    if st.session_state.started and not st.session_state.submitted:
-        st.markdown("---")
+    if st.session_state.started:
         st.markdown("### 最近，您常想些什麼？")
-
         options = st.multiselect(
             "您最近比較常想的是：",
             [
@@ -83,7 +78,6 @@ if st.session_state.show_module_one:
             ]
         )
         custom_input = st.text_area("還有什麼最近常出現在您心裡的？（可以不填）")
-
         if st.button("繼續"):
             st.session_state.options = options
             st.session_state.custom_input = custom_input
@@ -132,8 +126,8 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
 if st.session_state.module_three_done and not st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組四：行動策略，從這裡慢慢展開")
-    st.markdown("釐清了想法之後，這一步我們陪您看看有哪些小步驟可以開始安排，慢慢走、也走得穩。")
 
+    st.markdown("釐清了想法之後，這一步我們陪您看看有哪些小步驟可以開始安排，慢慢走、也走得穩。")
     strategies = get_strategy_suggestions()
     for s in strategies:
         with st.expander(s["title"]):
@@ -162,6 +156,3 @@ if st.session_state.module_four_done:
     <button style='padding: 0.6em 1.2em; font-size: 16px; border-radius: 6px; background-color: #4CAF50; color: white; border: none;'>預約諮詢</button>
 </a>
 """, unsafe_allow_html=True)
-    }
-  ]
-}

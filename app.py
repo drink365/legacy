@@ -16,25 +16,27 @@ if "next_step" not in st.session_state:
     st.session_state.next_step = False
 if "module_two_done" not in st.session_state:
     st.session_state.module_two_done = False
+if "module_three_done" not in st.session_state:
+    st.session_state.module_three_done = False
+if "module_four_done" not in st.session_state:
+    st.session_state.module_four_done = False
 
 # --- 品牌標題區 ---
 st.markdown("### 永傳")
 st.markdown("#### 傳承您的影響力")
 st.markdown("---")
 
-# --- 模組一 開場語 ---
+# --- 模組一：開場與思緒整理 ---
 st.markdown("## 模組一：經營的是事業，留下的是故事")
 st.markdown("""
 我們陪您一起梳理這段歷程，  
 為後人留下的不只是成果，更是一種精神。
 """)
 
-# --- 開始整理按鈕 ---
 if not st.session_state.started:
     if st.button("開始整理"):
         st.session_state.started = True
 
-# --- 模組一 互動區 ---
 if st.session_state.started and not st.session_state.submitted:
     st.markdown("---")
     st.markdown("### 最近，您常想些什麼？")
@@ -60,7 +62,7 @@ if st.session_state.started and not st.session_state.submitted:
         st.session_state.custom_input = custom_input
         st.session_state.submitted = True
 
-# --- 模組一 回饋 + 引導語 ---
+# --- 模組二：釐清優先順序 ---
 if st.session_state.submitted and not st.session_state.next_step:
     st.markdown("---")
     st.markdown("### 您正在思考的，是這些事：")
@@ -88,7 +90,7 @@ if st.session_state.submitted and not st.session_state.next_step:
     if st.button("我願意繼續"):
         st.session_state.next_step = True
 
-# --- 模組二：釐清最重要的事 ---
+# --- 模組二：使用者挑選最重要的事 ---
 if st.session_state.next_step and not st.session_state.module_two_done:
     st.markdown("---")
     st.markdown("## 模組二：釐清內心的優先順序")
@@ -99,7 +101,6 @@ if st.session_state.next_step and not st.session_state.module_two_done:
 只是陪您靜靜思考——那個您一直放在心裡的想法。
 """)
 
-    # --- 將模組一勾選 + 自填內容合併為選單 ---
     combined_options = list(st.session_state.options)
     if st.session_state.custom_input.strip():
         combined_options.append(st.session_state.custom_input.strip())
@@ -117,8 +118,8 @@ if st.session_state.next_step and not st.session_state.module_two_done:
         st.session_state.reason = reason
         st.session_state.module_two_done = True
 
-# --- 模組二回饋展示 ---
-if st.session_state.module_two_done:
+# --- 模組三：探索未來方向 ---
+if st.session_state.module_two_done and not st.session_state.module_three_done:
     st.markdown("---")
     st.markdown("### 您目前心中最重要的是：")
     if st.session_state.key_issues:
@@ -131,5 +132,85 @@ if st.session_state.module_two_done:
     st.markdown("""
 謝謝您和我們分享這些想法。  
 這是未來每一步規劃的起點。  
-我們會陪您，從這個起點開始，慢慢畫出清楚的藍圖。
+如果您願意，我們可以再往前走一步，看看有哪些方向可以開始準備。
+""")
+
+    if st.button("好，我想繼續看看"):
+        st.session_state.module_three_done = True
+
+if st.session_state.module_three_done and not st.session_state.module_four_done:
+    st.markdown("---")
+    st.markdown("## 模組三：從想法，到方向")
+
+    st.markdown("""
+剛剛那些思緒與感受，也許正帶著您指向某個方向。  
+現在，不如試著想一想：  
+您希望事情能朝什麼樣的未來發展？
+""")
+
+    direction_choices = st.multiselect(
+        "您希望事情未來可以朝哪些方向走？",
+        [
+            "希望有人能逐步接手，讓我放心退下來",
+            "希望我退休後，也能保有影響力與參與感",
+            "希望家人之間能建立共識與溝通模式",
+            "希望財務安排穩妥清楚，避免未來爭議",
+            "希望即使我不在，公司與資產仍能穩定運作",
+        ]
+    )
+
+    custom_direction = st.text_area("其他想補充的方向？（可以不填）")
+
+    if st.button("完成方向探索"):
+        st.session_state.directions = direction_choices
+        st.session_state.custom_direction = custom_direction
+        st.session_state.module_four_done = True
+
+# --- 模組四：策略建議 ---
+if st.session_state.module_four_done:
+    st.markdown("---")
+    st.markdown("## 模組四：行動策略，從這裡慢慢展開")
+
+    st.markdown("""
+釐清了想法之後，  
+接下來這一步，我們陪您一起看看，  
+針對您所在的位置與方向，  
+有哪些小步驟可以開始安排，慢慢走、也走得穩。
+""")
+
+    st.markdown("### 您可以考慮的策略方向：")
+
+    strategies = [
+        {
+            "title": "漸進式交棒：不急著退，也不獨撐全場",
+            "details": "設定過渡期角色，例如轉任董事長或顧問，讓二代慢慢承擔責任，同時保留您的影響力。這種方式能降低組織焦慮，也讓接班更自然。"
+        },
+        {
+            "title": "財務分層設計：保障、傳承、彈性三位一體",
+            "details": "將資產區分為『穩定保障用途』、『傳承安排用途』與『靈活運用用途』，透過保險與信託等工具，讓人生下半場更安心、後代更有秩序。"
+        },
+        {
+            "title": "建立家庭共識機制",
+            "details": "設計家庭會議流程、設定共同語言與期望，讓傳承不只是財產的交接，更是價值與理念的延續。可從簡單的每季共識對話開始。"
+        },
+        {
+            "title": "逐步規劃退休後的影響力角色",
+            "details": "您可以保留品牌形象、對外影響力，卻不需要管理日常營運。從公益參與、文化顧問、或基金會設立，都是讓智慧延續的好方式。"
+        },
+        {
+            "title": "預留法律與健康風險的防線",
+            "details": "為自己設立專屬的長照保障與法律照護權限設定（如財產信託與醫療代理人），避免未來措手不及，讓家人也安心。"
+        },
+    ]
+
+    for strategy in strategies:
+        with st.expander(strategy["title"]):
+            st.write(strategy["details"])
+
+    st.markdown("""
+---
+### 今天看到這裡，其實就很棒了。
+這些建議，您不需要一次做完，  
+只要慢慢開始想、開始選，  
+未來的藍圖，就會一點一滴清晰起來。
 """)

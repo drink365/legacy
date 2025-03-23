@@ -44,8 +44,7 @@ if "module_four_done" not in st.session_state:
     st.session_state.module_four_done = False
 
 # --- 品牌標題區 ---
-st.markdown("### 永傳")
-st.markdown("#### 傳承您的影響力")
+st.markdown("### 永傳：傳承您的影響力")
 st.markdown("---")
 
 # --- 模組一 ---

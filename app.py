@@ -1,4 +1,5 @@
 import streamlit as st
+import base64
 
 # --- 基本設定 ---
 st.set_page_config(
@@ -7,10 +8,16 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- 品牌 LOGO 顯示（置中） ---
-st.markdown("""
+# --- 品牌 LOGO 顯示（置中顯示圖片 Base64） ---
+def load_logo_base64(image_path):
+    with open(image_path, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+logo_base64 = load_logo_base64("logo.png")
+st.markdown(f"""
 <div style='text-align: center;'>
-    <img src='logo.png' width='300'>
+    <img src='data:image/png;base64,{logo_base64}' width='300'>
 </div>
 """, unsafe_allow_html=True)
 

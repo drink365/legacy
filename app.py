@@ -20,6 +20,8 @@ if "module_three_done" not in st.session_state:
     st.session_state.module_three_done = False
 if "module_four_done" not in st.session_state:
     st.session_state.module_four_done = False
+if "module_five_done" not in st.session_state:
+    st.session_state.module_five_done = False
 
 # --- 品牌標題區 ---
 st.markdown("### 永傳")
@@ -167,7 +169,7 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
         st.session_state.module_four_done = True
 
 # --- 模組四：策略建議 ---
-if st.session_state.module_four_done:
+if st.session_state.module_four_done and not st.session_state.module_five_done:
     st.markdown("---")
     st.markdown("## 模組四：行動策略，從這裡慢慢展開")
 
@@ -214,3 +216,30 @@ if st.session_state.module_four_done:
 只要慢慢開始想、開始選，  
 未來的藍圖，就會一點一滴清晰起來。
 """)
+
+    if st.button("我想預約諮詢"):
+        st.session_state.module_five_done = True
+
+# --- 模組五：預約諮詢 ---
+if st.session_state.module_five_done:
+    st.markdown("---")
+    st.markdown("## 模組五：預約諮詢")
+
+    st.markdown("""
+您已經為自己釐清了許多關鍵的思考，  
+如果您想讓這些想法進一步落實，  
+我們也很樂意陪您慢慢規劃下一步。
+
+---
+📌 永傳家族辦公室  
+💼 https://gracefo.com/  
+📧 123@gracefo.com
+
+點擊下方按鈕，即可發信與我們預約一對一諮詢。
+""")
+
+    st.markdown("""
+<a href="mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求。" target="_blank">
+    <button style='padding: 0.5em 1em; font-size: 16px; border-radius: 6px; background-color: #4CAF50; color: white; border: none;'>預約諮詢</button>
+</a>
+""", unsafe_allow_html=True)

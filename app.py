@@ -155,7 +155,7 @@ if st.session_state.module_four_done:
 """)
 
     st.markdown("""
-📩 或您也可以直接來信，我們會親自為您安排：  
+📩 您可以直接來信，我們會親自為您安排：  
 📌 永傳家族辦公室｜[https://gracefo.com/](https://gracefo.com/)  
 📧 Email｜[123@gracefo.com](mailto:123@gracefo.com)
 """)

@@ -86,6 +86,7 @@ if st.session_state.show_module_one and not st.session_state.submitted:
             st.rerun()
 
 # --- 模組二 ---
+st.markdown("\n🪴 模組一完成 ✔️")
 if st.session_state.submitted and not st.session_state.module_two_done:
     st.markdown("---")
     st.markdown("## 模組二：釐清內心的優先順序")
@@ -104,6 +105,7 @@ if st.session_state.submitted and not st.session_state.module_two_done:
         st.rerun()
 
 # --- 模組三 ---
+st.markdown("\n🪴 模組二完成 ✔️")
 if st.session_state.module_two_done and not st.session_state.module_three_done:
     st.markdown("---")
     st.markdown("## 模組三：從想法，到方向")
@@ -127,6 +129,7 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
         st.rerun()
 
 # --- 模組四 ---
+st.markdown("\n🪴 模組三完成 ✔️")
 if st.session_state.module_three_done and not st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組四：行動策略，從這裡慢慢展開")
@@ -142,9 +145,22 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
         st.rerun()
 
 # --- 模組五：預約諮詢 ---
+st.markdown("\n🪴 模組四完成 ✔️")
 if st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組五：預約諮詢")
+    st.markdown("""
+🌿 **寫給此刻的您：**
+
+也許您還不急著做決定，  
+但您已經做了最重要的一件事——開始思考。  
+
+未來也許還有許多挑戰，  
+但今天的您，已經替家族種下了信任與方向的種子。  
+
+慢慢走，走得遠。  
+未來不再只是擔心，而是從容。
+""")
 
     st.markdown("""
 看到這裡，代表您已經為未來邁出珍貴的一步。  
@@ -155,7 +171,10 @@ if st.session_state.module_four_done:
 """)
 
     st.markdown("""
-📩 您可以直接來信，我們會親自為您安排：  
+📩 如果您想更具體地展開行動，  
+我們誠摯邀請您預約 30 分鐘專屬對談。  
+這不是推銷，而是一場未來的開端。  
+
 📌 永傳家族辦公室｜[https://gracefo.com/](https://gracefo.com/)  
 📧 Email｜[123@gracefo.com](mailto:123@gracefo.com)
-""")
+""")""")

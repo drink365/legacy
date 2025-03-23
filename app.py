@@ -86,11 +86,10 @@ if st.session_state.show_module_one and not st.session_state.submitted:
             st.rerun()
 
 # --- 模組二 ---
-st.markdown("
-🪴 模組一完成 ✔️")
 if st.session_state.submitted and not st.session_state.module_two_done:
     st.markdown("---")
     st.markdown("## 模組二：釐清內心的優先順序")
+    st.markdown("🪴 模組一完成 ✔️")
 
     combined = list(st.session_state.options)
     if st.session_state.custom_input.strip():
@@ -106,11 +105,10 @@ if st.session_state.submitted and not st.session_state.module_two_done:
         st.rerun()
 
 # --- 模組三 ---
-st.markdown("
-🪴 模組二完成 ✔️")
 if st.session_state.module_two_done and not st.session_state.module_three_done:
     st.markdown("---")
     st.markdown("## 模組三：從想法，到方向")
+    st.markdown("🪴 模組二完成 ✔️")
 
     direction_choices = st.multiselect(
         "您希望事情未來可以朝哪些方向走？",
@@ -131,11 +129,10 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
         st.rerun()
 
 # --- 模組四 ---
-st.markdown("
-🪴 模組三完成 ✔️")
 if st.session_state.module_three_done and not st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組四：行動策略，從這裡慢慢展開")
+    st.markdown("🪴 模組三完成 ✔️")
 
     st.markdown("釐清了想法之後，這一步我們陪您看看有哪些小步驟可以開始安排，慢慢走、也走得穩。")
     strategies = get_strategy_suggestions()
@@ -148,11 +145,11 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
         st.rerun()
 
 # --- 模組五：預約諮詢 ---
-st.markdown("
-🪴 模組四完成 ✔️")
 if st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組五：預約諮詢")
+    st.markdown("🪴 模組四完成 ✔️")
+
     st.markdown("""
 🌿 **寫給此刻的您：**
 
@@ -167,18 +164,10 @@ if st.session_state.module_four_done:
 """)
 
     st.markdown("""
-看到這裡，代表您已經為未來邁出珍貴的一步。  
-或許腦海裡已經浮現了一些想做的安排、一些想問的事。  
-
-我們誠摯邀請您，與我們聊聊接下來的規劃，  
-讓這些想法，有機會慢慢成真。
-""")
-
-    st.markdown("""
 📩 如果您想更具體地展開行動，  
 我們誠摯邀請您預約 30 分鐘專屬對談。  
 這是一場未來的開端，一次為自己和家族的對話機會。  
 
 📌 永傳家族辦公室｜[https://gracefo.com/](https://gracefo.com/)  
 📧 Email｜[123@gracefo.com](mailto:123@gracefo.com)
-""")""")""")
+""")

@@ -24,7 +24,7 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# --- 傳承開場語（置中、加大加粗） ---
+# --- 傳承開場語 ---
 st.markdown("""
 <br>
 <div style='text-align: center; font-size: 20px; font-weight: bold; margin-top: 1em;'>
@@ -50,10 +50,7 @@ if "module_four_done" not in st.session_state:
 
 # --- 模組一 ---
 st.markdown("## 模組一：經營的是事業，留下的是故事")
-st.markdown("""
-我們陪您一起梳理這段歷程，  
-為後人留下的不只是成果，更是一種精神。
-""")
+st.markdown("我們陪您一起梳理這段歷程，為後人留下的不只是成果，更是一種精神。")
 
 if not st.session_state.started:
     if st.button("開始整理"):
@@ -62,7 +59,6 @@ if not st.session_state.started:
 if st.session_state.started and not st.session_state.submitted:
     st.markdown("---")
     st.markdown("### 最近，您常想些什麼？")
-    st.markdown("請隨意勾選下面幾個選項，也可以補充自己的想法。")
 
     options = st.multiselect(
         "您最近比較常想的是：",
@@ -95,19 +91,7 @@ if st.session_state.submitted and not st.session_state.next_step:
     if st.session_state.custom_input.strip():
         st.write(f"• {st.session_state.custom_input.strip()}")
 
-    st.markdown("""
-這些事，有的您已經想了很久，有的可能剛浮現。  
-沒關係，我們接下來會慢慢陪您，一步步釐清，您真正在意的，是什麼。
-""")
-
-    st.markdown("### 如果您願意，我們可以繼續往下看看")
-
-    st.markdown("""
-有時候，真正的關鍵，藏在一段話、或一個選擇背後的心念裡。  
-如果您願意，我們接下來可以慢慢梳理，  
-找出對您來說最重要的那幾件事，  
-一步步，把未來安排得更清楚、更穩當。
-""")
+    st.markdown("如果您願意，我們可以繼續往下看看")
 
     if st.button("我願意繼續"):
         st.session_state.next_step = True
@@ -116,18 +100,12 @@ if st.session_state.next_step and not st.session_state.module_two_done:
     st.markdown("---")
     st.markdown("## 模組二：釐清內心的優先順序")
 
-    st.markdown("""
-在許多重要的事之中，總有一兩件，對您來說有特別的份量。  
-我們不急著定義，也不急著安排，  
-只是陪您靜靜思考——那個您一直放在心裡的想法。
-""")
-
     combined_options = list(st.session_state.options)
     if st.session_state.custom_input.strip():
         combined_options.append(st.session_state.custom_input.strip())
 
     key_issues = st.multiselect(
-        "從您剛剛提到的事情中，哪一兩件對您來說最重要？",
+        "哪一兩件對您來說最重要？",
         combined_options,
         max_selections=2
     )
@@ -150,24 +128,12 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
         st.markdown("**您說，它之所以重要，是因為：**")
         st.write(f"「{st.session_state.reason.strip()}」")
 
-    st.markdown("""
-謝謝您和我們分享這些想法。  
-這是未來每一步規劃的起點。  
-如果您願意，我們可以再往前走一步，看看有哪些方向可以開始準備。
-""")
-
     if st.button("好，我想繼續看看"):
         st.session_state.module_three_done = True
 
 if st.session_state.module_three_done and not st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組三：從想法，到方向")
-
-    st.markdown("""
-剛剛那些思緒與感受，也許正帶著您指向某個方向。  
-現在，不如試著想一想：  
-您希望事情能朝什麼樣的未來發展？
-""")
 
     direction_choices = st.multiselect(
         "您希望事情未來可以朝哪些方向走？",
@@ -187,16 +153,31 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
         st.session_state.custom_direction = custom_direction
         st.session_state.module_four_done = True
 
-# --- 模組四 ---
+# --- 模組四＋模組五＋預約：整合條件顯示 ---
 if st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組四：行動策略，從這裡慢慢展開")
 
-# --- 模組五：自動預約引導 ---
-st.markdown("---")
-st.markdown("## 模組五：預約諮詢")
+    st.markdown("釐清了想法之後，這一步我們陪您看看有哪些小步驟可以開始安排，慢慢走、也走得穩。")
 
-st.markdown("""
+    strategies = get_strategy_suggestions()
+    for strategy in strategies:
+        with st.expander(strategy["title"]):
+            st.write(strategy["details"])
+
+    st.markdown("""
+---
+### 今天看到這裡，其實就很棒了。
+這些建議，您不需要一次做完，  
+只要慢慢開始想、開始選，  
+未來的藍圖，就會一點一滴清晰起來。
+""")
+
+    # --- 模組五：預約諮詢 ---
+    st.markdown("---")
+    st.markdown("## 模組五：預約諮詢")
+
+    st.markdown("""
 您已經為自己釐清了許多關鍵的思考，  
 如果您想讓這些想法進一步落實，  
 我們也很樂意陪您慢慢規劃下一步。
@@ -209,7 +190,7 @@ st.markdown("""
 點擊下方按鈕，即可發信與我們預約一對一諮詢。
 """)
 
-st.markdown("""
+    st.markdown("""
 <a href="mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求。" target="_blank">
     <button style='padding: 0.5em 1em; font-size: 16px; border-radius: 6px; background-color: #4CAF50; color: white; border: none;'>預約諮詢</button>
 </a>

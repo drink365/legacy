@@ -17,12 +17,14 @@ def load_logo_base64(image_path):
 logo_base64 = load_logo_base64("logo.png")
 st.markdown(f"""
 <div style='text-align: center;'>
-    <img src='data:image/png;base64,{logo_base64}' width='300'>
+    <img src='data:image/png;base64,{logo_base64}' width='300'><br>
+    <div style='font-size: 18px; font-weight: bold; margin-top: 0.5em;'>傳承您的影響力</div>
 </div>
 """, unsafe_allow_html=True)
 
 # --- 傳承開場語（置中、加大加粗） ---
 st.markdown("""
+<br>
 <div style='text-align: center; font-size: 20px; font-weight: bold; margin-top: 1em;'>
 🌱 每一位家族的掌舵者，都是家族傳承的種子。<br>
 我們陪您，讓這份影響力持續茁壯。
@@ -42,10 +44,6 @@ if "module_three_done" not in st.session_state:
     st.session_state.module_three_done = False
 if "module_four_done" not in st.session_state:
     st.session_state.module_four_done = False
-
-# --- 品牌標題區 ---
-st.markdown("### 永傳：傳承您的影響力")
-st.markdown("---")
 
 # --- 模組一 ---
 st.markdown("## 模組一：經營的是事業，留下的是故事")

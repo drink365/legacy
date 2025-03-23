@@ -41,36 +41,33 @@ defaults = {
     "module_three_done": False,
     "module_four_done": False,
     "show_module_one": False,
-    "launch_clicked": False
 }
 for key, val in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
-# --- 開始探索按鈕 ---
+# --- 開始探索按鈕（置中 + 動作）---
 if not st.session_state.show_module_one:
     st.markdown("""
-        <style>
-        div.stButton > button:first-child {
-            background-color: #1f7a8c;
-            color: white;
-            font-size: 20px;
-            padding: 0.75em 2em;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-        div.stButton > button:hover {
-            background-color: #105766;
-            color: white;
-        }
-        </style>
-        <div style='text-align: center;'>
+    <style>
+    div.stButton > button:first-child {
+        background-color: #1f7a8c;
+        color: white;
+        font-size: 20px;
+        padding: 0.75em 2em;
+        border-radius: 8px;
+        font-weight: bold;
+        display: block;
+        margin: 0 auto;
+    }
+    div.stButton > button:hover {
+        background-color: #105766;
+        color: white;
+    }
+    </style>
     """, unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1,2,1])
-    with col2:
-        if st.button("🚀 開始探索我的傳承藍圖"):
-            st.session_state.show_module_one = True
-    st.markdown("</div>", unsafe_allow_html=True)
+    if st.button("🚀 開始探索我的傳承藍圖"):
+        st.session_state.show_module_one = True
 
 # --- 模組一 ---
 if st.session_state.show_module_one and not st.session_state.submitted:

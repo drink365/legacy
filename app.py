@@ -12,6 +12,8 @@ if "started" not in st.session_state:
     st.session_state.started = False
 if "submitted" not in st.session_state:
     st.session_state.submitted = False
+if "next_step" not in st.session_state:
+    st.session_state.next_step = False
 
 # --- 品牌標題區 ---
 st.markdown("### 永傳")
@@ -59,8 +61,8 @@ if st.session_state.started and not st.session_state.submitted:
         st.session_state.custom_input = custom_input
         st.session_state.submitted = True
 
-# --- 回饋區 ---
-if st.session_state.submitted:
+# --- 回饋區 + 引導語 ---
+if st.session_state.submitted and not st.session_state.next_step:
     st.markdown("---")
     st.markdown("### 您正在思考的，是這些事：")
 
@@ -74,3 +76,22 @@ if st.session_state.submitted:
 這些事，有的您已經想了很久，有的可能剛浮現。  
 沒關係，我們接下來會慢慢陪您，一步步釐清，您真正在意的，是什麼。
 """)
+
+    # ✨ 新增下一步引導
+    st.markdown("### 如果您願意，我們可以繼續往下看看")
+
+    st.markdown("""
+有時候，真正的關鍵，藏在一段話、或一個選擇背後的心念裡。  
+如果您願意，我們接下來可以慢慢梳理，  
+找出對您來說最重要的那幾件事，  
+一步步，把未來安排得更清楚、更穩當。
+""")
+
+    if st.button("我願意繼續"):
+        st.session_state.next_step = True
+
+# --- 下一模組佔位（待開發） ---
+if st.session_state.next_step:
+    st.markdown("---")
+    st.markdown("### 模組二預備區（下一步功能開發中）")
+    st.info("這裡將設計更進一步的思緒釐清與人生規劃模組。敬請期待！")

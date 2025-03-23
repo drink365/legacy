@@ -46,12 +46,16 @@ for key, val in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
-# --- 開始整理按鈕（小一點、置中）---
-if not st.session_state.show_module_one:
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("開始整理"):
-            st.session_state.show_module_one = True
+# --- 開始整理按鈕（美化置中）---
+st.markdown("""
+<div style='text-align: center; margin-top: 30px;'>
+    <form action="">
+        <button style='padding: 10px 30px; font-size: 18px; border-radius: 8px; background-color: #4CAF50; color: white; border: none;'>🌱 開始探索我的傳承藍圖</button>
+    </form>
+</div>
+""", unsafe_allow_html=True)
+if st.button("🌱 開始探索我的傳承藍圖"):
+    st.session_state.show_module_one = True
 
 # --- 模組一 ---
 if st.session_state.show_module_one and not st.session_state.submitted:
@@ -142,17 +146,23 @@ if st.session_state.module_four_done:
     st.markdown("## 模組五：預約諮詢")
 
     st.markdown("""
-您已經為自己釐清了許多關鍵的思考，  
-如果您想讓這些想法進一步落實，  
-我們也很樂意陪您規劃下一步。
+看到這裡，代表您已經為未來邁出珍貴的一步。  
+或許腦海裡已經浮現了一些想做的安排、一些想問的事。  
 
-📌 永傳家族辦公室  
-💼 https://gracefo.com/  
-📧 123@gracefo.com
+我們誠摯邀請您，與我們聊聊接下來的規劃，  
+讓這些想法，有機會慢慢成真。
 """)
 
+    with st.form("consult_form"):
+        name = st.text_input("您的姓名")
+        email = st.text_input("聯絡信箱")
+        message = st.text_area("您想預約的主題或想了解的內容")
+
+        submitted = st.form_submit_button("提交預約申請")
+        if submitted:
+            st.success("感謝您，我們已收到您的預約申請，將儘快與您聯繫。")
+
     st.markdown("""
-<a href="mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求。" target="_blank">
-    <button style='padding: 0.6em 1.2em; font-size: 16px; border-radius: 6px; background-color: #4CAF50; color: white; border: none;'>預約諮詢</button>
-</a>
-""", unsafe_allow_html=True)
+📩 或您也可以直接來信，我們會親自為您安排：  
+[123@gracefo.com](mailto:123@gracefo.com)
+""")

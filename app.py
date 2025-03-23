@@ -7,14 +7,20 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- 品牌 LOGO 顯示 ---
-st.image("logo.png", width=300)
-
-# --- 傳承開場語 ---
+# --- 品牌 LOGO 顯示（置中） ---
 st.markdown("""
-🌱 每一位家族的掌舵者，都是家族傳承的種子。  
+<div style='text-align: center;'>
+    <img src='logo.png' width='300'>
+</div>
+""", unsafe_allow_html=True)
+
+# --- 傳承開場語（置中、加大加粗） ---
+st.markdown("""
+<div style='text-align: center; font-size: 20px; font-weight: bold; margin-top: 1em;'>
+🌱 每一位家族的掌舵者，都是家族傳承的種子。<br>
 我們陪您，讓這份影響力持續茁壯。
-""")
+</div>
+""", unsafe_allow_html=True)
 
 # --- 初始化狀態 ---
 if "started" not in st.session_state:

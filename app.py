@@ -48,9 +48,7 @@ for key, val in defaults.items():
 
 # --- 開始探索按鈕 ---
 if not st.session_state.show_module_one:
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("🚀 開始探索我的傳承藍圖"):
+    if st.button("🚀 開始探索我的傳承藍圖"):
             st.session_state.show_module_one = True
             st.rerun()
     st.stop()
@@ -154,11 +152,10 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
             st.rerun()
 
 # --- 模組五：預約諮詢 ---
-if st.session_state.module_four_done:
-    st.markdown("---")
-    st.markdown("## 模組五：預約諮詢")
+st.markdown("---")
+st.markdown("## 模組五：預約諮詢")
 
-    st.markdown("""
+st.markdown("""
 看到這裡，代表您已經為未來邁出珍貴的一步。  
 或許腦海裡已經浮現了一些想做的安排、一些想問的事。  
 
@@ -166,18 +163,7 @@ if st.session_state.module_four_done:
 讓這些想法，有機會慢慢成真。
 """)
 
-    with st.form("consult_form"):
-        name = st.text_input("您的姓名")
-        email = st.text_input("聯絡信箱")
-        message = st.text_area("您想預約的主題或想了解的內容")
-
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            submitted = st.form_submit_button("提交預約申請")
-            if submitted:
-                st.success("感謝您，我們已收到您的預約申請，將儘快與您聯繫。")
-
-    st.markdown("""
+st.markdown("""
 📩 或您也可以直接來信，我們會親自為您安排：  
 📌 永傳家族辦公室｜[https://gracefo.com/](https://gracefo.com/)  
 📧 Email｜[123@gracefo.com](mailto:123@gracefo.com)

@@ -46,10 +46,11 @@ for key, val in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
-# --- 開始探索按鈕（恢復為一般樣式）---
+# --- 開始探索按鈕（一般樣式）---
 if not st.session_state.show_module_one:
     if st.button("🚀 開始探索我的傳承藍圖"):
         st.session_state.show_module_one = True
+    st.stop()
 
 # --- 模組一 ---
 if st.session_state.show_module_one and not st.session_state.submitted:

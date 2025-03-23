@@ -88,8 +88,8 @@ if st.session_state.show_module_one and not st.session_state.submitted:
 # --- 模組二 ---
 if st.session_state.submitted and not st.session_state.module_two_done:
     st.markdown("---")
-    st.markdown("### 模組二：釐清內心的優先順序")
     st.markdown("🪴 模組一完成 ✔️")
+    st.markdown("### 模組二：釐清內心的優先順序")
 
     combined = list(st.session_state.options)
     if st.session_state.custom_input.strip():
@@ -107,8 +107,8 @@ if st.session_state.submitted and not st.session_state.module_two_done:
 # --- 模組三 ---
 if st.session_state.module_two_done and not st.session_state.module_three_done:
     st.markdown("---")
-    st.markdown("### 模組三：從想法，到方向")
     st.markdown("🪴 模組二完成 ✔️")
+    st.markdown("### 模組三：從想法，到方向")
 
     direction_choices = st.multiselect(
         "您希望事情未來可以朝哪些方向走？",
@@ -131,8 +131,8 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
 # --- 模組四 ---
 if st.session_state.module_three_done and not st.session_state.module_four_done:
     st.markdown("---")
-    st.markdown("### 模組四：行動策略，從這裡慢慢展開")
     st.markdown("🪴 模組三完成 ✔️")
+    st.markdown("### 模組四：行動策略，從這裡慢慢展開")
 
     st.markdown("釐清了想法之後，這一步我們陪您看看有哪些小步驟可以開始安排，慢慢走、也走得穩。")
     strategies = get_strategy_suggestions()
@@ -147,8 +147,8 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
 # --- 模組五：預約諮詢 ---
 if st.session_state.module_four_done:
     st.markdown("---")
-    st.markdown("### 模組五：預約諮詢")
     st.markdown("🪴 模組四完成 ✔️")
+    st.markdown("### 模組五：預約諮詢")
 
     st.markdown("""
 🌿 恭喜您，這些思考將是未來傳承藍圖的起點。

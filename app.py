@@ -50,7 +50,7 @@ for key, val in defaults.items():
 if not st.session_state.show_module_one:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        if st.button("🌱 開始探索我的傳承藍圖"):
+        if st.button("開始探索我的傳承藍圖"):
             st.session_state.show_module_one = True
 
 # --- 模組一 ---

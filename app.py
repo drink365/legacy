@@ -7,35 +7,36 @@ st.set_page_config(
     layout="centered"
 )
 
+# --- 初始化狀態 ---
+if "started" not in st.session_state:
+    st.session_state.started = False
+if "submitted" not in st.session_state:
+    st.session_state.submitted = False
+
 # --- 品牌標題區 ---
 st.markdown("### 永傳")
 st.markdown("#### 傳承您的影響力")
-
 st.markdown("---")
 
 # --- 模組一 開場語 ---
 st.markdown("## 模組一：經營的是事業，留下的是故事")
-
 st.markdown("""
 我們陪您一起梳理這段歷程，  
 為後人留下的不只是成果，更是一種精神。
 """)
 
-# --- 開始互動 ---
-if "started" not in st.session_state:
-    st.session_state.started = False
-
+# --- 開始整理按鈕 ---
 if not st.session_state.started:
     if st.button("開始整理"):
         st.session_state.started = True
-        st.experimental_rerun()
 
-else:
+# --- 互動區 ---
+if st.session_state.started and not st.session_state.submitted:
     st.markdown("---")
     st.markdown("### 最近，您常想些什麼？")
     st.markdown("請隨意勾選下面幾個選項，也可以補充自己的想法。")
 
-    # 多選問題
+    # 多選選項
     options = st.multiselect(
         "您最近比較常想的是：",
         [
@@ -49,22 +50,27 @@ else:
         ]
     )
 
-    # 自由輸入
+    # 自由輸入欄位
     custom_input = st.text_area("還有什麼最近常出現在您心裡的？（可以不填）")
 
     # 繼續按鈕
     if st.button("繼續"):
-        st.markdown("---")
-        st.markdown("### 您正在思考的，是這些事：")
+        st.session_state.options = options
+        st.session_state.custom_input = custom_input
+        st.session_state.submitted = True
 
-        # 顯示回饋摘要
-        if options:
-            for item in options:
-                st.write(f"• {item}")
-        if custom_input.strip():
-            st.write(f"• {custom_input.strip()}")
+# --- 回饋區 ---
+if st.session_state.submitted:
+    st.markdown("---")
+    st.markdown("### 您正在思考的，是這些事：")
 
-        st.markdown("""
+    if st.session_state.options:
+        for item in st.session_state.options:
+            st.write(f"• {item}")
+    if st.session_state.custom_input.strip():
+        st.write(f"• {st.session_state.custom_input.strip()}")
+
+    st.markdown("""
 這些事，有的您已經想了很久，有的可能剛浮現。  
 沒關係，我們接下來會慢慢陪您，一步步釐清，您真正在意的，是什麼。
 """)

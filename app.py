@@ -8,7 +8,13 @@ st.set_page_config(
 )
 
 # --- 品牌 LOGO 顯示 ---
-st.image("logo-橫式彩色.png", use_column_width=True)
+st.image("logo.png", use_column_width=True)
+
+# --- 傳承開場語 ---
+st.markdown("""
+🌱 每一位家族的掌舵者，都是家族傳承的種子。  
+我們陪您，讓這份影響力持續茁壯。
+""")
 
 # --- 初始化狀態 ---
 if "started" not in st.session_state:

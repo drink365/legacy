@@ -99,14 +99,17 @@ if st.session_state.next_step and not st.session_state.module_two_done:
 只是陪您靜靜看一眼——那個您一直放在心裡的想法。
 """)
 
-    # 讓使用者從剛剛選的選項中挑 1~2 項
+    # --- 將模組一勾選 + 自填內容合併為選單 ---
+    combined_options = list(st.session_state.options)
+    if st.session_state.custom_input.strip():
+        combined_options.append(st.session_state.custom_input.strip())
+
     key_issues = st.multiselect(
-        "從您剛剛選的事情中，哪一兩件對您來說最重要？",
-        st.session_state.options,
+        "從您剛剛提到的事情中，哪一兩件對您來說最重要？",
+        combined_options,
         max_selections=2
     )
 
-    # 輸入原因
     reason = st.text_area("為什麼這件事對您來說特別重要？")
 
     if st.button("完成這一段思考"):

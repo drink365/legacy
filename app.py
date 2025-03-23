@@ -17,7 +17,7 @@ def load_logo_base64(image_path):
 logo_base64 = load_logo_base64("logo.png")
 st.markdown(f"""
 <div style='text-align: center;'>
-    <img src='data:image/png;base64,{logo_base64}' width='300'><br>
+    <img src='data:image/png;base64,{logo_base64}' width='200'><br>
     <div style='font-size: 18px; font-weight: bold; margin-top: 0.5em;'>傳承您的影響力</div>
 </div>
 """, unsafe_allow_html=True)
@@ -56,7 +56,7 @@ if not st.session_state.show_module_one:
 # --- 模組一 ---
 if st.session_state.show_module_one and not st.session_state.submitted:
     st.markdown("---")
-    st.markdown("## 模組一：經營的是事業，留下的是故事")
+    st.markdown("### 模組一：經營的是事業，留下的是故事")
     st.markdown("我們陪您一起梳理這段歷程，為後人留下的不只是成果，更是一種精神。")
 
     if not st.session_state.started:
@@ -88,7 +88,7 @@ if st.session_state.show_module_one and not st.session_state.submitted:
 # --- 模組二 ---
 if st.session_state.submitted and not st.session_state.module_two_done:
     st.markdown("---")
-    st.markdown("## 模組二：釐清內心的優先順序")
+    st.markdown("### 模組二：釐清內心的優先順序")
     st.markdown("🪴 模組一完成 ✔️")
 
     combined = list(st.session_state.options)
@@ -107,7 +107,7 @@ if st.session_state.submitted and not st.session_state.module_two_done:
 # --- 模組三 ---
 if st.session_state.module_two_done and not st.session_state.module_three_done:
     st.markdown("---")
-    st.markdown("## 模組三：從想法，到方向")
+    st.markdown("### 模組三：從想法，到方向")
     st.markdown("🪴 模組二完成 ✔️")
 
     direction_choices = st.multiselect(
@@ -131,7 +131,7 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
 # --- 模組四 ---
 if st.session_state.module_three_done and not st.session_state.module_four_done:
     st.markdown("---")
-    st.markdown("## 模組四：行動策略，從這裡慢慢展開")
+    st.markdown("### 模組四：行動策略，從這裡慢慢展開")
     st.markdown("🪴 模組三完成 ✔️")
 
     st.markdown("釐清了想法之後，這一步我們陪您看看有哪些小步驟可以開始安排，慢慢走、也走得穩。")
@@ -147,16 +147,11 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
 # --- 模組五：預約諮詢 ---
 if st.session_state.module_four_done:
     st.markdown("---")
-    st.markdown("## 模組五：預約諮詢")
+    st.markdown("### 模組五：預約諮詢")
     st.markdown("🪴 模組四完成 ✔️")
 
     st.markdown("""
 🌿 恭喜您，這些思考將是未來傳承藍圖的起點。
-
-💬 在與我們對談之前，您也可以先問問自己這三個問題：  
-1. 如果我今天退休，最擔心的事情是什麼？  
-2. 我希望未來家人如何記得我？  
-3. 有沒有什麼，是我現在就可以決定、啟動的？
 """)
 
     st.markdown("""
@@ -166,6 +161,13 @@ if st.session_state.module_four_done:
 
     if st.button("📆 我想預約聊聊我的想法"):
         st.info("請來信至 123@gracefo.com，我們會親自為您安排。")
+
+    st.markdown("""
+💬 在與我們對談之前，您也可以先問問自己這三個問題：  
+1. 如果我今天退休，最擔心的事情是什麼？  
+2. 我希望未來家人如何記得我？  
+3. 有沒有什麼，是我現在就可以決定、啟動的？
+""")
 
     st.markdown("""
 📌 永傳家族辦公室｜[https://gracefo.com/](https://gracefo.com/)  

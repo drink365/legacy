@@ -96,7 +96,7 @@ if st.session_state.next_step and not st.session_state.module_two_done:
     st.markdown("""
 在許多重要的事之中，總有一兩件，對您來說有特別的份量。  
 我們不急著定義，也不急著安排，  
-只是陪您靜靜看一眼——那個您一直放在心裡的想法。
+只是陪您靜靜思考——那個您一直放在心裡的想法。
 """)
 
     # --- 將模組一勾選 + 自填內容合併為選單 ---

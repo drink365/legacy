@@ -97,7 +97,7 @@ def generate_pdf():
     doc.build(story)
     return pdf_path
 
-# --- LOGO 顯示 ---
+# --- LOGO ---
 logo_base64 = load_logo_base64("logo.png")
 st.markdown(f"""
 <div style='text-align: center;'>
@@ -115,13 +115,14 @@ st.markdown("""
 <br>
 """, unsafe_allow_html=True)
 
-# --- 下載報告按鈕 ---
-if st.button("📄 下載探索報告 PDF"):
-    pdf = generate_pdf()
-    with open(pdf, "rb") as f:
-        st.download_button(
-            label="下載報告",
-            data=f,
-            file_name="永傳AI探索報告.pdf",
-            mime="application/pdf"
-        )
+# --- 模組五完成後提供報告下載 ---
+if st.session_state.get("module_four_done"):
+    with st.expander("📄 點此下載探索紀錄 PDF"):
+        pdf = generate_pdf()
+        with open(pdf, "rb") as f:
+            st.download_button(
+                label="下載我的探索紀錄",
+                data=f,
+                file_name="永傳AI探索報告.pdf",
+                mime="application/pdf"
+            )

@@ -156,7 +156,13 @@ if st.session_state.module_four_done:
 
     st.markdown("""
 📩 如果您想更具體地展開行動，  
-我們誠摯邀請您預約 30 分鐘專屬對談。  
+我們誠摯邀請您預約 30 分鐘專屬對談。
+""")
+
+if st.button("📆 我想預約聊聊我的想法"):
+    st.info("請來信至 123@gracefo.com，我們會親自為您安排。")
+
+st.markdown("""
 📌 永傳家族辦公室｜[https://gracefo.com/](https://gracefo.com/)  
 📧 Email｜[123@gracefo.com](mailto:123@gracefo.com)
 """)

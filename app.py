@@ -2,10 +2,13 @@ import streamlit as st
 
 # --- 基本設定 ---
 st.set_page_config(
-    page_title="永傳 AI 教練",
+    page_title="永傳 AI 傳承教練",
     page_icon="🌿",
     layout="centered"
 )
+
+# --- 品牌 LOGO 顯示 ---
+st.image("logo-橫式彩色.png", use_column_width=True)
 
 # --- 初始化狀態 ---
 if "started" not in st.session_state:
@@ -20,15 +23,13 @@ if "module_three_done" not in st.session_state:
     st.session_state.module_three_done = False
 if "module_four_done" not in st.session_state:
     st.session_state.module_four_done = False
-if "module_five_done" not in st.session_state:
-    st.session_state.module_five_done = False
 
 # --- 品牌標題區 ---
 st.markdown("### 永傳")
 st.markdown("#### 傳承您的影響力")
 st.markdown("---")
 
-# --- 模組一：開場與思緒整理 ---
+# --- 模組一 ---
 st.markdown("## 模組一：經營的是事業，留下的是故事")
 st.markdown("""
 我們陪您一起梳理這段歷程，  
@@ -64,7 +65,7 @@ if st.session_state.started and not st.session_state.submitted:
         st.session_state.custom_input = custom_input
         st.session_state.submitted = True
 
-# --- 模組二：釐清優先順序 ---
+# --- 模組二 ---
 if st.session_state.submitted and not st.session_state.next_step:
     st.markdown("---")
     st.markdown("### 您正在思考的，是這些事：")
@@ -92,7 +93,6 @@ if st.session_state.submitted and not st.session_state.next_step:
     if st.button("我願意繼續"):
         st.session_state.next_step = True
 
-# --- 模組二：使用者挑選最重要的事 ---
 if st.session_state.next_step and not st.session_state.module_two_done:
     st.markdown("---")
     st.markdown("## 模組二：釐清內心的優先順序")
@@ -120,7 +120,7 @@ if st.session_state.next_step and not st.session_state.module_two_done:
         st.session_state.reason = reason
         st.session_state.module_two_done = True
 
-# --- 模組三：探索未來方向 ---
+# --- 模組三 ---
 if st.session_state.module_two_done and not st.session_state.module_three_done:
     st.markdown("---")
     st.markdown("### 您目前心中最重要的是：")
@@ -168,8 +168,8 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
         st.session_state.custom_direction = custom_direction
         st.session_state.module_four_done = True
 
-# --- 模組四：策略建議 ---
-if st.session_state.module_four_done and not st.session_state.module_five_done:
+# --- 模組四 ---
+if st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組四：行動策略，從這裡慢慢展開")
 
@@ -217,11 +217,7 @@ if st.session_state.module_four_done and not st.session_state.module_five_done:
 未來的藍圖，就會一點一滴清晰起來。
 """)
 
-    if st.button("我想預約諮詢"):
-        st.session_state.module_five_done = True
-
-# --- 模組五：預約諮詢 ---
-if st.session_state.module_five_done:
+    # --- 模組五：自動預約引導 ---
     st.markdown("---")
     st.markdown("## 模組五：預約諮詢")
 

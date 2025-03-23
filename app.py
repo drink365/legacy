@@ -148,6 +148,12 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
 if st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組五：預約諮詢")
+    st.markdown("""
+💬 在與我們對談之前，您也可以先問問自己這三個問題：  
+1. 如果我今天退休，最擔心的事情是什麼？  
+2. 我希望未來家人如何記得我？  
+3. 有沒有什麼，是我現在就可以決定、啟動的？
+""")
     st.markdown("🪴 模組四完成 ✔️")
 
     st.markdown("""

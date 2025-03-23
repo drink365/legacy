@@ -192,32 +192,14 @@ if st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組四：行動策略，從這裡慢慢展開")
 
-# --- 模組五：使用封裝模組 ---
+# --- 模組五：自動預約引導 ---
 st.markdown("---")
-st.markdown("### 模組五：行動策略，從這裡慢慢展開")
+st.markdown("## 模組五：預約諮詢")
 
 st.markdown("""
-釐清了想法之後，  
-接下來這一步，我們陪您一起看看，  
-針對您所在的位置與方向，  
-有哪些小步驟可以開始安排，慢慢走、也走得穩。
-""")
-
-st.markdown("### 您可以考慮的策略方向：")
-
-strategies = get_strategy_suggestions()
-for strategy in strategies:
-    with st.expander(strategy["title"]):
-        st.write(strategy["details"])
-
-st.markdown("""
----
-### 今天看到這裡，其實就很棒了。
-這些建議，您不需要一次做完，  
-只要慢慢開始想、開始選，  
-未來的藍圖，就會一點一滴清晰起來。
-""")
-
+您已經為自己釐清了許多關鍵的思考，  
+如果您想讓這些想法進一步落實，  
+我們也很樂意陪您慢慢規劃下一步。
 
 ---
 📌 永傳家族辦公室  
@@ -227,7 +209,7 @@ st.markdown("""
 點擊下方按鈕，即可發信與我們預約一對一諮詢。
 """)
 
-    st.markdown("""
+st.markdown("""
 <a href="mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求。" target="_blank">
     <button style='padding: 0.5em 1em; font-size: 16px; border-radius: 6px; background-color: #4CAF50; color: white; border: none;'>預約諮詢</button>
 </a>

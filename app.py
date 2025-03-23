@@ -52,7 +52,7 @@ if not st.session_state.show_module_one:
     with col2:
         if st.button("🚀 開始探索我的傳承藍圖"):
             st.session_state.show_module_one = True
-            st.experimental_rerun()
+            st.rerun()
     st.stop()
 
 # --- 模組一 ---

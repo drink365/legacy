@@ -46,26 +46,8 @@ for key, val in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
-# --- 開始探索按鈕（置中 + 動作）---
+# --- 開始探索按鈕（恢復為一般樣式）---
 if not st.session_state.show_module_one:
-    st.markdown("""
-    <style>
-    div.stButton > button:first-child {
-        background-color: #1f7a8c;
-        color: white;
-        font-size: 20px;
-        padding: 0.75em 2em;
-        border-radius: 8px;
-        font-weight: bold;
-        display: block;
-        margin: 0 auto;
-    }
-    div.stButton > button:hover {
-        background-color: #105766;
-        color: white;
-    }
-    </style>
-    """, unsafe_allow_html=True)
     if st.button("🚀 開始探索我的傳承藍圖"):
         st.session_state.show_module_one = True
 

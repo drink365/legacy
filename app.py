@@ -46,12 +46,17 @@ for key, val in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = val
 
-# --- 開始整理按鈕（美化置中）---
+# --- 開始整理按鈕（吸睛置中樣式）---
 if not st.session_state.show_module_one:
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("開始探索我的傳承藍圖"):
-            st.session_state.show_module_one = True
+    st.markdown("""
+    <div style='text-align: center; margin-top: 30px;'>
+        <button onclick="window.location.reload()" style='padding: 12px 28px; font-size: 20px; border-radius: 8px; background-color: #1f7a8c; color: white; border: none;'>
+            🚀 開始探索我的傳承藍圖
+        </button>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("🚀 開始探索我的傳承藍圖"):
+        st.session_state.show_module_one = True
 
 # --- 模組一 ---
 if st.session_state.show_module_one and not st.session_state.submitted:

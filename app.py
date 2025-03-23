@@ -47,15 +47,11 @@ for key, val in defaults.items():
         st.session_state[key] = val
 
 # --- 開始整理按鈕（美化置中）---
-st.markdown("""
-<div style='text-align: center; margin-top: 30px;'>
-    <form action="">
-        <button style='padding: 10px 30px; font-size: 18px; border-radius: 8px; background-color: #4CAF50; color: white; border: none;'>🌱 開始探索我的傳承藍圖</button>
-    </form>
-</div>
-""", unsafe_allow_html=True)
-if st.button("🌱 開始探索我的傳承藍圖"):
-    st.session_state.show_module_one = True
+if not st.session_state.show_module_one:
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("🌱 開始探索我的傳承藍圖"):
+            st.session_state.show_module_one = True
 
 # --- 模組一 ---
 if st.session_state.show_module_one and not st.session_state.submitted:

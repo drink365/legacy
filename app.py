@@ -48,7 +48,12 @@ for key, val in defaults.items():
 
 # --- 探索起點按鈕 ---
 if not st.session_state.show_module_one:
-    if st.button("開始整理", use_container_width=True):
+    st.markdown("""
+    <div style='text-align: center;'>
+        <button onclick="window.location.reload()" style='padding: 0.4em 1em; font-size: 14px; border-radius: 6px; background-color: #4CAF50; color: white; border: none;'>開始整理</button>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("開始整理"):
         st.session_state.show_module_one = True
 
 # --- 模組一 ---
@@ -85,21 +90,7 @@ if st.session_state.show_module_one:
             st.session_state.submitted = True
 
 # --- 模組二 ---
-if st.session_state.submitted and not st.session_state.next_step:
-    st.markdown("---")
-    st.markdown("### 您正在思考的，是這些事：")
-    for item in st.session_state.options:
-        st.write(f"• {item}")
-    if st.session_state.custom_input.strip():
-        st.write(f"• {st.session_state.custom_input.strip()}")
-
-    st.markdown("如果您願意，我們可以繼續往下看看")
-
-    if st.button("我願意繼續"):
-        st.session_state.next_step = True
-
-# --- 模組二延伸：選出關鍵議題 ---
-if st.session_state.next_step and not st.session_state.module_two_done:
+if st.session_state.submitted and not st.session_state.module_two_done:
     st.markdown("---")
     st.markdown("## 模組二：釐清內心的優先順序")
 
@@ -118,20 +109,8 @@ if st.session_state.next_step and not st.session_state.module_two_done:
 # --- 模組三 ---
 if st.session_state.module_two_done and not st.session_state.module_three_done:
     st.markdown("---")
-    st.markdown("### 您目前心中最重要的是：")
-    for item in st.session_state.key_issues:
-        st.write(f"• {item}")
-    if st.session_state.reason.strip():
-        st.markdown("**您說，它之所以重要，是因為：**")
-        st.write(f"「{st.session_state.reason.strip()}」")
-
-    if st.button("好，我想繼續看看"):
-        st.session_state.module_three_done = True
-
-# --- 模組四 ---
-if st.session_state.module_three_done and not st.session_state.module_four_done:
-    st.markdown("---")
     st.markdown("## 模組三：從想法，到方向")
+
     direction_choices = st.multiselect(
         "您希望事情未來可以朝哪些方向走？",
         [
@@ -147,10 +126,10 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
     if st.button("完成方向探索"):
         st.session_state.directions = direction_choices
         st.session_state.custom_direction = custom_dir
-        st.session_state.module_four_done = True
+        st.session_state.module_three_done = True
 
-# --- 模組五：策略建議與預約 ---
-if st.session_state.module_four_done:
+# --- 模組四 ---
+if st.session_state.module_three_done and not st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組四：行動策略，從這裡慢慢展開")
     st.markdown("釐清了想法之後，這一步我們陪您看看有哪些小步驟可以開始安排，慢慢走、也走得穩。")
@@ -160,13 +139,18 @@ if st.session_state.module_four_done:
         with st.expander(s["title"]):
             st.write(s["details"])
 
+    if st.button("完成策略探索"):
+        st.session_state.module_four_done = True
+
+# --- 模組五：預約諮詢 ---
+if st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組五：預約諮詢")
 
     st.markdown("""
 您已經為自己釐清了許多關鍵的思考，  
 如果您想讓這些想法進一步落實，  
-我們也很樂意陪您慢慢規劃下一步。
+我們也很樂意陪您規劃下一步。
 
 📌 永傳家族辦公室  
 💼 https://gracefo.com/  
@@ -178,3 +162,6 @@ if st.session_state.module_four_done:
     <button style='padding: 0.6em 1.2em; font-size: 16px; border-radius: 6px; background-color: #4CAF50; color: white; border: none;'>預約諮詢</button>
 </a>
 """, unsafe_allow_html=True)
+    }
+  ]
+}

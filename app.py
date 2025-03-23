@@ -52,6 +52,7 @@ if not st.session_state.show_module_one:
     with col2:
         if st.button("🚀 開始探索我的傳承藍圖"):
             st.session_state.show_module_one = True
+            st.experimental_rerun()
     st.stop()
 
 # --- 模組一 ---
@@ -65,6 +66,7 @@ if st.session_state.show_module_one and not st.session_state.submitted:
         with col2:
             if st.button("開始進入模組一"):
                 st.session_state.started = True
+                st.experimental_rerun()
 
     if st.session_state.started:
         st.markdown("### 最近，您常想些什麼？")
@@ -87,6 +89,7 @@ if st.session_state.show_module_one and not st.session_state.submitted:
                 st.session_state.options = options
                 st.session_state.custom_input = custom_input
                 st.session_state.submitted = True
+                st.experimental_rerun()
 
 # --- 模組二 ---
 if st.session_state.submitted and not st.session_state.module_two_done:
@@ -106,6 +109,7 @@ if st.session_state.submitted and not st.session_state.module_two_done:
             st.session_state.key_issues = key_issues
             st.session_state.reason = reason
             st.session_state.module_two_done = True
+            st.experimental_rerun()
 
 # --- 模組三 ---
 if st.session_state.module_two_done and not st.session_state.module_three_done:
@@ -130,6 +134,7 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
             st.session_state.directions = direction_choices
             st.session_state.custom_direction = custom_dir
             st.session_state.module_three_done = True
+            st.experimental_rerun()
 
 # --- 模組四 ---
 if st.session_state.module_three_done and not st.session_state.module_four_done:
@@ -146,6 +151,7 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
     with col2:
         if st.button("完成策略探索"):
             st.session_state.module_four_done = True
+            st.experimental_rerun()
 
 # --- 模組五：預約諮詢 ---
 if st.session_state.module_four_done:

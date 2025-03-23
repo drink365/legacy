@@ -86,7 +86,8 @@ if st.session_state.show_module_one and not st.session_state.submitted:
             st.rerun()
 
 # --- 模組二 ---
-st.markdown("\n🪴 模組一完成 ✔️")
+st.markdown("
+🪴 模組一完成 ✔️")
 if st.session_state.submitted and not st.session_state.module_two_done:
     st.markdown("---")
     st.markdown("## 模組二：釐清內心的優先順序")
@@ -105,7 +106,8 @@ if st.session_state.submitted and not st.session_state.module_two_done:
         st.rerun()
 
 # --- 模組三 ---
-st.markdown("\n🪴 模組二完成 ✔️")
+st.markdown("
+🪴 模組二完成 ✔️")
 if st.session_state.module_two_done and not st.session_state.module_three_done:
     st.markdown("---")
     st.markdown("## 模組三：從想法，到方向")
@@ -129,7 +131,8 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
         st.rerun()
 
 # --- 模組四 ---
-st.markdown("\n🪴 模組三完成 ✔️")
+st.markdown("
+🪴 模組三完成 ✔️")
 if st.session_state.module_three_done and not st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組四：行動策略，從這裡慢慢展開")
@@ -145,7 +148,8 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
         st.rerun()
 
 # --- 模組五：預約諮詢 ---
-st.markdown("\n🪴 模組四完成 ✔️")
+st.markdown("
+🪴 模組四完成 ✔️")
 if st.session_state.module_four_done:
     st.markdown("---")
     st.markdown("## 模組五：預約諮詢")
@@ -173,8 +177,8 @@ if st.session_state.module_four_done:
     st.markdown("""
 📩 如果您想更具體地展開行動，  
 我們誠摯邀請您預約 30 分鐘專屬對談。  
-這不是推銷，而是一場未來的開端。  
+這是一場未來的開端，一次為自己和家族的對話機會。  
 
 📌 永傳家族辦公室｜[https://gracefo.com/](https://gracefo.com/)  
 📧 Email｜[123@gracefo.com](mailto:123@gracefo.com)
-""")""")
+""")""")""")

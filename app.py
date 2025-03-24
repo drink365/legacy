@@ -107,6 +107,14 @@ st.markdown("""
 <br>
 """, unsafe_allow_html=True)
 
+# 首頁按鈕引導（觸發 started 狀態）
+if not st.session_state.started:
+    if st.button("開始整理我的傳承藍圖"):
+        st.session_state.started = True
+    else:
+        st.stop()  # 沒點按鈕就停止，不往下跑
+
+
 # 初始化狀態
 for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
     if key not in st.session_state:

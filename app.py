@@ -98,25 +98,21 @@ try:
 except Exception as e:
     st.warning("⚠️ 無法載入 logo 圖檔，請確認 logo.png 是否存在。")
 
-st.markdown(\"\"\"
+st.markdown("""
 <br>
 <div style='text-align: center; font-size: 20px; font-weight: bold;'>
 🌱 每一位家族的掌舵者，都是家族傳承的種子。<br>
 我們陪您，讓這份影響力持續茁壯。
 </div>
 <br>
-\"\"\", unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 # 初始化狀態
 for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
     if key not in st.session_state:
         st.session_state[key] = False
 
-if not st.session_state.started:
-    if st.button("開始整理我的傳承藍圖"):
-        st.session_state.started = True
-    else:
-        st.stop()
+
 
 # 模組一：傳承風格小測驗
 if st.session_state.started and not st.session_state.legacy_quiz_done:

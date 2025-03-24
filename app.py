@@ -78,7 +78,7 @@ def generate_pdf():
     story.append(Paragraph("下一步，我們可以一起完成", styleH))
     story.append(Paragraph("如果這份紀錄讓您浮現了願景，我們誠摯邀請您預約對談，一起為未來鋪路。", styleN))
     story.append(Spacer(1, 12))
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 6))  # 加上額外空白行
     story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
     story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
 
@@ -107,6 +107,8 @@ st.markdown("""
 </div>
 <br>
 """, unsafe_allow_html=True)
+
+
 
 # 初始化狀態
 for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:

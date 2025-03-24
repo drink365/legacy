@@ -103,7 +103,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 初始化狀態
-for key in ["started", "submitted", "next_step", "module_two_done", "module_three_done", "module_four_done"]:
+for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done"]:
     if key not in st.session_state:
         st.session_state[key] = False
 
@@ -111,13 +111,11 @@ for key in ["started", "submitted", "next_step", "module_two_done", "module_thre
 if not st.session_state.started:
     if st.button("開始整理我的傳承藍圖"):
         st.session_state.started = True
-        st.experimental_rerun()
-    st.stop()
-
-# 模組一~五 之後內容接續...
+    else:
+        st.stop()
 
 # 模組一
-if not st.session_state.submitted:
+if st.session_state.started and not st.session_state.submitted:
     st.markdown("## 模組一：經營的是事業，留下的是故事")
     st.markdown("我們陪您一起梳理這段歷程，為後人留下的不只是成果，更是一種精神。")
     options = st.multiselect("您最近比較常想的是：", [
@@ -134,7 +132,6 @@ if not st.session_state.submitted:
         st.session_state.options = options
         st.session_state.custom_input = custom_input
         st.session_state.submitted = True
-        st.experimental_rerun()
 
 # 模組二
 if st.session_state.submitted and not st.session_state.module_two_done:
@@ -148,7 +145,6 @@ if st.session_state.submitted and not st.session_state.module_two_done:
         st.session_state.key_issues = key_issues
         st.session_state.reason = reason
         st.session_state.module_two_done = True
-        st.experimental_rerun()
 
 # 模組三
 if st.session_state.module_two_done and not st.session_state.module_three_done:
@@ -168,7 +164,6 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
         st.session_state.directions = direction_choices
         st.session_state.custom_direction = custom_dir
         st.session_state.module_three_done = True
-        st.experimental_rerun()
 
 # 模組四
 if st.session_state.module_three_done and not st.session_state.module_four_done:
@@ -180,9 +175,8 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
             st.write(s["details"])
     if st.button("完成策略探索"):
         st.session_state.module_four_done = True
-        st.experimental_rerun()
 
-# 模組五＋報告下載
+# 模組五
 if st.session_state.module_four_done:
     st.markdown("## 模組五：預約諮詢")
     st.markdown("🌿 恭喜您，這些思考將是未來傳承藍圖的起點。")
@@ -204,4 +198,3 @@ if st.session_state.module_four_done:
 📌 永傳家族辦公室｜[https://gracefo.com/](https://gracefo.com/)  
 📧 Email｜[123@gracefo.com](mailto:123@gracefo.com)
 """)
-# 可由上一版 app.py 內容貼入，保持狀態流程邏輯完整

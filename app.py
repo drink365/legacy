@@ -49,6 +49,11 @@ def generate_pdf():
     story.append(Paragraph("永傳 AI 傳承教練探索紀錄", styleH))
     story.append(Spacer(1, 20))
 
+    if "legacy_style_result" in st.session_state:
+        story.append(Paragraph("您的傳承風格：", styleH))
+        story.append(Paragraph(st.session_state.legacy_style_result, styleN))
+        story.append(Spacer(1, 12))
+
     if "key_issues" in st.session_state:
         story.append(Paragraph("模組二：您最在意的重點", styleH))
         for issue in st.session_state.key_issues:
@@ -104,12 +109,10 @@ st.markdown("""
 <br>
 """, unsafe_allow_html=True)
 
-# 初始化狀態
-for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done"]:
+for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
     if key not in st.session_state:
         st.session_state[key] = False
 
-# 起始按鈕
 if not st.session_state.started:
     if st.button("開始整理我的傳承藍圖"):
         st.session_state.started = True
@@ -117,86 +120,38 @@ if not st.session_state.started:
         st.stop()
 
 # 模組一
-if st.session_state.started and not st.session_state.submitted:
-    st.markdown("## 模組一：經營的是事業，留下的是故事")
-    st.markdown("我們陪您一起梳理這段歷程，為後人留下的不只是成果，更是一種精神。")
-    options = st.multiselect("您最近比較常想的是：", [
-        "公司的未來要怎麼安排？",
-        "孩子適不適合承接家業？",
-        "退休後的生活要怎麼過？",
-        "怎麼分配資產才公平？",
-        "家族成員之間的關係",
-        "萬一健康出現變化怎麼辦？",
-        "我想慢慢退下來，但不知道從哪開始",
-    ])
-    custom_input = st.text_area("還有什麼最近常出現在您心裡的？（可以不填）")
-    if st.button("繼續"):
-        st.session_state.options = options
-        st.session_state.custom_input = custom_input
-        st.session_state.submitted = True
+if st.session_state.started and not st.session_state.legacy_quiz_done:
+    st.markdown("## 傳承風格小測驗：我是怎麼看待家族傳承的？")
+    st.markdown("請根據您的直覺選出最貼近您想法的選項。")
 
-# 模組二
-if st.session_state.submitted and not st.session_state.module_two_done:
-    st.markdown("## 模組二：釐清內心的優先順序")
-    combined = list(st.session_state.options)
-    if st.session_state.custom_input.strip():
-        combined.append(st.session_state.custom_input.strip())
-    key_issues = st.multiselect("哪一兩件對您來說最重要？", combined, max_selections=2)
-    reason = st.text_area("為什麼這件事對您來說特別重要？")
-    if st.button("完成這一段思考"):
-        st.session_state.key_issues = key_issues
-        st.session_state.reason = reason
-        st.session_state.module_two_done = True
+    questions = [
+        ("傳承的出發點對我來說，最重要的是：", ["家人能持續相處和睦", "資產能安全地傳承下去", "我的理念能被理解與延續"]),
+        ("當子女表達不想接班，我會：", ["不勉強他們，找外部幫手也可", "再觀察是否只是短期情緒", "引導他們理解我創業的初衷"]),
+        ("我最擔心未來的哪種情況？", ["家人產生衝突", "資產糾紛或稅務出錯", "後代迷失方向、失去初衷"]),
+        ("面對傳承，我比較喜歡的風格是：", ["柔和溝通，建立共識", "明確制度、先講規則", "敘說理念，引導願景"]),
+        ("我最希望扮演的角色是：", ["和平橋樑，維持關係", "安排者，設計制度與策略", "領航者，引領下一代看見方向"])
+    ]
 
-# 模組三
-if st.session_state.module_two_done and not st.session_state.module_three_done:
-    st.markdown("## 模組三：從想法，到方向")
-    direction_choices = st.multiselect(
-        "您希望事情未來可以朝哪些方向走？",
-        [
-            "希望有人能逐步接手，讓我放心退下來",
-            "希望我退休後，也能保有影響力與參與感",
-            "希望家人之間能建立共識與溝通模式",
-            "希望財務安排穩妥清楚，避免未來爭議",
-            "希望即使我不在，公司與資產仍能穩定運作",
-        ]
-    )
-    custom_dir = st.text_area("其他想補充的方向？（可以不填）")
-    if st.button("完成方向探索"):
-        st.session_state.directions = direction_choices
-        st.session_state.custom_direction = custom_dir
-        st.session_state.module_three_done = True
+    selections = []
+    for i, (q, opts) in enumerate(questions):
+        choice = st.radio(q, opts, key=f"quiz_{i}")
+        selections.append(choice)
 
-# 模組四
-if st.session_state.module_three_done and not st.session_state.module_four_done:
-    st.markdown("## 模組四：行動策略，從這裡慢慢展開")
-    st.markdown("釐清了想法之後，這一步我們陪您看看有哪些小步驟可以開始安排，慢慢走、也走得穩。")
-    strategies = get_strategy_suggestions()
-    for s in strategies:
-        with st.expander(s["title"]):
-            st.write(s["details"])
-    if st.button("完成策略探索"):
-        st.session_state.module_four_done = True
+    if st.button("完成風格測驗"):
+        a_count = sum([s.startswith("家人") or s.startswith("不勉強") or s.startswith("家人產生") or s.startswith("柔和") or s.startswith("和平") for s in selections])
+        b_count = sum([s.startswith("資產") or s.startswith("再觀察") or s.startswith("資產糾紛") or s.startswith("明確") or s.startswith("安排者") for s in selections])
+        c_count = sum([s.startswith("我的理念") or s.startswith("引導") or s.startswith("後代") or s.startswith("敘說") or s.startswith("領航者") for s in selections])
 
-# 模組五
-if st.session_state.module_four_done:
-    st.markdown("## 模組五：預約諮詢")
-    st.markdown("🌿 恭喜您，這些思考將是未來傳承藍圖的起點。")
-    st.markdown("📩 如果您想更具體地展開行動，我們誠摯邀請您預約 30 分鐘專屬對談。")
+        if a_count >= max(b_count, c_count):
+            st.session_state.legacy_style_result = "❤️ 關係守護者型：您重視家庭和諧、情感平衡，適合建立家族共識與柔性傳承策略。"
+        elif b_count >= max(a_count, c_count):
+            st.session_state.legacy_style_result = "💼 策略家型：您偏好制度與規劃，適合以信託、股權與稅務工具建構穩定架構。"
+        else:
+            st.session_state.legacy_style_result = "🧭 領航者型：您重視理念與精神的延續，適合透過願景建立、生命故事傳承影響力。"
 
-    if st.button("📆 我想預約聊聊我的想法"):
-        st.markdown("[請點此發信與我們聯繫](mailto:123@gracefo.com?subject=預約家族傳承諮詢&body=您好，我想預約一對一對談，請協助安排時間，謝謝！)")
+        st.session_state.legacy_quiz_done = True
 
-    st.markdown("\n")
-    pdf_buffer = generate_pdf()
-    st.download_button(
-        label="📄 下載我的探索紀錄",
-        data=pdf_buffer,
-        file_name="永傳AI探索報告.pdf",
-        mime="application/pdf"
-    )
-
-    st.markdown("""
-📌 永傳家族辦公室｜[https://gracefo.com/](https://gracefo.com/)  
-📧 Email｜[123@gracefo.com](mailto:123@gracefo.com)
-""")
+if st.session_state.legacy_quiz_done and not st.session_state.submitted:
+    st.markdown("## 您的傳承風格")
+    st.success(st.session_state.legacy_style_result)
+    st.markdown("---")

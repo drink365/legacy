@@ -218,13 +218,6 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
 # 模組五 & 六：行動引導 + PDF 下載 + 預約
 if st.session_state.module_four_done:
     st.markdown("---")
-
-    # 最後的結語
-st.markdown("---")
-st.markdown("感謝您完成這段探索。我們相信，每一次釐清與行動，都是為未來鋪路的開始。")
-st.markdown("願您的影響力，代代傳承。🌿")
-
-    
     st.markdown("## 下一步，我可以從哪裡開始？")
     st.markdown("🎉 您已經整理出一些非常重要的思考！")
 
@@ -257,3 +250,7 @@ st.markdown("願您的影響力，代代傳承。🌿")
 📧 聯絡我們：123@gracefo.com
 """, unsafe_allow_html=True)
 
+    # ✅ 最後的結語（正確縮排）
+    st.markdown("---")
+    st.markdown("感謝您完成這段探索。我們相信，每一次釐清與行動，都是為未來鋪路的開始。")
+    st.markdown("願您的影響力，代代傳承。🌿")

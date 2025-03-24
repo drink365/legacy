@@ -78,6 +78,7 @@ def generate_pdf():
     story.append(Paragraph("下一步，我們可以一起完成", styleH))
     story.append(Paragraph("如果這份紀錄讓您浮現了願景，我們誠摯邀請您預約對談，一起為未來鋪路。", styleN))
     story.append(Spacer(1, 12))
+    story.append(Spacer(1, 6))
     story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
     story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
 
@@ -107,18 +108,19 @@ st.markdown("""
 <br>
 """, unsafe_allow_html=True)
 
+# 初始化狀態
+for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
+    if key not in st.session_state:
+        st.session_state[key] = False
+
 # 首頁按鈕引導（觸發 started 狀態）
 if not st.session_state.started:
     if st.button("開始整理我的傳承藍圖"):
         st.session_state.started = True
     else:
-        st.stop()  # 沒點按鈕就停止，不往下跑
+        st.stop()
 
-
-# 初始化狀態
-for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
-    if key not in st.session_state:
-        st.session_state[key] = False
+# 其餘模組邏輯請接續在這之後...（例如 legacy_quiz, 模組一～模組四邏輯）
 
 
 # 模組一：傳承風格小測驗

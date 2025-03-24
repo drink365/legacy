@@ -1,15 +1,7 @@
 import streamlit as st
 import base64
-import os
-from io import BytesIO
 from modules.strategy_module import get_strategy_suggestions
-from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.lib.styles import ParagraphStyle
-from reportlab.lib.enums import TA_CENTER
-from reportlab.lib.units import mm
+from modules.pdf_generator import generate_pdf
 
 # 頁面設定
 st.set_page_config(
@@ -23,71 +15,6 @@ def load_logo_base64(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-# PDF 產出函式
-def generate_pdf():
-    buffer = BytesIO()
-    logo_path = "logo.png"
-    font_path = "NotoSansTC-Regular.ttf"
-
-    pdfmetrics.registerFont(TTFont('NotoSansTC', font_path))
-    styleN = ParagraphStyle(name='Normal', fontName='NotoSansTC', fontSize=12)
-    styleH = ParagraphStyle(name='Heading2', fontName='NotoSansTC', fontSize=14, spaceAfter=10)
-    styleC = ParagraphStyle(name='Center', fontName='NotoSansTC', fontSize=10, alignment=TA_CENTER)
-
-    story = []
-    logo = Image(logo_path, width=80 * mm, height=20 * mm)
-    logo.hAlign = 'CENTER'
-    story.append(logo)
-    story.append(Spacer(1, 6))
-    story.append(Paragraph("傳承您的影響力", styleC))
-    story.append(Paragraph("每一位家族的掌舵者，都是家族傳承的種子。", styleC))
-    story.append(Paragraph("我們陪您，讓這份影響力持續茁壯。", styleC))
-    story.append(Spacer(1, 24))
-
-    story.append(Paragraph("永傳 AI 傳承教練探索紀錄", styleH))
-    story.append(Spacer(1, 20))
-
-    if "legacy_style_result" in st.session_state:
-        story.append(Paragraph("您的傳承風格：", styleH))
-        story.append(Paragraph(st.session_state.legacy_style_result, styleN))
-        story.append(Spacer(1, 12))
-
-    if "key_issues" in st.session_state:
-        story.append(Paragraph("模組二：您最在意的重點", styleH))
-        for issue in st.session_state.key_issues:
-            story.append(Paragraph(f"• {issue}", styleN))
-        if st.session_state.get("reason"):
-            story.append(Paragraph(f"原因：{st.session_state.reason}", styleN))
-        story.append(Spacer(1, 12))
-
-    if "directions" in st.session_state:
-        story.append(Paragraph("模組三：您期望的未來方向", styleH))
-        for d in st.session_state.directions:
-            story.append(Paragraph(f"• {d}", styleN))
-        if st.session_state.get("custom_direction"):
-            story.append(Paragraph(f"補充：{st.session_state.custom_direction}", styleN))
-        story.append(Spacer(1, 12))
-
-    story.append(Paragraph("對談前的思考引導", styleH))
-    story.append(Paragraph("這三個問題，邀請您在心中停留片刻：", styleN))
-    story.append(Paragraph("1. 如果我今天退休，最擔心的事情是什麼？", styleN))
-    story.append(Paragraph("2. 我希望未來家人如何記得我？", styleN))
-    story.append(Paragraph("3. 有沒有什麼，是我現在就可以決定、啟動的？", styleN))
-    story.append(Spacer(1, 20))
-
-    story.append(Paragraph("下一步，我們可以一起完成", styleH))
-    story.append(Paragraph("如果這份紀錄讓您浮現了願景，我們誠摯邀請您預約對談，一起為未來鋪路。", styleN))
-    story.append(Spacer(1, 12))
-    story.append(Spacer(1, 6))  # 加上額外空白行
-    story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
-    story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
-
-    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
-    doc.build(story)
-    buffer.seek(0)
-    return buffer
-
-# 嘗試載入 logo
 try:
     logo_base64 = load_logo_base64("logo.png")
     st.markdown(f"""
@@ -96,7 +23,7 @@ try:
         <div style='font-size: 18px; font-weight: bold; margin-top: 0.5em;'>傳承您的影響力</div>
     </div>
     """, unsafe_allow_html=True)
-except Exception as e:
+except Exception:
     st.warning("⚠️ 無法載入 logo 圖檔，請確認 logo.png 是否存在。")
 
 st.markdown("""
@@ -108,24 +35,19 @@ st.markdown("""
 <br>
 """, unsafe_allow_html=True)
 
-
-
 # 初始化狀態
 for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
     if key not in st.session_state:
         st.session_state[key] = False
 
-# 首頁按鈕引導（觸發 started 狀態）
+# 初始按鈕
 if not st.session_state.started:
     if st.button("開始整理我的傳承藍圖"):
         st.session_state.started = True
     else:
         st.stop()
 
-# 其餘模組邏輯請接續在這之後...（例如 legacy_quiz, 模組一～模組四邏輯）
-
-
-# 模組一：傳承風格小測驗
+# 模組一：風格測驗
 if st.session_state.started and not st.session_state.legacy_quiz_done:
     st.markdown("## 傳承風格小測驗：我是怎麼看待家族傳承的？")
     st.markdown("請根據您的直覺選出最貼近您想法的選項。")
@@ -157,12 +79,9 @@ if st.session_state.started and not st.session_state.legacy_quiz_done:
 
         st.session_state.legacy_quiz_done = True
 
-# 顯示結果並進入下一步
+# 模組一延伸：想法收集
 if st.session_state.legacy_quiz_done and not st.session_state.submitted:
-    st.markdown("## 您的傳承風格")
-    st.success(st.session_state.legacy_style_result)
-    st.markdown("---")
-    st.markdown("### 模組一：最近，您常想些什麼？")
+    st.markdown("## 模組一：最近，您常想些什麼？")
     options = st.multiselect(
         "請選出最近比較常想的事（可複選）：",
         [
@@ -215,7 +134,7 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
         st.session_state.custom_direction = custom_direction
         st.session_state.module_three_done = True
 
-# 模組四：策略展開入口
+# 模組四：策略建議
 if st.session_state.module_three_done and not st.session_state.module_four_done:
     st.markdown("## 模組四：行動策略，從這裡慢慢展開")
     st.markdown("釐清了想法之後，這一步我們陪您看看有哪些小步驟可以開始安排，慢慢走、也走得穩。")
@@ -227,9 +146,8 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
     if st.button("完成策略初步探索"):
         st.session_state.module_four_done = True
 
-# 模組五 & 六：行動引導 + PDF 下載 + 預約
+# 模組五：行動引導 + PDF + 預約
 if st.session_state.module_four_done:
-    st.markdown("---")
     st.markdown("## 下一步，我可以從哪裡開始？")
     st.markdown("🎉 您已經整理出一些非常重要的思考！")
 
@@ -262,7 +180,6 @@ if st.session_state.module_four_done:
 📧 聯絡我們：123@gracefo.com
 """, unsafe_allow_html=True)
 
-    # ✅ 最後的結語（正確縮排）
     st.markdown("---")
     st.markdown("感謝您完成這段探索。我們相信，每一次釐清與行動，都是為未來鋪路的開始。")
     st.markdown("願您的影響力，代代傳承。🌿")

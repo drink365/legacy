@@ -183,13 +183,14 @@ if st.session_state.module_four_done:
     st.markdown("## 模組五：預約諮詢")
     st.markdown("🌿 恭喜您，這些思考將是未來傳承藍圖的起點。")
     st.markdown("📩 如果您想更具體地展開行動，我們誠摯邀請您預約 30 分鐘專屬對談。")
-    if st.button("📆 我想預約聊聊我的想法"):
-        st.info("請來信至 123@gracefo.com，我們會親自為您安排。")
 
-    with st.expander("📄 點此下載探索紀錄 PDF"):
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("[📆 我想預約聊聊我的想法](mailto:123@gracefo.com?subject=預約家族傳承諮詢&body=您好，我想預約一對一對談，請協助安排時間，謝謝！)")
+    with col2:
         pdf_buffer = generate_pdf()
         st.download_button(
-            label="下載我的探索紀錄",
+            label="📄 下載我的探索紀錄",
             data=pdf_buffer,
             file_name="永傳AI探索報告.pdf",
             mime="application/pdf"

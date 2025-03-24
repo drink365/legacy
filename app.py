@@ -1,6 +1,7 @@
 import streamlit as st
 import base64
 import os
+from io import BytesIO
 from modules.strategy_module import get_strategy_suggestions
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
@@ -26,7 +27,7 @@ def load_logo_base64(image_path):
 # PDF 報告產出
 
 def generate_pdf():
-    pdf_path = "/mnt/data/永傳AI探索報告.pdf"
+    buffer = BytesIO()
     logo_path = "logo.png"
     font_path = "NotoSansTC-Regular.ttf"
 
@@ -77,9 +78,10 @@ def generate_pdf():
     story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
     story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
 
-    doc = SimpleDocTemplate(pdf_path, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
     doc.build(story)
-    return pdf_path
+    buffer.seek(0)
+    return buffer
 
 # 嘗試載入 logo
 try:
@@ -185,14 +187,13 @@ if st.session_state.module_four_done:
         st.info("請來信至 123@gracefo.com，我們會親自為您安排。")
 
     with st.expander("📄 點此下載探索紀錄 PDF"):
-        pdf = generate_pdf()
-        with open(pdf, "rb") as f:
-            st.download_button(
-                label="下載我的探索紀錄",
-                data=f,
-                file_name="永傳AI探索報告.pdf",
-                mime="application/pdf"
-            )
+        pdf_buffer = generate_pdf()
+        st.download_button(
+            label="下載我的探索紀錄",
+            data=pdf_buffer,
+            file_name="永傳AI探索報告.pdf",
+            mime="application/pdf"
+        )
 
     st.markdown("""
 📌 永傳家族辦公室｜[https://gracefo.com/](https://gracefo.com/)  

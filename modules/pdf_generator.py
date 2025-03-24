@@ -33,7 +33,7 @@ def generate_pdf():
 
     if "legacy_style_result" in st.session_state:
         story.append(Paragraph("您的傳承風格：", styleH))
-        story.append(Paragraph(st.session_state.legacy_style_result, styleN))
+        story.append(Paragraph(st.session_state.legacy_style_result.replace("❤️", "").replace("💼", "").replace("🧭", ""), styleN))
         story.append(Spacer(1, 12))
 
     if "key_issues" in st.session_state:

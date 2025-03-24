@@ -77,7 +77,7 @@ def generate_pdf():
 
     story.append(Paragraph("下一步，我們可以一起完成", styleH))
     story.append(Paragraph("如果這份紀錄讓您浮現了願景，我們誠摯邀請您預約對談，一起為未來鋪路。", styleN))
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 12))
     story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
     story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
 
@@ -111,7 +111,6 @@ st.markdown("""
 for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
     if key not in st.session_state:
         st.session_state[key] = False
-
 
 
 # 模組一：傳承風格小測驗
@@ -219,6 +218,13 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
 # 模組五 & 六：行動引導 + PDF 下載 + 預約
 if st.session_state.module_four_done:
     st.markdown("---")
+
+    # 最後的結語
+st.markdown("---")
+st.markdown("感謝您完成這段探索。我們相信，每一次釐清與行動，都是為未來鋪路的開始。")
+st.markdown("願您的影響力，代代傳承。🌿")
+
+    
     st.markdown("## 下一步，我可以從哪裡開始？")
     st.markdown("🎉 您已經整理出一些非常重要的思考！")
 
@@ -251,7 +257,3 @@ if st.session_state.module_four_done:
 📧 聯絡我們：123@gracefo.com
 """, unsafe_allow_html=True)
 
-# 最後的結語
-st.markdown("---")
-st.markdown("感謝您完成這段探索。我們相信，每一次釐清與行動，都是為未來鋪路的開始。")
-st.markdown("願您的影響力，代代傳承。🌿")

@@ -1,5 +1,4 @@
 import streamlit as st
-import base64
 from modules.strategy_module import get_strategy_suggestions
 from modules.pdf_generator import generate_pdf
 
@@ -10,47 +9,34 @@ st.set_page_config(
     layout="centered"
 )
 
-# LOGO base64 顯示
-def load_logo_base64(image_path):
-    with open(image_path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
+# 初始化 session state
+for key in [
+    "started", "legacy_quiz_done", "legacy_style_result",
+    "submitted", "options", "custom_input",
+    "module_two_done", "key_issues", "reason",
+    "module_three_done", "directions", "custom_direction",
+    "module_four_done"
+]:
+    if key not in st.session_state:
+        st.session_state[key] = False if not key.startswith("custom") else ""
 
-try:
-    logo_base64 = load_logo_base64("logo.png")
-    st.markdown(f"""
+# 初始畫面
+if not st.session_state.started:
+    st.markdown("""
     <div style='text-align: center;'>
-        <img src='data:image/png;base64,{logo_base64}' width='200'><br>
-        <div style='font-size: 18px; font-weight: bold; margin-top: 0.5em;'>傳承您的影響力</div>
+        <h2>🌿 傳承您的影響力</h2>
+        <p>每一位家族的掌舵者，都是家族傳承的種子。<br>
+        我們陪您，讓這份影響力持續茁壯。</p>
     </div>
     """, unsafe_allow_html=True)
-except Exception:
-    st.warning("⚠️ 無法載入 logo 圖檔，請確認 logo.png 是否存在。")
-
-st.markdown("""
-<br>
-<div style='text-align: center; font-size: 20px; font-weight: bold;'>
-🌱 每一位家族的掌舵者，都是家族傳承的種子。<br>
-我們陪您，讓這份影響力持續茁壯。
-</div>
-<br>
-""", unsafe_allow_html=True)
-
-# 初始化狀態
-for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
-    if key not in st.session_state:
-        st.session_state[key] = False
-
-# 初始按鈕
-if not st.session_state.started:
     if st.button("開始整理我的傳承藍圖"):
         st.session_state.started = True
-    else:
-        st.stop()
+    st.stop()
 
-# 模組一：風格測驗
-if st.session_state.started and not st.session_state.legacy_quiz_done:
+# 傳承風格小測驗
+if not st.session_state.legacy_quiz_done:
     st.markdown("## 傳承風格小測驗：我是怎麼看待家族傳承的？")
-    st.markdown("請根據您的直覺選出最貼近您想法的選項。")
+    st.markdown("請根據直覺選出最貼近您想法的選項：")
 
     questions = [
         ("傳承的出發點對我來說，最重要的是：", ["家人能持續相處和睦", "資產能安全地傳承下去", "我的理念能被理解與延續"]),
@@ -79,27 +65,31 @@ if st.session_state.started and not st.session_state.legacy_quiz_done:
 
         st.session_state.legacy_quiz_done = True
 
-# 模組一延伸：想法收集
+# 顯示測驗結果
 if st.session_state.legacy_quiz_done and not st.session_state.submitted:
-    st.markdown("## 模組一：最近，您常想些什麼？")
-    options = st.multiselect(
-        "請選出最近比較常想的事（可複選）：",
-        [
-            "公司的未來要怎麼安排？",
-            "孩子適不適合承接家業？",
-            "退休後的生活要怎麼過？",
-            "怎麼分配資產才公平？",
-            "家族成員之間的關係",
-            "萬一健康出現變化怎麼辦？",
-            "我想慢慢退下來，但不知道從哪開始"
-        ]
-    )
-    custom_input = st.text_area("還有什麼最近常出現在您心裡的？（可以不填）")
+    st.markdown("## 您的傳承風格")
+    st.success(st.session_state.legacy_style_result)
+    st.markdown("---")
+    st.markdown("### 模組一：最近，您常想些什麼？")
+    st.markdown("請從下列選項勾選，也可自由補充。")
+
+    options = st.multiselect("我最近常想的是：", [
+        "公司的未來要怎麼安排？",
+        "孩子適不適合承接家業？",
+        "退休後的生活要怎麼過？",
+        "怎麼分配資產才公平？",
+        "家族成員之間的關係",
+        "萬一健康出現變化怎麼辦？",
+        "我想慢慢退下來，但不知道從哪開始"
+    ])
+
+    custom_input = st.text_area("還有什麼最近常出現在您心裡的？（可不填）")
 
     if st.button("繼續"):
         st.session_state.options = options
         st.session_state.custom_input = custom_input
         st.session_state.submitted = True
+
 
 # 模組二：優先排序
 if st.session_state.submitted and not st.session_state.module_two_done:

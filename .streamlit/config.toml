@@ -12,8 +12,9 @@ showSidebarNavigation = true
 [browser]
 gatherUsageStats = false
 
-[menuItems]
-# 這些是側邊選單自訂項目（預設語言為英文，這裡改為中文）
-"關於永傳" = "about"
-"實例分享" = "cases"
-"聯絡我們" = "contact"
+[pages]
+"app.py" = "首頁"
+"pages/about.py" = "關於我們"
+"pages/cases.py" = "探索案例"
+"pages/contact.py" = "聯絡方式"
+"pages/coach.py" = "AI 傳承教練"

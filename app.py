@@ -66,7 +66,6 @@ st.markdown("</div>", unsafe_allow_html=True)
 # 底部資訊
 st.markdown("""
 <div style='text-align: center; font-size: 12px; color: gray;'>
-永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a>｜<a href="mailto:123@gracefo.com">聯絡信箱：123@gracefo.com</a>
+永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a>｜聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)
-

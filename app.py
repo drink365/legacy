@@ -64,9 +64,9 @@ if st.button("🌿 開始探索傳承藍圖"):
 st.markdown("</div>", unsafe_allow_html=True)
 
 # 底部資訊
-st.markdown("---")
 st.markdown("""
 <div style='text-align: center; font-size: 12px; color: gray;'>
-永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a>｜聯絡信箱：123@gracefo.com
+永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a>｜<a href="mailto:123@gracefo.com">聯絡信箱：123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)
+

@@ -5,12 +5,7 @@ import base64
 st.set_page_config(
     page_title="永傳 AI 傳承教練 - 首頁",
     page_icon="🌿",
-    layout="centered",
-    menu_items={
-        "Get Help": "https://gracefo.com/help",
-        "Report a Bug": "https://gracefo.com/contact",
-        "About": "https://gracefo.com"
-    }
+    layout="centered"
 )
 
 # Logo base64 顯示
@@ -60,10 +55,11 @@ st.markdown("---")
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
 if st.button("🌿 開始探索傳承藍圖"):
-    st.switch_page("coach.py")
+    st.switch_page("pages/coach.py")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # 底部資訊
+st.markdown("---")
 st.markdown("""
 <div style='text-align: center; font-size: 12px; color: gray;'>
 永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a>｜聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>

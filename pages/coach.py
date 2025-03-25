@@ -17,16 +17,12 @@ for key in ["started", "submitted", "module_two_done", "module_three_done", "mod
     if key not in st.session_state:
         st.session_state[key] = False
 
-# 開始探索按鈕（使用表單避免需點兩次）
+# 開始探索按鈕（只需點一次即可切換狀態）
 if not st.session_state.started:
-    with st.form(key="start_form"):
-        st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-        start_clicked = st.form_submit_button("🌿 開始探索傳承藍圖")
-        st.markdown("</div>", unsafe_allow_html=True)
-        if start_clicked:
-            st.session_state.started = True
-        else:
-            st.stop()
+    if st.button("🌿 開始探索傳承藍圖"):
+        st.session_state.started = True
+        st.experimental_rerun()
+    st.stop()
 
 # 傳承風格小測驗
 if st.session_state.started and not st.session_state.legacy_quiz_done:
@@ -59,6 +55,8 @@ if st.session_state.started and not st.session_state.legacy_quiz_done:
             st.session_state.legacy_style_result = "🧭 領航者型：您重視理念與精神的延續，適合透過願景建立、生命故事傳承影響力。"
 
         st.session_state.legacy_quiz_done = True
+
+
 
 # 顯示結果並進入模組一
 if st.session_state.legacy_quiz_done and not st.session_state.submitted:

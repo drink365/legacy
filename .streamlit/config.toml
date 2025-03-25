@@ -1,7 +1,7 @@
 [theme]
-base = "light"         # 使用亮色主題
-primaryColor = "#4CAF50"  # 主色調（永傳綠）
-font = "sans serif"    # 字體風格
+base = "light"
+primaryColor = "#4CAF50"
+font = "sans serif"
 
 [server]
 headless = true
@@ -11,7 +11,3 @@ showSidebarNavigation = true
 
 [browser]
 gatherUsageStats = false
-
-[general]
-# 指定首頁為 landing.py，需放在主目錄
-initialPage = "landing.py"

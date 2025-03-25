@@ -90,6 +90,10 @@ if st.session_state.legacy_quiz_done and not st.session_state.submitted:
         st.session_state.custom_input = custom_input
         st.session_state.submitted = True
 
+# 模組二、三、四...（保持不變）
+# 後續邏輯照原本流程接續即可
+
+
 
 # 模組二：優先排序
 if st.session_state.submitted and not st.session_state.module_two_done:

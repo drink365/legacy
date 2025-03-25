@@ -11,3 +11,9 @@ showSidebarNavigation = true
 
 [browser]
 gatherUsageStats = false
+
+[menuItems]
+# 這些是側邊選單自訂項目（預設語言為英文，這裡改為中文）
+"關於永傳" = "about"
+"實例分享" = "cases"
+"聯絡我們" = "contact"

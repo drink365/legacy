@@ -1,3 +1,4 @@
+# landing.py
 import streamlit as st
 import base64
 
@@ -5,7 +6,12 @@ import base64
 st.set_page_config(
     page_title="永傳 AI 傳承教練 - 首頁",
     page_icon="🌿",
-    layout="centered"
+    layout="centered",
+    menu_items={
+        "Get Help": "取得協助",
+        "Report a bug": "回報問題",
+        "About": "關於此應用程式"
+    }
 )
 
 # Logo base64 顯示
@@ -54,8 +60,8 @@ st.markdown("""
 st.markdown("---")
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-if st.button("🌿 開始整理我的傳承藍圖"):
-    st.switch_page("pages/coach.py")
+if st.button("🌿 開始探索傳承藍圖"):
+    st.switch_page("app.py")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # 底部資訊

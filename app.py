@@ -1,4 +1,3 @@
-# landing.py
 import streamlit as st
 import base64
 
@@ -8,9 +7,9 @@ st.set_page_config(
     page_icon="🌿",
     layout="centered",
     menu_items={
-        "Get Help": "取得協助",
-        "Report a bug": "回報問題",
-        "About": "關於此應用程式"
+        "Get Help": "https://gracefo.com/help",
+        "Report a Bug": "https://gracefo.com/contact",
+        "About": "https://gracefo.com"
     }
 )
 
@@ -61,7 +60,7 @@ st.markdown("---")
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
 if st.button("🌿 開始探索傳承藍圖"):
-    st.switch_page("app.py")
+    st.switch_page("coach.py")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # 底部資訊

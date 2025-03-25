@@ -5,7 +5,12 @@ import base64
 st.set_page_config(
     page_title="永傳 AI 傳承教練 - 首頁",
     page_icon="🌿",
-    layout="centered"
+    layout="centered",
+    menu_items={
+        "Get help": "https://gracefo.com/",
+        "Report a bug": "https://gracefo.com/",
+        "About": "永傳家族辦公室｜傳承您的影響力"
+    }
 )
 
 # Logo base64 顯示

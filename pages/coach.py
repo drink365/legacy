@@ -1,4 +1,7 @@
 import streamlit as st
+import base64
+import os
+from io import BytesIO
 from modules.strategy_module import get_strategy_suggestions
 from modules.pdf_generator import generate_pdf
 
@@ -9,41 +12,33 @@ st.set_page_config(
     layout="centered"
 )
 
-# 初始化 session state
-for key in [
-    "started", "legacy_quiz_done", "legacy_style_result",
-    "submitted", "options", "custom_input",
-    "module_two_done", "key_issues", "reason",
-    "module_three_done", "directions", "custom_direction",
-    "module_four_done"
-]:
+# 初始化狀態
+for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
     if key not in st.session_state:
-        st.session_state[key] = False if not key.startswith("custom") else ""
+        st.session_state[key] = False
 
-# 初始畫面
+# 開始探索按鈕（使用表單避免需點兩次）
 if not st.session_state.started:
-    st.markdown("""
-    <div style='text-align: center;'>
-        <h2>🌿 傳承您的影響力</h2>
-        <p>每一位家族的掌舵者，都是家族傳承的種子。<br>
-        我們陪您，讓這份影響力持續茁壯。</p>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("開始整理我的傳承藍圖"):
-        st.session_state.started = True
-    st.stop()
+    with st.form(key="start_form"):
+        st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+        start_clicked = st.form_submit_button("🌿 開始探索傳承藍圖")
+        st.markdown("</div>", unsafe_allow_html=True)
+        if start_clicked:
+            st.session_state.started = True
+        else:
+            st.stop()
 
 # 傳承風格小測驗
-if not st.session_state.legacy_quiz_done:
+if st.session_state.started and not st.session_state.legacy_quiz_done:
     st.markdown("## 傳承風格小測驗：我是怎麼看待家族傳承的？")
-    st.markdown("請根據直覺選出最貼近您想法的選項：")
+    st.markdown("請根據您的直覺選出最貼近您想法的選項。")
 
     questions = [
         ("傳承的出發點對我來說，最重要的是：", ["家人能持續相處和睦", "資產能安全地傳承下去", "我的理念能被理解與延續"]),
         ("當子女表達不想接班，我會：", ["不勉強他們，找外部幫手也可", "再觀察是否只是短期情緒", "引導他們理解我創業的初衷"]),
         ("我最擔心未來的哪種情況？", ["家人產生衝突", "資產糾紛或稅務出錯", "後代迷失方向、失去初衷"]),
         ("面對傳承，我比較喜歡的風格是：", ["柔和溝通，建立共識", "明確制度、先講規則", "敘說理念，引導願景"]),
-        ("我最希望扮演的角色是：", ["和平橋樑，維持關係", "安排者，設計制度與策略", "領航者，引領下一代看見方向"])
+        ("我最希望扮演的角色是：", ["和平橋樑，維持關係", "安排者，設計制度與策略", "領航者，引領下一代看見方向"]),
     ]
 
     selections = []
@@ -65,37 +60,32 @@ if not st.session_state.legacy_quiz_done:
 
         st.session_state.legacy_quiz_done = True
 
-# 顯示測驗結果
+# 顯示結果並進入模組一
 if st.session_state.legacy_quiz_done and not st.session_state.submitted:
     st.markdown("## 您的傳承風格")
     st.success(st.session_state.legacy_style_result)
     st.markdown("---")
     st.markdown("### 模組一：最近，您常想些什麼？")
-    st.markdown("請從下列選項勾選，也可自由補充。")
-
-    options = st.multiselect("我最近常想的是：", [
-        "公司的未來要怎麼安排？",
-        "孩子適不適合承接家業？",
-        "退休後的生活要怎麼過？",
-        "怎麼分配資產才公平？",
-        "家族成員之間的關係",
-        "萬一健康出現變化怎麼辦？",
-        "我想慢慢退下來，但不知道從哪開始"
-    ])
-
-    custom_input = st.text_area("還有什麼最近常出現在您心裡的？（可不填）")
+    options = st.multiselect(
+        "請選出最近比較常想的事（可複選）：",
+        [
+            "公司的未來要怎麼安排？",
+            "孩子適不適合承接家業？",
+            "退休後的生活要怎麼過？",
+            "怎麼分配資產才公平？",
+            "家族成員之間的關係",
+            "萬一健康出現變化怎麼辦？",
+            "我想慢慢退下來，但不知道從哪開始"
+        ]
+    )
+    custom_input = st.text_area("還有什麼最近常出現在您心裡的？（可以不填）")
 
     if st.button("繼續"):
         st.session_state.options = options
         st.session_state.custom_input = custom_input
         st.session_state.submitted = True
 
-# 模組二、三、四...（保持不變）
-# 後續邏輯照原本流程接續即可
-
-
-
-# 模組二：優先排序
+# 模組二
 if st.session_state.submitted and not st.session_state.module_two_done:
     st.markdown("## 模組二：您最在意的重點")
     combined_options = list(st.session_state.options)
@@ -109,7 +99,7 @@ if st.session_state.submitted and not st.session_state.module_two_done:
         st.session_state.reason = reason
         st.session_state.module_two_done = True
 
-# 模組三：未來方向
+# 模組三
 if st.session_state.module_two_done and not st.session_state.module_three_done:
     st.markdown("## 模組三：您期望的未來方向")
     direction_choices = st.multiselect(
@@ -128,7 +118,7 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
         st.session_state.custom_direction = custom_direction
         st.session_state.module_three_done = True
 
-# 模組四：策略建議
+# 模組四
 if st.session_state.module_three_done and not st.session_state.module_four_done:
     st.markdown("## 模組四：行動策略，從這裡慢慢展開")
     st.markdown("釐清了想法之後，這一步我們陪您看看有哪些小步驟可以開始安排，慢慢走、也走得穩。")
@@ -140,8 +130,9 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
     if st.button("完成策略初步探索"):
         st.session_state.module_four_done = True
 
-# 模組五：行動引導 + PDF + 預約
+# 模組五
 if st.session_state.module_four_done:
+    st.markdown("---")
     st.markdown("## 下一步，我可以從哪裡開始？")
     st.markdown("🎉 您已經整理出一些非常重要的思考！")
 
@@ -170,8 +161,8 @@ if st.session_state.module_four_done:
 👉 <a href="mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求。" target="_blank">點我寄信預約對談</a>
 
 ---
-📌 永傳家族辦公室｜https://gracefo.com/  
-📧 聯絡我們：123@gracefo.com
+📌 永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a>  
+📧 聯絡我們：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 """, unsafe_allow_html=True)
 
     st.markdown("---")

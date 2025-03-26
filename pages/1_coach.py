@@ -2,13 +2,6 @@ import streamlit as st
 from modules.strategy_module import get_strategy_suggestions
 from modules.pdf_generator import generate_pdf
 
-# 設定頁面標題
-st.set_page_config(
-    page_title="傳承教練",
-    page_icon="🌿",
-    layout="centered"
-)
-
 # 初始化狀態
 for key in ["submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
     if key not in st.session_state:
@@ -16,6 +9,7 @@ for key in ["submitted", "module_two_done", "module_three_done", "module_four_do
 
 # 傳承風格小測驗
 if not st.session_state.legacy_quiz_done:
+    st.set_page_config(page_title="探索傳承風格", page_icon="🌿")
     st.markdown("## 傳承風格小測驗：我是怎麼看待家族傳承的？")
     st.markdown("請根據您的直覺選出最貼近您想法的選項。")
 
@@ -142,8 +136,13 @@ if st.session_state.module_four_done:
 
     st.markdown("### 📬 預約深入對談")
     if st.button("📩 點我寄信預約對談"):
-        js = "window.open('mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求。')"
-        st.components.v1.html(f"<script>{js}</script>", height=0)
+        st.markdown("<meta http-equiv='refresh' content='0;url=mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求。'>", unsafe_allow_html=True)
+
+    st.markdown("""
+    ---
+    📌 永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a>  
+    📧 聯絡我們：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
+    """, unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("感謝您完成這段探索。我們相信，每一次釐清與行動，都是為未來鋪路的開始。")

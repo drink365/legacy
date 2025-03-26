@@ -2,9 +2,9 @@ import streamlit as st
 from modules.strategy_module import get_strategy_suggestions
 from modules.pdf_generator import generate_pdf
 
-# 頁面設定
+# 設定頁面標題
 st.set_page_config(
-    page_title="永傳 AI 傳承教練",
+    page_title="傳承教練",
     page_icon="🌿",
     layout="centered"
 )

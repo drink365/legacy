@@ -54,7 +54,7 @@ st.markdown("---")
 st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
 if st.button("🌿 開始探索傳承藍圖"):
-    st.switch_page("coach")
+    st.switch_page("探索藍圖")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # 底部資訊

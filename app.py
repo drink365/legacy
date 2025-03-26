@@ -1,7 +1,6 @@
 import streamlit as st
 import base64
 
-# 頁面設定
 st.set_page_config(
     page_title="永傳 AI 傳承教練 - 首頁",
     page_icon="🌿",

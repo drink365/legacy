@@ -1,16 +1,6 @@
 import streamlit as st
-import base64
-import os
-from io import BytesIO
 from modules.strategy_module import get_strategy_suggestions
 from modules.pdf_generator import generate_pdf
-
-# 頁面設定
-st.set_page_config(
-    page_title="永傳 AI 傳承教練",
-    page_icon="🌿",
-    layout="centered"
-)
 
 # 初始化狀態
 for key in ["submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:

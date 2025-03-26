@@ -138,12 +138,18 @@ if st.session_state.module_four_done:
     st.markdown("""
 若您希望更進一步實現這些想法，我們非常樂意為您提供協助。
 
-👉 <a href="mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求。" target="_blank">點我寄信預約對談</a>
+# 結尾預約按鈕範例
+if st.session_state.module_four_done:
+    st.markdown("---")
+    st.markdown("### 📬 預約深入對談")
+    if st.button("📧 點我寄信預約對談"):
+        js = "window.open('mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求。')"
+        st.components.v1.html(f"<script>{js}</script>", height=0)
 
----
-📌 永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a>  
-📧 聯絡我們：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
-""", unsafe_allow_html=True)
+    st.markdown("---")
+    st.markdown("📌 永傳家族辦公室｜[https://gracefo.com](https://gracefo.com)  ")
+    st.markdown("📧 聯絡我們：123@gracefo.com")
+
 
     st.markdown("---")
     st.markdown("感謝您完成這段探索。我們相信，每一次釐清與行動，都是為未來鋪路的開始。")

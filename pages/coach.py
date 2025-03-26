@@ -13,18 +13,12 @@ st.set_page_config(
 )
 
 # 初始化狀態
-for key in ["started", "submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
+for key in ["submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
     if key not in st.session_state:
         st.session_state[key] = False
 
-# 開始探索按鈕
-if not st.session_state.started:
-    if st.button("🌿 開始探索傳承藍圖"):
-        st.session_state.started = True
-    st.stop()
-
 # 傳承風格小測驗
-if st.session_state.started and not st.session_state.legacy_quiz_done:
+if not st.session_state.legacy_quiz_done:
     st.markdown("## 傳承風格小測驗：我是怎麼看待家族傳承的？")
     st.markdown("請根據您的直覺選出最貼近您想法的選項。")
 
@@ -79,6 +73,7 @@ if st.session_state.legacy_quiz_done and not st.session_state.submitted:
         st.session_state.options = options
         st.session_state.custom_input = custom_input
         st.session_state.submitted = True
+
 
 # 模組二
 if st.session_state.submitted and not st.session_state.module_two_done:

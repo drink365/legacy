@@ -2,6 +2,13 @@ import streamlit as st
 from modules.strategy_module import get_strategy_suggestions
 from modules.pdf_generator import generate_pdf
 
+# 頁面設定
+st.set_page_config(
+    page_title="永傳 AI 傳承教練",
+    page_icon="🌿",
+    layout="centered"
+)
+
 # 初始化狀態
 for key in ["submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
     if key not in st.session_state:
@@ -135,7 +142,7 @@ if st.session_state.module_four_done:
 
     st.markdown("### 📬 預約深入對談")
     if st.button("📩 點我寄信預約對談"):
-        js = "window.open('mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求.')"
+        js = "window.open('mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求。')"
         st.components.v1.html(f"<script>{js}</script>", height=0)
 
     st.markdown("---")

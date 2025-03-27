@@ -1,5 +1,4 @@
-import streamlit as st
-from typing import Tuple
+from typing import Tuple, List
 from modules.tax_constants import TaxConstants
 
 class EstateTaxCalculator:
@@ -8,15 +7,9 @@ class EstateTaxCalculator:
     def __init__(self, constants: TaxConstants):
         self.constants = constants
 
-    def compute_deductions(
-        self,
-        spouse: bool,
-        adult_children: int,
-        other_dependents: int,
-        disabled_people: int,
-        parents: int
-    ) -> float:
-        """計算扣除額總計"""
+    def compute_deductions(self, spouse: bool, adult_children: int, other_dependents: int,
+                           disabled_people: int, parents: int) -> float:
+        """計算總扣除額"""
         spouse_deduction = self.constants.SPOUSE_DEDUCTION_VALUE if spouse else 0
         total_deductions = (
             spouse_deduction +
@@ -28,33 +21,18 @@ class EstateTaxCalculator:
         )
         return total_deductions
 
-    @st.cache_data
-    def calculate_estate_tax(
-        _self,
-        total_assets: float,
-        spouse: bool,
-        adult_children: int,
-        other_dependents: int,
-        disabled_people: int,
-        parents: int
-    ) -> Tuple[float, float, float]:
-        """計算課稅遺產淨額與稅額"""
-        deductions = _self.compute_deductions(
-            spouse, adult_children, other_dependents, disabled_people, parents
-        )
-        exempted_total = _self.constants.EXEMPT_AMOUNT + deductions
-
-        if total_assets < exempted_total:
-            return 0.0, 0.0, deductions
-
-        taxable_amount = max(0, total_assets - exempted_total)
+    def calculate_estate_tax(self, total_assets: float, spouse: bool, adult_children: int,
+                             other_dependents: int, disabled_people: int, parents: int) -> Tuple[float, float, float]:
+        """計算遺產稅"""
+        deductions = self.compute_deductions(spouse, adult_children, other_dependents, disabled_people, parents)
+        if total_assets < self.constants.EXEMPT_AMOUNT + deductions:
+            return 0, 0, deductions
+        taxable_amount = max(0, total_assets - self.constants.EXEMPT_AMOUNT - deductions)
         tax_due = 0.0
         previous_bracket = 0
-
-        for bracket, rate in _self.constants.TAX_BRACKETS:
+        for bracket, rate in self.constants.TAX_BRACKETS:
             if taxable_amount > previous_bracket:
                 taxable_at_rate = min(taxable_amount, bracket) - previous_bracket
                 tax_due += taxable_at_rate * rate
                 previous_bracket = bracket
-
         return taxable_amount, round(tax_due, 0), deductions

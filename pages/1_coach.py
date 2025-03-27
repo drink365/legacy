@@ -9,7 +9,7 @@ for key in ["submitted", "module_two_done", "module_three_done", "module_four_do
 
 # 傳承風格小測驗
 if not st.session_state.legacy_quiz_done:
-    st.set_page_config(page_title="探索傳承風格", page_icon="🌿")
+    st.set_page_config(page_title="探索傳承風格｜永傳 AI 傳承教練", page_icon="🌿")
     st.markdown("## 傳承風格小測驗：我是怎麼看待家族傳承的？")
     st.markdown("請根據您的直覺選出最貼近您想法的選項。")
 

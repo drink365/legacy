@@ -19,7 +19,7 @@ st.markdown("""
 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a>
 
 ### 📌 公司名稱
-永傳家族辦公室
+永傳家族辦公室  
 永傳科創股份有限公司
 
 ### 📍 公司地址

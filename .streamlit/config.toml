@@ -15,6 +15,6 @@ gatherUsageStats = false
 [pages]
 "app.py" = "首頁"
 "pages/1_coach.py" = "傳承風格"
-"pages/2_cases.py" = "探索案例"
+"pages/2_cases.py" = "案例分享"
 "pages/3_about.py" = "關於我們"
 "pages/4_contact.py" = "聯絡方式"

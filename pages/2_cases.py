@@ -1,7 +1,7 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="案例分享",
+    page_title="案例分享｜永傳 AI 傳承教練",
     page_icon="📚",
     layout="centered"
 )

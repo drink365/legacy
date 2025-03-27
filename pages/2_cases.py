@@ -1,12 +1,12 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="真實案例分享",
+    page_title="案例分享",
     page_icon="📚",
     layout="centered"
 )
 
-st.markdown("# 📚 真實案例分享")
+st.markdown("# 📚 案例分享")
 
 st.markdown("""
 在這個單元，我們將陸續分享不同家族的真實傳承故事。

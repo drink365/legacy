@@ -25,7 +25,7 @@ render_estate_tax_ui(calculator)
 # 最下方資訊
 st.markdown("---")
 st.markdown("""
-<div style='text-align: center; font-size: 12px; color: gray;'>
+<div style='text-align: center; font-size: 14px; color: gray;'>
 永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
 聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>

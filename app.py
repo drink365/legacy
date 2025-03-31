@@ -56,28 +56,24 @@ if quiz_option:
 st.markdown("---")
 st.markdown("### 💬 為什麼需要這個工具？")
 st.markdown("""
-這是一個幫助您整理思緒、掌握方向的智慧探索工具，  
+這是一個幫助您整理思緒、掌握方向的智慧探索工具，
 專為家族掌舵者量身打造。
 
-📍 協助您看見真正的關注點  
-📍 減輕與家人談論未來安排的壓力  
-📍 從心出發，找到適合的傳承路徑  
+📍 協助您看見真正的關注點
+📍 減輕與家人談論未來安排的壓力
+📍 從心出發，找到適合的傳承路徑
 
-🕒 **只需 10 分鐘，完成五個探索模組**，即可下載個人化報告，作為與家人或顧問討論的起點。  
+🕒 **只需 10 分鐘，完成五個探索模組**，即可下載個人化報告，作為與家人或顧問討論的起點。
+
 完成後若希望進一步對談，我們也提供預約服務。
 """)
 
-# CTA 區塊（美化按鈕）
+# CTA 區塊
 st.markdown("---")
-st.markdown("""
-<div style='text-align: center;'>
-    <a href='/pages/1_coach' target='_self'>
-        <button style='background-color: #4CAF50; color: white; padding: 0.75em 1.5em; font-size: 16px; border: none; border-radius: 8px; cursor: pointer;'>
-            🌿 立即開始我的傳承探索
-        </button>
-    </a>
-</div>
-""", unsafe_allow_html=True)
+st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+if st.button("🌿 立即開始我的傳承探索"):
+    st.switch_page("pages/1_coach.py")
+st.markdown("</div>", unsafe_allow_html=True)
 
 # 新增探索後行動導流
 st.markdown("---")

@@ -47,9 +47,10 @@ quiz_option = st.radio("", [
     "如果我不在了，資產怎麼處理？",
     "接班人真的準備好了嗎？",
     "家人之間的關係好像還沒穩固…"
-])
+], index=None)
 
-st.success("✅ 根據您的選項，您非常適合開始探索傳承藍圖！")
+if quiz_option:
+    st.success("✅ 根據您的選項，您非常適合開始探索傳承藍圖！")
 
 # 平台簡介
 st.markdown("---")

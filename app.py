@@ -41,7 +41,7 @@ st.markdown("---")
 
 # 首頁快測模組
 st.markdown("### 👣 最近，您有想過這些問題嗎？")
-st.markdown("選一個最有感的選項：")
+st.markdown("<div style='margin-bottom: -1em;'>選一個最有感的選項：</div>", unsafe_allow_html=True)
 quiz_option = st.radio("", [
     "我該怎麼安排退休金？",
     "如果我不在了，資產怎麼處理？",

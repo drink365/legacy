@@ -41,13 +41,15 @@ st.markdown("---")
 
 # 首頁快測模組
 st.markdown("### 👣 最近，您有想過這些問題嗎？")
-st.markdown("<div style='margin-bottom: -1em;'>選一個最有感的選項：</div>", unsafe_allow_html=True)
+st.markdown("""
+<div style='margin-bottom: -0.5em;'>選一個最有感的選項：</div>
+""", unsafe_allow_html=True)
 quiz_option = st.radio("", [
     "我該怎麼安排退休金？",
     "如果我不在了，資產怎麼處理？",
     "接班人真的準備好了嗎？",
     "家人之間的關係好像還沒穩固…"
-], index=None)
+], index=None, label_visibility="collapsed")
 
 if quiz_option:
     st.success("✅ 根據您的選項，您非常適合開始探索傳承藍圖！")
@@ -59,8 +61,8 @@ st.markdown("""
 這是一個幫助您整理思緒、掌握方向的智慧探索工具，
 專為家族掌舵者量身打造。
 
-📍 協助您看見真正的關注點
-📍 減輕與家人談論未來安排的壓力
+📍 協助您看見真正的關注點  
+📍 減輕與家人談論未來安排的壓力  
 📍 從心出發，找到適合的傳承路徑
 
 🕒 **只需 10 分鐘，完成五個探索模組**，即可下載個人化報告，作為與家人或顧問討論的起點。
@@ -70,10 +72,11 @@ st.markdown("""
 
 # CTA 區塊
 st.markdown("---")
-st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-if st.button("🌿 立即開始我的傳承探索"):
-    st.switch_page("pages/1_coach.py")
-st.markdown("</div>", unsafe_allow_html=True)
+st.markdown("""
+<div style='text-align: center;'>
+    <button onclick="location.href='/pages/1_coach.py'" style='background-color: #4CAF50; color: white; padding: 12px 24px; font-size: 16px; border: none; border-radius: 8px; cursor: pointer;'>🌿 立即開始我的傳承探索</button>
+</div>
+""", unsafe_allow_html=True)
 
 # 新增探索後行動導流
 st.markdown("---")

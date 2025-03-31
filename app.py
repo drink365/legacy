@@ -1,3 +1,4 @@
+# 優化 app.py 的 CTA 區塊，強化導流與轉換
 import streamlit as st
 import base64
 
@@ -24,7 +25,7 @@ except:
 
 # 品牌標語
 st.markdown("""
-<div style='text-align: center; font-size: 24px; font-weight: bold; margin-top: 1em;'>
+<div style='text-align: center; font-size: 28px; font-weight: bold; margin-top: 1em;'>
 傳承您的影響力
 </div>
 """, unsafe_allow_html=True)
@@ -38,29 +39,54 @@ st.markdown("""
 
 st.markdown("---")
 
-# 服務簡介
-st.markdown("### 💬 關於「永傳 AI 傳承教練」")
-st.markdown("""
-這是一套為家族掌舵者量身打造的對話工具，  
-幫助您釐清想法、看見方向，從容展開退休與傳承的準備。  
+# 首頁快測模組
+st.markdown("### 👣 最近，您有想過這些問題嗎？")
+st.markdown("選一個最有感的選項：")
+quiz_option = st.radio("", [
+    "我該怎麼安排退休金？",
+    "如果我不在了，資產怎麼處理？",
+    "接班人真的準備好了嗎？",
+    "家人之間的關係好像還沒穩固…"
+])
 
-🔸 無需註冊、無壓力體驗  
-🔸 透過 AI 對話梳理關鍵思維  
-🔸 匯出個人化探索紀錄，作為與家人／顧問對話的起點  
+st.success("✅ 根據您的選項，您非常適合開始探索傳承藍圖！")
+
+# 平台簡介
+st.markdown("---")
+st.markdown("### 💬 為什麼需要這個工具？")
+st.markdown("""
+這是一個幫助您整理思緒、掌握方向的智慧探索工具，
+專為家族掌舵者量身打造。
+
+📍 協助您看見真正的關注點
+📍 減輕與家人談論未來安排的壓力
+📍 從心出發，找到適合的傳承路徑
+
+🕒 **只需 10 分鐘，完成五個探索模組**，即可下載個人化報告，作為與家人或顧問討論的起點。
+
+完成後若希望進一步對談，我們也提供預約服務。
 """)
 
-# CTA 按鈕
+# CTA 區塊
 st.markdown("---")
-st.markdown("<br>", unsafe_allow_html=True)
 st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-if st.button("🌿 開始探索傳承藍圖"):
+if st.button("🌿 立即開始我的傳承探索"):
     st.switch_page("pages/1_coach.py")
 st.markdown("</div>", unsafe_allow_html=True)
+
+# 新增探索後行動導流
+st.markdown("---")
+st.markdown("### 📬 下一步，想了解我的傳承保障怎麼安排？")
+st.markdown("""
+💡 歡迎預約 1 對 1 對談，我們將依照您的探索結果，提供專屬傳承與保險建議。  
+👉 <a href="mailto:123@gracefo.com?subject=預約家族傳承規劃" target="_blank">點我寄信預約對談</a>
+""", unsafe_allow_html=True)
 
 # 底部資訊
 st.markdown("---")
 st.markdown("""
 <div style='text-align: center; font-size: 12px; color: gray;'>
-永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a>｜聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
+永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
+聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)

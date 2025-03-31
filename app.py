@@ -1,4 +1,4 @@
-# 優化 app.py 的 CTA 區塊，強化導流與轉換
+# app.py
 import streamlit as st
 import base64
 
@@ -39,11 +39,9 @@ st.markdown("""
 
 st.markdown("---")
 
-# 首頁快測模組
+# 快速診斷
 st.markdown("### 👣 最近，您有想過這些問題嗎？")
-st.markdown("""
-<div style='margin-bottom: -0.5em;'>選一個最有感的選項：</div>
-""", unsafe_allow_html=True)
+st.markdown("<div style='margin-bottom: -0.5em;'>選一個最有感的選項：</div>", unsafe_allow_html=True)
 quiz_option = st.radio("", [
     "我該怎麼安排退休金？",
     "如果我不在了，資產怎麼處理？",
@@ -54,32 +52,28 @@ quiz_option = st.radio("", [
 if quiz_option:
     st.success("✅ 根據您的選項，您非常適合開始探索傳承藍圖！")
 
-# 平台簡介
+# 工具介紹
 st.markdown("---")
 st.markdown("### 💬 為什麼需要這個工具？")
 st.markdown("""
-這是一個幫助您整理思緒、掌握方向的智慧探索工具，
+這是一個幫助您整理思緒、掌握方向的智慧探索工具，  
 專為家族掌舵者量身打造。
 
 📍 協助您看見真正的關注點  
 📍 減輕與家人談論未來安排的壓力  
-📍 從心出發，找到適合的傳承路徑
+📍 從心出發，找到適合的傳承路徑  
 
 🕒 **只需 10 分鐘，完成五個探索模組**，即可下載個人化報告，作為與家人或顧問討論的起點。
-
-完成後若希望進一步對談，我們也提供預約服務。
 """)
 
-# CTA 區塊
+# CTA 區塊（使用中文名稱作為 switch_page 的參數）
 st.markdown("---")
 st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-custom_btn = st.button("🌿 立即開始我的傳承探索")
+if st.button("🌿 立即開始我的傳承探索"):
+    st.switch_page("AI 傳承教練")
 st.markdown("</div>", unsafe_allow_html=True)
 
-if custom_btn:
-    st.switch_page("pages/1_coach.py")
-
-# 新增探索後行動導流
+# 額外導流
 st.markdown("---")
 st.markdown("### 📬 下一步，想了解我的傳承保障怎麼安排？")
 st.markdown("""
@@ -90,7 +84,7 @@ st.markdown("""
 # 底部資訊
 st.markdown("---")
 st.markdown("""
-<div style='text-align: center; font-size: 14px; color: gray;'>
+<div style='text-align: center; font-size: 13px; color: gray;'>
 永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
 聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>

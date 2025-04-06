@@ -1,4 +1,3 @@
-# 永傳 AI 傳承教練 - 首頁
 import streamlit as st
 import base64
 
@@ -39,78 +38,44 @@ st.markdown("""
 
 st.markdown("---")
 
-# 首頁快測模組
-st.markdown("### 👣 最近，您有想過這些問題嗎？")
-st.markdown("<div style='margin-bottom: -0.5em;'>選一個最有感的選項：</div>", unsafe_allow_html=True)
-quiz_option = st.radio("", [
-    "我該怎麼安排退休金？",
-    "如果我不在了，資產怎麼處理？",
-    "接班人真的準備好了嗎？",
-    "家人之間的關係好像還沒穩固…"
-], index=None)
+# CTA：啟動探索
+st.markdown("### 🌿 我該從哪裡開始？")
+st.markdown("10 分鐘探索流程，陪您釐清思緒、看見方向")
+if st.button("🚀 啟動傳承探索教練"):
+    st.session_state.start_from_home = True
+    st.switch_page("pages/1_coach.py")
 
-if quiz_option:
-    if quiz_option == "我該怎麼安排退休金？":
-        st.success("✅ 根據您的選項，建議您先進行退休金規劃！")
-        if st.button("前往退休試算工具"):
-            st.switch_page("pages/6_retirement.py")
-    else:
-        st.success("✅ 根據您的選項，您非常適合開始探索傳承藍圖！")
-        if st.button("啟動傳承探索教練"):
-            st.switch_page("pages/1_coach.py")
-
-# 平台簡介
+# 小工具收合區
 st.markdown("---")
-st.markdown("### 💬 為什麼需要這個工具？")
-st.markdown("""
-這是一個幫助您整理思緒、掌握方向的智慧探索工具，  
-專為家族掌舵者量身打造。
+with st.expander("📦 想試用小工具？"):
+    st.markdown("#### 🔸 AI秒算遺產稅")
+    st.write("快速估算您的遺產稅額與現金缺口，為稅務風險提前布局。")
+    if st.button("開始試算", key="tax_tool"):
+        st.switch_page("pages/5_estate_tax.py")
 
-📍 協助您看見真正的關注點  
-📍 減輕與家人談論未來安排的壓力  
-📍 從心出發，找到適合的傳承路徑
+    st.markdown("#### 🔸 傳承圖生成器（即將上線）")
+    st.write("輸入家族成員與資產型態，立即畫出風險與工具對應的視覺地圖。")
+    st.button("敬請期待", key="map_tool")
 
-🕒 **只需 10 分鐘，完成五個探索模組**，即可下載個人化報告，作為與家人或顧問討論的起點。
+    st.markdown("#### 🔸 保單組合模擬器（開發中）")
+    st.write("根據年齡、預算與繳費年期，自動試算合適的保單配置與現金流模型。")
+    st.button("敬請期待", key="insurance_tool")
 
-完成後若希望進一步對談，我們也提供預約服務。
-""")
+    st.markdown("#### 🔸 樂活退休試算器（開發中）")
+    st.write("估算您未來30年生活＋醫療＋長照支出，預測缺口，安心規劃未來。")
+    st.button("敬請期待", key="retirement_tool")
 
-# 工具導覽區
+# 柔性 CTA
 st.markdown("---")
-st.markdown("### 🧰 永傳家辦小工具")
-
-st.markdown("#### 🔸 AI秒算遺產稅")
-st.write("快速估算您的遺產稅額與現金缺口，為稅務風險提前布局。")
-if st.button("開始試算", key="tax_tool"):
-    st.switch_page("pages/5_estate_tax.py")
-
-st.markdown("#### 🔸 傳承圖生成器（即將上線）")
-st.write("輸入家族成員與資產型態，立即畫出風險與工具對應的視覺地圖。")
-st.button("敬請期待", key="map_tool")
-
-st.markdown("#### 🔸 保單組合模擬器（開發中）")
-st.write("根據年齡、預算與繳費年期，自動試算合適的保單配置與現金流模型。")
-st.button("敬請期待", key="insurance_tool")
-
-st.markdown("#### 🔸 樂活退休試算器")
-st.write("估算您未來30年生活＋醫療＋長照支出，預測缺口，安心規劃未來。")
-if st.button("開始試算", key="retirement_tool"):
-    st.switch_page("pages/6_retirement.py")
-
-
-# 行動導流與聯絡
-st.markdown("---")
-st.markdown("### 📬 下一步，想了解我的傳承保障怎麼安排？")
-st.markdown("""
-💡 歡迎預約 1 對 1 對談，我們將依照您的探索結果，提供專屬傳承與保險建議。  
-👉 <a href=\"mailto:123@gracefo.com?subject=預約家族傳承規劃\" target=\"_blank\">點我寄信預約對談</a>
-""", unsafe_allow_html=True)
+st.markdown("### 💬 還沒準備好？沒關係，我們可以聊聊")
+st.markdown("如果您還在觀望，也歡迎預約對談，我們會陪您一起釐清方向。")
+st.markdown("👉 <a href=\"mailto:123@gracefo.com?subject=預約家族傳承規劃\" target=\"_blank\">點我寄信預約對談</a>", unsafe_allow_html=True)
 
 # 頁尾資訊
 st.markdown("---")
 st.markdown("""
 <div style='text-align: center; font-size: 14px; color: gray;'>
-永傳家族辦公室｜<a href=\"https://gracefo.com\" target=\"_blank\">https://gracefo.com</a><br>
-聯絡信箱：<a href=\"mailto:123@gracefo.com\">123@gracefo.com</a>
+永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
+聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)

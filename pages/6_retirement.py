@@ -1,12 +1,17 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="樂活退休試算｜永傳家辦小工具",
+    page_title="樂活退休試算｜永傳家族傳承教練",
     page_icon="💰",
     layout="centered"
 )
 
-st.markdown("# 💰 樂活退休試算工具")
+st.markdown("""
+<div style='text-align: center;'>
+    <h1>💰 樂活退休試算</h1>
+    <p style='font-size: 18px; margin-top: -10px;'>由傳承教練陪您看見未來，預作準備</p>
+</div>
+""", unsafe_allow_html=True)
 st.markdown("""
 傳承教練陪您一起看清未來 30 年的生活輪廓：
 

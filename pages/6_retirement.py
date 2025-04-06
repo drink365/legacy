@@ -6,6 +6,7 @@ st.set_page_config(
     layout="centered"
 )
 
+# 頁首標題區
 st.markdown("""
 <div style='text-align: center;'>
     <h1>💰 樂活退休試算</h1>
@@ -13,6 +14,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# 說明與提醒區
 st.markdown("""
 傳承教練陪您一起看清未來 30 年的生活輪廓：
 
@@ -20,31 +22,31 @@ st.markdown("""
 ✅ 了解目前資產是否足以支撐退休生活  
 ✅ 預測可能出現的財務缺口，提早準備、安心退休
 
-<br>💬 「退休不是結束，而是另一段人生的開始。」  
+💬 「退休不是結束，而是另一段人生的開始。」  
 傳承教練提醒您，提早預備的每一步，都是為自己與家人創造安心與選擇的自由。
 
 > 📌 本工具為初步估算，實際規劃仍需搭配個人財務諮詢
 ---
 """)
 
-# 基本輸入
+# 👤 基本資料
 st.markdown("### 👤 基本資料")
 age = st.number_input("目前年齡", min_value=30, max_value=80, value=55)
 retire_age = st.number_input("預計退休年齡", min_value=50, max_value=80, value=60)
 life_expectancy = st.number_input("預估壽命（活多久）", min_value=70, max_value=110, value=90)
 
-# 資產與報酬
+# 💼 資產與報酬
 st.markdown("### 💼 現有資產與報酬")
 current_assets = st.number_input("目前可用於退休的總資產（萬元）", min_value=0, value=1000)
 expected_return = st.slider("預期年報酬率（％）", 0.0, 10.0, 2.0, 0.1)
 
-# 年支出預估
+# 💸 年支出預估
 st.markdown("### 💸 預估年支出")
 annual_expense = st.number_input("每年退休生活支出（萬元）", min_value=0, value=100)
 annual_medical = st.number_input("每年醫療支出預估（萬元）", min_value=0, value=10)
 annual_longterm = st.number_input("每年長照支出預估（萬元）", min_value=0, value=5)
 
-# 試算
+# 📊 開始試算
 if st.button("📊 開始試算"):
     total_years = life_expectancy - retire_age
     total_expense = total_years * (annual_expense + annual_medical + annual_longterm)
@@ -69,18 +71,19 @@ if st.button("📊 開始試算"):
 💬 <i>傳承教練建議：</i> 即使足夠，也建議定期檢視，調整投資策略與風險控管，讓退休後生活更有彈性與餘裕。
 """, unsafe_allow_html=True)
 
-# 導引與聯絡
+# 📬 導引與預約
 st.markdown("---")
 st.markdown("### 📬 想更完整安排退休與傳承？")
 st.markdown("""
 💡 歡迎預約 1 對 1 對談，由傳承教練陪您規劃樂活退休的藍圖。  
-👉 <a href=\"mailto:123@gracefo.com?subject=退休試算後想深入諮詢\" target=\"_blank\">點我寄信預約對談</a>
+👉 <a href="mailto:123@gracefo.com?subject=退休試算後想深入諮詢" target="_blank">點我寄信預約對談</a>
 """, unsafe_allow_html=True)
 
+# 📎 頁尾資訊
 st.markdown("---")
 st.markdown("""
 <div style='text-align: center; font-size: 14px; color: gray;'>
-永傳家族辦公室｜<a href=\"https://gracefo.com\" target=\"_blank\">https://gracefo.com</a><br>
-聯絡信箱：<a href=\"mailto:123@gracefo.com\">123@gracefo.com</a>
+永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
+聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)

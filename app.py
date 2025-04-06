@@ -50,7 +50,14 @@ quiz_option = st.radio("", [
 ], index=None)
 
 if quiz_option:
-    st.success("✅ 根據您的選項，您非常適合開始探索傳承藍圖！")
+    if quiz_option == "我該怎麼安排退休金？":
+        st.success("✅ 根據您的選項，建議您先進行退休金規劃！")
+        if st.button("前往退休試算工具"):
+            st.switch_page("pages/6_retirement.py")
+    else:
+        st.success("✅ 根據您的選項，您非常適合開始探索傳承藍圖！")
+        if st.button("啟動傳承探索教練"):
+            st.switch_page("pages/1_coach.py")
 
 # 平台簡介
 st.markdown("---")
@@ -67,13 +74,6 @@ st.markdown("""
 
 完成後若希望進一步對談，我們也提供預約服務。
 """)
-
-# CTA 區塊
-st.markdown("---")
-st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-if st.button("🌿 立即開始我的傳承探索"):
-    st.switch_page("pages/1_coach.py")
-st.markdown("</div>", unsafe_allow_html=True)
 
 # 工具導覽區
 st.markdown("---")
@@ -92,11 +92,9 @@ st.markdown("#### 🔸 保單組合模擬器（開發中）")
 st.write("根據年齡、預算與繳費年期，自動試算合適的保單配置與現金流模型。")
 st.button("敬請期待", key="insurance_tool")
 
-st.markdown("#### 🔸 樂活退休試算器")
+st.markdown("#### 🔸 樂活退休試算器（開發中）")
 st.write("估算您未來30年生活＋醫療＋長照支出，預測缺口，安心規劃未來。")
-if st.button("開始試算", key="retirement_tool"):
-    st.switch_page("pages/6_retirement.py")
-
+st.button("敬請期待", key="retirement_tool")
 
 # 行動導流與聯絡
 st.markdown("---")

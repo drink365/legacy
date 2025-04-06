@@ -1,6 +1,10 @@
 import streamlit as st
 from io import BytesIO
 from datetime import date
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+import os
 
 st.set_page_config(
     page_title="樂活退休試算｜永傳家族傳承教練",
@@ -73,28 +77,42 @@ if st.button("📊 開始試算"):
 💬 <i>傳承教練建議：</i> 即使足夠，也建議定期檢視，調整投資策略與風險控管，讓退休後生活更有彈性與餘裕。
 """, unsafe_allow_html=True)
 
-    # 下載 PDF（簡易文字版）
+    # PDF 下載區
     st.markdown("---")
-    st.markdown("### 📥 下載試算摘要")
+    st.markdown("### 📥 下載試算摘要（PDF）")
     buffer = BytesIO()
-    summary = f"""
-🧾 樂活退休試算摘要（{date.today()}）
+    c = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
 
-退休年齡：{retire_age} 歲
-預估壽命：{life_expectancy} 歲
-預估退休年數：{total_years} 年
+    logo_path = "logo-橫式彩色.png"
+    if os.path.exists(logo_path):
+        logo = ImageReader(logo_path)
+        c.drawImage(logo, 50, height - 80, width=180, preserveAspectRatio=True, mask='auto')
 
-退休總支出：約 {total_expense:,.0f} 萬元
-退休資產成長：約 {total_assets_future:,.0f} 萬元
-退休資金缺口：約 {shortage:,.0f} 萬元
-建議補強金額：約 {round(shortage * 1.05):,.0f} 萬元
-"""
-    buffer.write(summary.encode("utf-8"))
+    c.setFont("Helvetica-Bold", 16)
+    c.drawString(50, height - 120, "樂活退休試算摘要")
+    c.setFont("Helvetica", 12)
+    c.drawString(50, height - 140, f"📅 試算日期：{date.today()}")
+    c.drawString(50, height - 170, f"退休年齡：{retire_age} 歲")
+    c.drawString(50, height - 190, f"預估壽命：{life_expectancy} 歲")
+    c.drawString(50, height - 210, f"預估退休年數：{total_years} 年")
+    c.drawString(50, height - 240, f"退休總支出：約 {total_expense:,.0f} 萬元")
+    c.drawString(50, height - 260, f"退休資產成長：約 {total_assets_future:,.0f} 萬元")
+    c.drawString(50, height - 280, f"退休資金缺口：約 {shortage:,.0f} 萬元")
+    if shortage > 0:
+        c.drawString(50, height - 300, f"建議補強金額：約 {round(shortage * 1.05):,.0f} 萬元")
+
+    c.setFont("Helvetica-Oblique", 10)
+    c.drawString(50, 60, "永傳家族辦公室｜https://gracefo.com    聯絡信箱：123@gracefo.com")
+
+    c.save()
+    buffer.seek(0)
+
     st.download_button(
-        label="下載 PDF（簡易文字版）",
+        label="下載我的退休試算報告（PDF）",
         data=buffer,
-        file_name="retirement_summary.txt",
-        mime="text/plain"
+        file_name="retirement_summary.pdf",
+        mime="application/pdf"
     )
 
     # 回首頁按鈕

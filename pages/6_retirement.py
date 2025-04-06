@@ -9,6 +9,7 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
 import os
+from modules.cta_section import render_cta
 
 st.set_page_config(
     page_title="樂活退休試算｜永傳家族傳承教練",
@@ -102,7 +103,7 @@ if st.button("📊 開始試算") or "calc_done" in st.session_state:
 
         story = []
         if os.path.exists(logo_path):
-            logo = Image(logo_path, width=80 * mm, height=20 * mm)  # 調整 logo 大小
+            logo = Image(logo_path, width=80 * mm, height=20 * mm)
             logo.hAlign = 'CENTER'
             story.append(logo)
         story.append(Spacer(1, 12))
@@ -134,6 +135,8 @@ if st.button("📊 開始試算") or "calc_done" in st.session_state:
         file_name="retirement_summary.pdf",
         mime="application/pdf"
     )
+
+    render_cta()
 
 # 導引與聯絡
 st.markdown("---")

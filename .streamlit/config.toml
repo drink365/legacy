@@ -1,16 +1,18 @@
-# .streamlit/config.toml
 [theme]
 base = "light"
 
 [server]
 headless = true
 
+[client]
+showSidebarNavigation = true
+
 [pages]
-"app.py" = "永傳 AI 傳承教練（首頁）"
-"pages/1_coach.py" = "傳承探索模組"
-"pages/2_cases.py" = "案例分享"
-"pages/3_about.py" = "關於我們"
-"pages/4_contact.py" = "聯絡預約"
-"pages/5_estate_tax.py" = "AI秒算遺產稅"
-"pages/6_retirement.py" = "樂活退休試算"
-"pages/0_Tools_Page.py" = "永傳家辦小工具"
+"app.py" = "🏠 永傳 AI 傳承教練（首頁）"
+"pages/0_tools_page.py" = "🧰 永傳家辦小工具"
+"pages/1_coach.py" = "🧭 傳承探索模組"
+"pages/2_cases.py" = "📚 案例分享"
+"pages/3_about.py" = "👥 關於我們"
+"pages/4_contact.py" = "📩 聯絡預約"
+"pages/5_estate_tax.py" = "🧮 AI 秒算遺產稅"
+"pages/6_retirement.py" = "💰 樂活退休試算"

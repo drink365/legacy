@@ -102,7 +102,7 @@ if st.button("📊 開始試算") or "calc_done" in st.session_state:
 
         story = []
         if os.path.exists(logo_path):
-            logo = Image(logo_path, width=100 * mm, height=25 * mm)
+            logo = Image(logo_path, width=80 * mm, height=20 * mm)  # 調整 logo 大小
             logo.hAlign = 'CENTER'
             story.append(logo)
         story.append(Spacer(1, 12))

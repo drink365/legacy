@@ -92,20 +92,23 @@ if st.button("📊 開始試算"):
     logo_path = "logo-橫式彩色.png"
     if os.path.exists(logo_path):
         logo = ImageReader(logo_path)
-        c.drawImage(logo, 50, height - 80, width=180, preserveAspectRatio=True, mask='auto')
+        c.drawImage(logo, 50, height - 100, width=180, preserveAspectRatio=True, mask='auto')
+        logo_offset = 110
+    else:
+        logo_offset = 60
 
     c.setFont("NotoSansTC", 16)
-    c.drawString(50, height - 120, "樂活退休試算摘要")
+    c.drawString(50, height - logo_offset - 20, "樂活退休試算摘要")
     c.setFont("NotoSansTC", 12)
-    c.drawString(50, height - 140, f"📅 試算日期：{date.today()}")
-    c.drawString(50, height - 170, f"退休年齡：{retire_age} 歲")
-    c.drawString(50, height - 190, f"預估壽命：{life_expectancy} 歲")
-    c.drawString(50, height - 210, f"預估退休年數：{total_years} 年")
-    c.drawString(50, height - 240, f"退休總支出：約 {total_expense:,.0f} 萬元")
-    c.drawString(50, height - 260, f"退休資產成長：約 {total_assets_future:,.0f} 萬元")
-    c.drawString(50, height - 280, f"退休資金缺口：約 {shortage:,.0f} 萬元")
+    c.drawString(50, height - logo_offset - 40, f"試算日期：{date.today()}")
+    c.drawString(50, height - logo_offset - 70, f"退休年齡：{retire_age} 歲")
+    c.drawString(50, height - logo_offset - 90, f"預估壽命：{life_expectancy} 歲")
+    c.drawString(50, height - logo_offset - 110, f"預估退休年數：{total_years} 年")
+    c.drawString(50, height - logo_offset - 140, f"退休總支出：約 {total_expense:,.0f} 萬元")
+    c.drawString(50, height - logo_offset - 160, f"退休資產成長：約 {total_assets_future:,.0f} 萬元")
+    c.drawString(50, height - logo_offset - 180, f"退休資金缺口：約 {shortage:,.0f} 萬元")
     if shortage > 0:
-        c.drawString(50, height - 300, f"建議補強金額：約 {round(shortage * 1.05):,.0f} 萬元")
+        c.drawString(50, height - logo_offset - 200, f"建議補強金額：約 {round(shortage * 1.05):,.0f} 萬元")
 
     c.setFont("NotoSansTC", 10)
     c.drawString(50, 60, "永傳家族辦公室｜https://gracefo.com    聯絡信箱：123@gracefo.com")

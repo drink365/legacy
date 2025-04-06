@@ -46,7 +46,7 @@ if submitted:
     st.markdown(f"總資產：約 **{total:,.0f} 萬元**")
 
     # 長條圖
-    fig, ax = plt.subplots(figsize=(8, 4))
+    fig, ax = plt.subplots(figsize=(6, 3))
     categories = list(asset_data.keys())
     values = list(asset_data.values())
     bars = ax.bar(categories, values, color="#C62828")
@@ -78,11 +78,11 @@ if submitted:
         mime="application/pdf"
     )
 
-    # 補充導引按鈕
+    # 延伸導引按鈕
     st.markdown("---")
-    st.markdown("### 📌 想進一步了解遺產稅試算？")
-    st.page_link("/5_estate_tax", label="🔗 前往 AI秒算遺產稅 模組", icon="🧮")
+    st.markdown("### 📌 延伸分析工具")
+    st.page_link("pages/5_estate_tax.py", label="🔗 前往 AI秒算遺產稅 模組", icon="🧮")
 
-    # 👉 加入 CTA 引導諮詢按鈕
+    # 行動 CTA
     st.markdown("---")
     render_cta()

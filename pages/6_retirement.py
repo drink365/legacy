@@ -89,7 +89,7 @@ if st.button("📊 開始試算"):
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
 
-    logo_path = "logo-橫式彩色.png"
+    logo_path = "logo.png"
     if os.path.exists(logo_path):
         logo = ImageReader(logo_path)
         c.drawImage(logo, 50, height - 100, width=180, preserveAspectRatio=True, mask='auto')

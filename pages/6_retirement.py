@@ -9,7 +9,7 @@ st.set_page_config(
 st.markdown("""
 <div style='text-align: center;'>
     <h1>💰 樂活退休試算</h1>
-    <p style='font-size: 18px; margin-top: -10px;'>由傳承教練陪您看見未來，預作準備</p>
+    <p style='font-size: 18px; margin-top: -10px;'>由永傳家族傳承教練陪您看見未來，預作準備</p>
 </div>
 """, unsafe_allow_html=True)
 

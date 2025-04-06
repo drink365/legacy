@@ -4,7 +4,6 @@ import matplotlib.font_manager as fm
 import numpy as np
 from io import BytesIO
 from modules.pdf_generator import generate_asset_map_pdf
-from modules.cta_section import render_cta
 
 # 設定中文字型
 font_path = "NotoSansTC-Regular.ttf"
@@ -45,43 +44,55 @@ if submitted:
     st.markdown("### ✅ 資產總覽")
     st.markdown(f"總資產：約 **{total:,.0f} 萬元**")
 
-    # 長條圖
-    fig, ax = plt.subplots(figsize=(6, 3))  # 小尺寸
-    categories = list(asset_data.keys())
-    values = list(asset_data.values())
-    bars = ax.bar(categories, values, color="#C62828")
-    ax.set_ylabel("金額 (萬元)", fontsize=10, fontproperties=prop)
-    ax.set_title("資產分布圖", fontsize=12, fontproperties=prop)
-    ax.tick_params(axis='x', labelrotation=30, labelsize=9)
-    ax.tick_params(axis='y', labelsize=9)
-    for bar in bars:
-        yval = bar.get_height()
-        ax.text(bar.get_x() + bar.get_width()/2.0, yval + 50, f"{int(yval):,}", ha='center', va='bottom', fontsize=9, fontproperties=prop)
-    st.pyplot(fig)
+    # 避免全部為零時顯示空圖
+    if total == 0:
+        st.info("請輸入資產數值後，點選上方按鈕產生風險圖。")
+    else:
+        # 長條圖繪製
+        fig, ax = plt.subplots(figsize=(6, 3))
+        categories = list(asset_data.keys())
+        values = list(asset_data.values())
+        bars = ax.bar(categories, values, color="#C62828")
 
-    # 提示與建議
-    st.markdown("---")
-    st.markdown("### 🔍 傳承風險提示")
-    if equity > total * 0.5:
-        st.warning("您的資產過度集中於『公司股權』，建議考慮股權信託或保險來分散風險與稅負。")
-    if real_estate > total * 0.4:
-        st.info("您持有較多不動產，可事先規劃移轉方式，避免未來繼承時產生糾紛或變現困難。")
-    if financial > total * 0.5:
-        st.success("金融資產具流動性，有助於預留稅源與安排傳承，但仍需搭配整體架構設計。")
+        # 中文顯示處理
+        ax.set_title("資產分布圖", fontsize=14, fontproperties=prop)
+        ax.set_ylabel("金額 (萬元)", fontsize=12, fontproperties=prop)
+        ax.set_xticks(range(len(categories)))
+        ax.set_xticklabels(categories, fontproperties=prop, fontsize=10, rotation=30)
 
-    st.markdown("---")
-    st.markdown("### 📎 下載 PDF 總結報告")
-    pdf_bytes = generate_asset_map_pdf(asset_data, total)
-    st.download_button(
-        label="📄 下載傳承風險圖報告 (PDF)",
-        data=pdf_bytes,
-        file_name="asset_map_summary.pdf",
-        mime="application/pdf"
-    )
+        for bar in bars:
+            yval = bar.get_height()
+            ax.text(bar.get_x() + bar.get_width()/2.0, yval + 50, f"{int(yval):,}",
+                    ha='center', va='bottom', fontsize=10, fontproperties=prop)
 
-    st.markdown("---")
-    st.markdown("### 📌 想進一步了解遺產稅試算？")
-    st.page_link("pages/5_estate_tax.py", label="🔗 前往 AI秒算遺產稅 模組", icon="🧮")
+        st.pyplot(fig)
 
-    st.markdown("---")
-    render_cta()
+        # 提示與建議
+        st.markdown("---")
+        st.markdown("### 🔍 傳承風險提示")
+        if equity > total * 0.5:
+            st.warning("您的資產過度集中於『公司股權』，建議考慮股權信託或保險來分散風險與稅負。")
+        if real_estate > total * 0.4:
+            st.info("您持有較多不動產，可事先規劃移轉方式，避免未來繼承時產生糾紛或變現困難。")
+        if financial > total * 0.5:
+            st.success("金融資產具流動性，有助於預留稅源與安排傳承，但仍需搭配整體架構設計。")
+
+        # PDF 輸出
+        st.markdown("---")
+        st.markdown("### 📎 下載 PDF 總結報告")
+        pdf_bytes = generate_asset_map_pdf(asset_data, total)
+        st.download_button(
+            label="📄 下載傳承風險圖報告 (PDF)",
+            data=pdf_bytes,
+            file_name="asset_map_summary.pdf",
+            mime="application/pdf"
+        )
+
+        # 導引按鈕
+        st.markdown("---")
+        st.markdown("### 📌 想進一步了解遺產稅試算？")
+        st.page_link("pages/5_estate_tax.py", label="🔗 前往 AI秒算遺產稅 模組", icon="🧮")
+
+        st.markdown("---")
+        st.markdown("### ☎️ 想與傳承教練預約 1 對 1 諮詢？")
+        st.page_link("pages/4_contact.py", label="📬 填寫表單與我們聯繫", icon="📌")

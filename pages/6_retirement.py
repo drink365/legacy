@@ -12,6 +12,7 @@ st.markdown("""
     <p style='font-size: 18px; margin-top: -10px;'>由傳承教練陪您看見未來，預作準備</p>
 </div>
 """, unsafe_allow_html=True)
+
 st.markdown("""
 傳承教練陪您一起看清未來 30 年的生活輪廓：
 
@@ -51,28 +52,28 @@ if st.button("📊 開始試算"):
     shortage = total_expense - total_assets_future
 
     st.markdown("---")
-    st.markdown("### 📈 試算結果
+    st.markdown("### 📈 試算結果")
     st.markdown(f"預估退休後需準備的總金額：約 **{total_expense:,.0f} 萬元**")
     st.markdown(f"您的資產在退休時預估將成長為：約 **{total_assets_future:,.0f} 萬元**")
 
     if shortage > 0:
         st.error(f"⚠️ 預估可能短缺：約 {shortage:,.0f} 萬元。建議及早進行資產配置與保障規劃。")
         st.markdown("""
-💬 <i>傳承教練提醒：</i> 不用擔心，這正是開始規劃的好時機！
-- 您可以評估是否透過保險、年金或不動產現金流做補強
+💬 <i>傳承教練提醒：</i> 不用擔心，這正是開始規劃的好時機！  
+- 您可以評估是否透過保險、年金或不動產現金流做補強  
 - 建議進一步釐清資產配置與支出彈性，打造安心的退休現金流
-        """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
     else:
         st.success("✅ 恭喜！目前規劃的資產足以支應您的退休需求。")
         st.markdown("""
 💬 <i>傳承教練建議：</i> 即使足夠，也建議定期檢視，調整投資策略與風險控管，讓退休後生活更有彈性與餘裕。
-        """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 # 導引與聯絡
 st.markdown("---")
 st.markdown("### 📬 想更完整安排退休與傳承？")
 st.markdown("""
-💡 歡迎預約 1 對 1 對談，由傳承教練陪您規劃樂活退休的藍圖。
+💡 歡迎預約 1 對 1 對談，由傳承教練陪您規劃樂活退休的藍圖。  
 👉 <a href=\"mailto:123@gracefo.com?subject=退休試算後想深入諮詢\" target=\"_blank\">點我寄信預約對談</a>
 """, unsafe_allow_html=True)
 

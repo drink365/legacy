@@ -8,7 +8,8 @@ from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
 import streamlit as st
 
-def generate_pdf():
+
+def generate_exploration_pdf():
     buffer = BytesIO()
     logo_path = "logo.png"
     font_path = "NotoSansTC-Regular.ttf"
@@ -33,7 +34,10 @@ def generate_pdf():
 
     if "legacy_style_result" in st.session_state:
         story.append(Paragraph("您的傳承風格：", styleH))
-        story.append(Paragraph(st.session_state.legacy_style_result.replace("❤️", "").replace("💼", "").replace("🧭", ""), styleN))
+        story.append(Paragraph(
+            st.session_state.legacy_style_result.replace("❤️", "").replace("💼", "").replace("🧭", ""),
+            styleN
+        ))
         story.append(Spacer(1, 12))
 
     if "key_issues" in st.session_state:
@@ -65,6 +69,41 @@ def generate_pdf():
     story.append(Spacer(1, 6))
     story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
     story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
+
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
+    doc.build(story)
+    buffer.seek(0)
+    return buffer
+
+
+def generate_asset_map_pdf(asset_data, total_value):
+    buffer = BytesIO()
+    font_path = "NotoSansTC-Regular.ttf"
+
+    pdfmetrics.registerFont(TTFont("NotoSansTC", font_path))
+    style_title = ParagraphStyle(name='Title', fontName='NotoSansTC', fontSize=18, alignment=TA_CENTER, spaceAfter=12)
+    style_header = ParagraphStyle(name='Header', fontName='NotoSansTC', fontSize=14, spaceAfter=10)
+    style_text = ParagraphStyle(name='Normal', fontName='NotoSansTC', fontSize=12)
+    style_center = ParagraphStyle(name='Center', fontName='NotoSansTC', fontSize=10, alignment=TA_CENTER)
+
+    story = []
+
+    logo = Image("logo.png", width=80 * mm, height=20 * mm)
+    logo.hAlign = 'CENTER'
+    story.append(logo)
+    story.append(Spacer(1, 12))
+    story.append(Paragraph("傳承風險圖與建議摘要", style_title))
+    story.append(Spacer(1, 12))
+
+    for category, amount in asset_data.items():
+        story.append(Paragraph(f"{category}：{amount:,.0f} 萬元", style_text))
+    story.append(Spacer(1, 12))
+
+    story.append(Paragraph(f"總資產：{total_value:,.0f} 萬元", style_header))
+    story.append(Spacer(1, 24))
+
+    story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", style_center))
+    story.append(Paragraph("聯絡信箱：123@gracefo.com", style_center))
 
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
     doc.build(story)

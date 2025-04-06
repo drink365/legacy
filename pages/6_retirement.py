@@ -3,6 +3,8 @@ from io import BytesIO
 from datetime import date
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.utils import ImageReader
 import os
 
@@ -11,6 +13,9 @@ st.set_page_config(
     page_icon="💰",
     layout="centered"
 )
+
+# 註冊中文字體
+pdfmetrics.registerFont(TTFont('NotoSansTC', 'NotoSansTC-Regular.ttf'))
 
 st.markdown("""
 <div style='text-align: center;'>
@@ -89,9 +94,9 @@ if st.button("📊 開始試算"):
         logo = ImageReader(logo_path)
         c.drawImage(logo, 50, height - 80, width=180, preserveAspectRatio=True, mask='auto')
 
-    c.setFont("Helvetica-Bold", 16)
+    c.setFont("NotoSansTC", 16)
     c.drawString(50, height - 120, "樂活退休試算摘要")
-    c.setFont("Helvetica", 12)
+    c.setFont("NotoSansTC", 12)
     c.drawString(50, height - 140, f"📅 試算日期：{date.today()}")
     c.drawString(50, height - 170, f"退休年齡：{retire_age} 歲")
     c.drawString(50, height - 190, f"預估壽命：{life_expectancy} 歲")
@@ -102,7 +107,7 @@ if st.button("📊 開始試算"):
     if shortage > 0:
         c.drawString(50, height - 300, f"建議補強金額：約 {round(shortage * 1.05):,.0f} 萬元")
 
-    c.setFont("Helvetica-Oblique", 10)
+    c.setFont("NotoSansTC", 10)
     c.drawString(50, 60, "永傳家族辦公室｜https://gracefo.com    聯絡信箱：123@gracefo.com")
 
     c.save()

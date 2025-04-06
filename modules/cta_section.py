@@ -2,7 +2,7 @@ import streamlit as st
 
 def render_cta():
     st.markdown("---")
-    st.markdown("### 🌿 想把剛才的試算結果變成具體的退休／傳承計畫嗎？")
+    st.markdown("### 🌿 為未來畫出藍圖，現在就是最好的時機。")
     st.markdown("""
     每一次認真思考未來，都是為家人創造安心的開始。  
     若您希望我們陪您進一步釐清資產、保障與家族規劃方向，  

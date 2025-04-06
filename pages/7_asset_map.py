@@ -44,40 +44,41 @@ if submitted:
     st.markdown("### ✅ 資產總覽")
     st.markdown(f"總資產：約 **{total:,.0f} 萬元**")
 
-    # 避免全部為零時顯示空圖
     if total == 0:
-        st.info("請輸入資產數值後，點選上方按鈕產生風險圖。")
+        st.info("請輸入資產資料以產生圖表與分析建議。")
     else:
-        # 長條圖繪製
-        fig, ax = plt.subplots(figsize=(6, 3))
+        # 長條圖
+        fig, ax = plt.subplots(figsize=(5, 2.5))
         categories = list(asset_data.keys())
         values = list(asset_data.values())
         bars = ax.bar(categories, values, color="#C62828")
-
-        # 中文顯示處理
-        ax.set_title("資產分布圖", fontsize=14, fontproperties=prop)
-        ax.set_ylabel("金額 (萬元)", fontsize=12, fontproperties=prop)
-        ax.set_xticks(range(len(categories)))
-        ax.set_xticklabels(categories, fontproperties=prop, fontsize=10, rotation=30)
-
+        ax.set_ylabel("金額 (萬元)", fontsize=10)
+        ax.set_title("資產分布圖", fontsize=12)
+        ax.tick_params(axis='x', labelrotation=30, labelsize=8)
+        ax.tick_params(axis='y', labelsize=8)
         for bar in bars:
             yval = bar.get_height()
-            ax.text(bar.get_x() + bar.get_width()/2.0, yval + 50, f"{int(yval):,}",
-                    ha='center', va='bottom', fontsize=10, fontproperties=prop)
-
+            ax.text(bar.get_x() + bar.get_width()/2.0, yval + total*0.01, f"{int(yval):,}",
+                    ha='center', va='bottom', fontsize=8)
         st.pyplot(fig)
 
-        # 提示與建議
+        # 傳承風險提示
         st.markdown("---")
         st.markdown("### 🔍 傳承風險提示")
+        shown = False
         if equity > total * 0.5:
             st.warning("您的資產過度集中於『公司股權』，建議考慮股權信託或保險來分散風險與稅負。")
+            shown = True
         if real_estate > total * 0.4:
             st.info("您持有較多不動產，可事先規劃移轉方式，避免未來繼承時產生糾紛或變現困難。")
+            shown = True
         if financial > total * 0.5:
             st.success("金融資產具流動性，有助於預留稅源與安排傳承，但仍需搭配整體架構設計。")
+            shown = True
+        if not shown:
+            st.markdown("目前您的資產分布相對平均，請持續關注未來的變化與傳承安排。")
 
-        # PDF 輸出
+        # PDF 下載
         st.markdown("---")
         st.markdown("### 📎 下載 PDF 總結報告")
         pdf_bytes = generate_asset_map_pdf(asset_data, total)
@@ -88,11 +89,11 @@ if submitted:
             mime="application/pdf"
         )
 
-        # 導引按鈕
+        # 補充導引按鈕
         st.markdown("---")
         st.markdown("### 📌 想進一步了解遺產稅試算？")
         st.page_link("pages/5_estate_tax.py", label="🔗 前往 AI秒算遺產稅 模組", icon="🧮")
 
         st.markdown("---")
-        st.markdown("### ☎️ 想與傳承教練預約 1 對 1 諮詢？")
-        st.page_link("pages/4_contact.py", label="📬 填寫表單與我們聯繫", icon="📌")
+        st.markdown("### 🗂️ 需要專人協助擬定傳承策略？")
+        st.page_link("pages/4_contact.py", label="📞 預約 1 對 1 諮詢", icon="📌")

@@ -2,11 +2,12 @@ import streamlit as st
 from io import BytesIO
 from datetime import date
 from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.lib.utils import ImageReader
-import os
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.units import mm
 
 st.set_page_config(
     page_title="樂活退休試算｜永傳家族傳承教練",
@@ -86,34 +87,37 @@ if st.button("📊 開始試算"):
     st.markdown("---")
     st.markdown("### 📥 下載試算摘要（PDF）")
     buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
-
     logo_path = "logo.png"
-    if os.path.exists(logo_path):
-        logo = ImageReader(logo_path)
-        c.drawImage(logo, 50, height - 100, width=180, preserveAspectRatio=True, mask='auto')
-        logo_offset = 110
-    else:
-        logo_offset = 60
+    font_path = "NotoSansTC-Regular.ttf"
 
-    c.setFont("NotoSansTC", 16)
-    c.drawString(50, height - logo_offset - 20, "樂活退休試算摘要")
-    c.setFont("NotoSansTC", 12)
-    c.drawString(50, height - logo_offset - 40, f"試算日期：{date.today()}")
-    c.drawString(50, height - logo_offset - 70, f"退休年齡：{retire_age} 歲")
-    c.drawString(50, height - logo_offset - 90, f"預估壽命：{life_expectancy} 歲")
-    c.drawString(50, height - logo_offset - 110, f"預估退休年數：{total_years} 年")
-    c.drawString(50, height - logo_offset - 140, f"退休總支出：約 {total_expense:,.0f} 萬元")
-    c.drawString(50, height - logo_offset - 160, f"退休資產成長：約 {total_assets_future:,.0f} 萬元")
-    c.drawString(50, height - logo_offset - 180, f"退休資金缺口：約 {shortage:,.0f} 萬元")
+    pdfmetrics.registerFont(TTFont('NotoSansTC', font_path))
+    styleN = ParagraphStyle(name='Normal', fontName='NotoSansTC', fontSize=12)
+    styleH = ParagraphStyle(name='Heading2', fontName='NotoSansTC', fontSize=14, spaceAfter=10)
+    styleC = ParagraphStyle(name='Center', fontName='NotoSansTC', fontSize=10, alignment=TA_CENTER)
+
+    story = []
+    logo = Image(logo_path, width=80 * mm, height=20 * mm)
+    logo.hAlign = 'CENTER'
+    story.append(logo)
+    story.append(Spacer(1, 6))
+    story.append(Paragraph("樂活退休試算摘要", styleH))
+    story.append(Spacer(1, 12))
+    story.append(Paragraph(f"試算日期：{date.today()}", styleN))
+    story.append(Paragraph(f"退休年齡：{retire_age} 歲", styleN))
+    story.append(Paragraph(f"預估壽命：{life_expectancy} 歲", styleN))
+    story.append(Paragraph(f"預估退休年數：{total_years} 年", styleN))
+    story.append(Spacer(1, 6))
+    story.append(Paragraph(f"退休總支出：約 {total_expense:,.0f} 萬元", styleN))
+    story.append(Paragraph(f"退休資產成長：約 {total_assets_future:,.0f} 萬元", styleN))
+    story.append(Paragraph(f"退休資金缺口：約 {shortage:,.0f} 萬元", styleN))
     if shortage > 0:
-        c.drawString(50, height - logo_offset - 200, f"建議補強金額：約 {round(shortage * 1.05):,.0f} 萬元")
+        story.append(Paragraph(f"建議補強金額：約 {round(shortage * 1.05):,.0f} 萬元", styleN))
+    story.append(Spacer(1, 12))
+    story.append(Paragraph("永傳家族辦公室｜https://gracefo.com", styleC))
+    story.append(Paragraph("聯絡信箱：123@gracefo.com", styleC))
 
-    c.setFont("NotoSansTC", 10)
-    c.drawString(50, 60, "永傳家族辦公室｜https://gracefo.com    聯絡信箱：123@gracefo.com")
-
-    c.save()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
+    doc.build(story)
     buffer.seek(0)
 
     st.download_button(

@@ -9,9 +9,9 @@ for key in ["submitted", "module_two_done", "module_three_done", "module_four_do
 
 # 傳承風格小測驗
 if not st.session_state.legacy_quiz_done:
-    st.set_page_config(page_title="傳承風格｜永傳 AI 傳承教練", page_icon="🌿")
-    st.markdown("## 傳承風格小測驗：我是怎麼看待家族傳承的？")
-    st.markdown("請根據您的直覺選出最貼近您想法的選項。")
+    st.set_page_config(page_title="傳承風格｜永傳家族傳承教練", page_icon="🌿")
+    st.markdown("## 👋 傳承教練陪您探索：我是怎麼看待家族傳承的？")
+    st.markdown("請依直覺選出最貼近您心情的選項。這沒有對錯，只是了解您出發點的小練習。")
 
     questions = [
         ("傳承的出發點對我來說，最重要的是：", ["家人能持續相處和睦", "資產能安全地傳承下去", "我的理念能被理解與延續"]),
@@ -42,10 +42,11 @@ if not st.session_state.legacy_quiz_done:
 
 # 顯示結果並進入模組一
 if st.session_state.legacy_quiz_done and not st.session_state.submitted:
-    st.markdown("## 您的傳承風格")
+    st.markdown("## 🎯 傳承教練觀察到您的風格是：")
     st.success(st.session_state.legacy_style_result)
     st.markdown("---")
-    st.markdown("### 模組一：最近，您常想些什麼？")
+    st.markdown("### 🧠 模組一｜最近，您常想些什麼？")
+    st.markdown("讓我們從您最近關心的問題出發，一步一步梳理思緒。")
     options = st.multiselect(
         "請選出最近比較常想的事（可複選）：",
         [
@@ -67,7 +68,8 @@ if st.session_state.legacy_quiz_done and not st.session_state.submitted:
 
 # 模組二
 if st.session_state.submitted and not st.session_state.module_two_done:
-    st.markdown("## 模組二：您最在意的重點")
+    st.markdown("## 🔍 模組二｜您最在意的重點")
+    st.markdown("從剛剛的回應中，我們一起挑出幾個您特別在意的主題。")
     combined_options = list(st.session_state.options)
     if st.session_state.custom_input.strip():
         combined_options.append(st.session_state.custom_input.strip())
@@ -81,7 +83,8 @@ if st.session_state.submitted and not st.session_state.module_two_done:
 
 # 模組三
 if st.session_state.module_two_done and not st.session_state.module_three_done:
-    st.markdown("## 模組三：您期望的未來方向")
+    st.markdown("## 🌱 模組三｜您期望的未來方向")
+    st.markdown("想像一下未來理想的狀態，您希望事情怎麼發展？")
     direction_choices = st.multiselect(
         "您希望事情未來可以朝哪些方向發展？",
         [
@@ -100,9 +103,9 @@ if st.session_state.module_two_done and not st.session_state.module_three_done:
 
 # 模組四
 if st.session_state.module_three_done and not st.session_state.module_four_done:
-    st.markdown("## 模組四：行動策略，從這裡慢慢展開")
-    st.markdown("釐清了想法之後，這一步我們陪您看看有哪些小步驟可以開始安排，慢慢走、也走得穩。")
-    st.markdown("### 您可以考慮的策略方向：")
+    st.markdown("## 🚶 模組四｜行動策略，從這裡慢慢展開")
+    st.markdown("釐清了想法之後，這一步傳承教練會提供一些可能的行動方向，讓您一步步前進。")
+    st.markdown("### 📌 您可以考慮的策略方向：")
     strategies = get_strategy_suggestions()
     for strategy in strategies:
         with st.expander(strategy["title"]):
@@ -113,8 +116,8 @@ if st.session_state.module_three_done and not st.session_state.module_four_done:
 # 模組五
 if st.session_state.module_four_done:
     st.markdown("---")
-    st.markdown("## 下一步，我可以從哪裡開始？")
-    st.markdown("🎉 您已經整理出一些非常重要的思考！")
+    st.markdown("## 🧭 模組五｜下一步，我可以從哪裡開始？")
+    st.markdown("🎉 傳承教練陪您走完一段很重要的探索歷程！")
 
     if "key_issues" in st.session_state:
         if any("關係" in item or "家族成員" in item for item in st.session_state.key_issues):
@@ -130,13 +133,13 @@ if st.session_state.module_four_done:
     st.download_button(
         label="下載我的探索紀錄報告（PDF）",
         data=pdf,
-        file_name="永傳AI探索報告.pdf",
+        file_name="永傳探索報告.pdf",
         mime="application/pdf"
     )
 
     st.markdown("### 📬 預約深入對談")
     if st.button("📩 點我寄信預約對談"):
-        st.markdown("<meta http-equiv='refresh' content='0;url=mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳AI教練，想進一步與您聊聊我的規劃需求。'>", unsafe_allow_html=True)
+        st.markdown("<meta http-equiv='refresh' content='0;url=mailto:123@gracefo.com?subject=預約諮詢：我想了解家族傳承與退休安排&body=您好，我剛剛使用了永傳家族傳承教練的探索模組，想進一步與您聊聊我的規劃需求。'>", unsafe_allow_html=True)
 
     st.markdown("""
     ---
@@ -145,5 +148,5 @@ if st.session_state.module_four_done:
     """, unsafe_allow_html=True)
 
     st.markdown("---")
-    st.markdown("感謝您完成這段探索。我們相信，每一次釐清與行動，都是為未來鋪路的開始。")
-    st.markdown("願您的影響力，代代傳承。🌿")
+    st.markdown("感謝您完成這段探索。每一次釐清與行動，都是為未來鋪路的開始。")
+    st.markdown("傳承教練期待下次與您再相見。🌿")

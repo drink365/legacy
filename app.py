@@ -3,7 +3,7 @@ import streamlit as st
 import base64
 
 st.set_page_config(
-    page_title="永傳 AI 傳承教練 - 首頁",
+    page_title="永傳家族傳承教練 - 首頁",
     page_icon="🌿",
     layout="centered"
 )

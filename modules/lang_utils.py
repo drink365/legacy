@@ -1,64 +1,37 @@
+import json
+import os
 import streamlit as st
 
-# 翻譯字典
-TRANSLATIONS = {
-    "zh-TW": {
-        "impact_title": "影響力",
-        "impact_subtitle": "高資產家庭的傳承策略平台",
-        "impact_tagline": "讓每一分資源，都成為你影響力的延伸",
-        "choose_user_type": "請選擇您的身份",
-        "for_advisors": "顧問入口",
-        "for_clients": "客戶入口",
-        "platform_footer": "傳承策略平台",
-    },
-    "en": {
-        "impact_title": "Legacy Impact",
-        "impact_subtitle": "A Strategic Legacy Platform for Affluent Families",
-        "impact_tagline": "Turn every resource into an extension of your impact",
-        "choose_user_type": "Choose your role",
-        "for_advisors": "Advisor Portal",
-        "for_clients": "Client Portal",
-        "platform_footer": "Legacy Strategy Platform",
-    },
-    "zh-CN": {
-        "impact_title": "影响力",
-        "impact_subtitle": "高净值家庭的传承策略平台",
-        "impact_tagline": "让每一分钱，都成为你影响力的延伸",
-        "choose_user_type": "请选择您的身份",
-        "for_advisors": "顾问入口",
-        "for_clients": "客户入口",
-        "platform_footer": "传承策略平台",
-    }
+# 定義語系檔所在資料夾
+LANG_DIR = "lang"
+
+# 支援語言清單
+AVAILABLE_LANGUAGES = {
+    "zh_tw": "繁體中文",
+    "en": "English",
+    "zh_cn": "简体中文"
 }
 
-# 設定語言
+def load_language(lang_code):
+    file_path = os.path.join(LANG_DIR, f"lang_{lang_code}.json")
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+# 設定語言（存在 session_state 中）
 def set_language():
-    if "app_language" not in st.session_state:
-        st.session_state.app_language = "zh-TW"
-
-    lang = st.sidebar.selectbox(
-        "🌐 語言 / Language / 语言",
-        options=["繁體中文", "English", "简体中文"],
-        index=["繁體中文", "English", "简体中文"].index(get_lang_name(st.session_state.app_language))
-    )
-
-    lang_code = {
-        "繁體中文": "zh-TW",
-        "English": "en",
-        "简体中文": "zh-CN"
-    }[lang]
-
-    if st.session_state.app_language != lang_code:
-        st.session_state.app_language = lang_code
+    if "language" not in st.session_state:
+        st.session_state.language = "zh_tw"  # 預設語言：繁體中文
+    selected_lang = st.sidebar.selectbox("🌐 語言 Language", options=list(AVAILABLE_LANGUAGES.keys()),
+                                         format_func=lambda x: AVAILABLE_LANGUAGES[x])
+    if selected_lang != st.session_state.language:
+        st.session_state.language = selected_lang
         st.rerun()
 
+# 根據目前語言載入對應翻譯檔
 def get_text(key):
-    lang = st.session_state.get("app_language", "zh-TW")
-    return TRANSLATIONS.get(lang, TRANSLATIONS["zh-TW"]).get(key, key)
-
-def get_lang_name(code):
-    return {
-        "zh-TW": "繁體中文",
-        "en": "English",
-        "zh-CN": "简体中文"
-    }.get(code, "繁體中文")
+    lang_code = st.session_state.get("language", "zh_tw")
+    lang_data = load_language(lang_code)
+    return lang_data.get(key, key)

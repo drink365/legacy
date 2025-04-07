@@ -9,7 +9,6 @@ from reportlab.lib.units import mm
 from reportlab.lib import colors
 import streamlit as st
 
-
 def generate_pdf():
     buffer = BytesIO()
     logo_path = "logo.png"
@@ -139,7 +138,7 @@ def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
 # --- modules/pdf_generator.py 中新增函式 ---
 
 # 📦 保單策略規劃 PDF 產出函式
-def generate_insurance_strategy_pdf(age, gender, budget, pay_years, goals, strategies):
+def generate_insurance_strategy_pdf(age, gender, budget, currency, pay_years, goals, strategies):
     buffer = BytesIO()
     logo_path = "logo.png"
     font_path = "NotoSansTC-Regular.ttf"
@@ -156,13 +155,13 @@ def generate_insurance_strategy_pdf(age, gender, budget, pay_years, goals, strat
     story.append(Spacer(1, 18))
 
     story.append(Paragraph("基本資料", styleH))
-    story.append(Paragraph(f"年齡：{age} 歲　性別：{gender}　預算：約 {budget:,} 萬元　繳費年期：{pay_years}", styleN))
+    story.append(Paragraph(f"年齡：{age} 歲　性別：{gender}　預算：約 {budget:,} 萬元（{currency}）　繳費年期：{pay_years}", styleN))
     story.append(Paragraph(f"規劃目標：{'、'.join(goals)}", styleN))
     story.append(Spacer(1, 18))
 
     story.append(Paragraph("建議策略組合", styleH))
     for s in strategies:
-        story.append(Paragraph(f"{s['name']}", styleN))
+        story.append(Paragraph(f"策略名稱：{s['name']}", styleN))
         story.append(Paragraph(f"適合目標：{'、'.join(s['matched_goals'])}", styleN))
         story.append(Paragraph(f"結構說明：{s['description']}", styleN))
         story.append(Spacer(1, 12))

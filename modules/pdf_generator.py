@@ -114,7 +114,7 @@ def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
     story.append(Paragraph("系統建議摘要", styleH))
     if suggestions:
         for s in suggestions:
-            story.append(Paragraph(f"• {s}", styleN))
+            story.append(Paragraph(f"• ", styleN))
     else:
         story.append(Paragraph("目前資產結構整體平衡，仍建議定期檢視傳承架構與稅源預備狀況。", styleN))
 

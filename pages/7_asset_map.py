@@ -85,14 +85,17 @@ fig.savefig(chart_buffer, format="png")
 chart_buffer.seek(0)
 
 st.markdown("### 📥 產出報告")
-if st.button("📄 匯出 PDF 報告"):
-    pdf_file = generate_asset_map_pdf(labels, values, suggestions, chart_buffer)
-    st.download_button(
-        label="⬇️ 下載我的資產風險報告",
-        data=pdf_file,
-        file_name="asset_risk_report.pdf",
-        mime="application/pdf"
-    )
+# 預先產出 PDF
+pdf_file = generate_asset_map_pdf(labels, values, suggestions, chart_buffer)
+
+# 一鍵下載
+st.download_button(
+    label="📄 下載我的資產風險報告",
+    data=pdf_file,
+    file_name="asset_risk_report.pdf",
+    mime="application/pdf"
+)
+
 
 # 跨頁行動導引
 st.markdown("---")

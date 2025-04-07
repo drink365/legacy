@@ -25,14 +25,13 @@ if 'asset_data' not in st.session_state:
 st.header("✅ 資產總覽")
 st.caption("請輸入每項資產的預估金額（萬元）")
 
-with st.form("asset_form"):
-    cols = st.columns(3)
-    keys = list(st.session_state.asset_data.keys())
-    for i, key in enumerate(keys):
-        with cols[i % 3]:
-            value = st.number_input(f"{key}", min_value=0, step=100, value=st.session_state.asset_data[key], key=key)
-            st.session_state.asset_data[key] = value
-    submitted = st.form_submit_button("📥 更新資產總覽")
+cols = st.columns(3)
+keys = list(st.session_state.asset_data.keys())
+for i, key in enumerate(keys):
+    with cols[i % 3]:
+        st.session_state.asset_data[key] = st.number_input(
+            f"{key}", min_value=0, step=100, value=st.session_state.asset_data[key], key=key
+        )
 
 asset_data = st.session_state.asset_data
 total = sum(asset_data.values())

@@ -1,5 +1,3 @@
-# --- modules/pdf_generator.py ---
-
 from io import BytesIO
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle
@@ -10,8 +8,6 @@ from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
 from reportlab.lib import colors
 import streamlit as st
-
-# 原本的傳承教練 PDF 產出函式
 
 def generate_pdf():
     buffer = BytesIO()
@@ -76,9 +72,9 @@ def generate_pdf():
     buffer.seek(0)
     return buffer
 
-# 資產結構 PDF 產出函式
+# 新增給 7_asset_map.py 用的報表函式
 
-def generate_asset_pdf(labels, values, suggestions, chart_image_bytes):
+def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
     buffer = BytesIO()
     logo_path = "logo.png"
     font_path = "NotoSansTC-Regular.ttf"

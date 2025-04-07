@@ -69,7 +69,7 @@ if st.session_state.submitted_asset_map:
             risk_suggestions.append(msg)
             high_risk_count += 1
         elif category == "不動產" and ratio > 0.4:
-            msg = "『不動產』占比較大，可能影響繼承時分配彈性，建議規劃信託或分批移轉。"
+            msg = "『不動產』占比較大，可能影響繼承時分配彈性與變現能力，建議規劃信託或分批移轉。"
             st.warning(msg)
             risk_suggestions.append(msg)
             high_risk_count += 1
@@ -118,9 +118,10 @@ if st.session_state.submitted_asset_map:
     st.markdown("以下是針對風險提示，您可以採取的下一步行動：")
     st.markdown("""
     - 若股權占比高：請洽顧問討論股權信託與公司治理設計。
-    - 若不動產占比高：可考慮不動產信託、換屋或出售部分資產。
+    - 若不動產占比高：可考慮不動產信託、換屋或出售部分資產，提升靈活性。
     - 若未配置保單：可初步評估保額、稅源與家族成員的保障需求。
     - 若有海外資產：請確保已做 FBAR/CRS 合規申報，並評估海外信託規劃。
+    - 若有其他資產：盤點特殊資產如藝術品與收藏品，評估是否適合納入傳承架構。
     """)
 
     st.markdown("---")

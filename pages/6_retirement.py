@@ -106,7 +106,7 @@ if st.button("📊 開始試算") or "calc_done" in st.session_state:
             logo.hAlign = 'CENTER'
             story.append(logo)
         story.append(Spacer(1, 12))
-        story.append(Paragraph("📋 樂活退休試算摘要", styleH))
+        story.append(Paragraph("樂活退休試算摘要", styleH))
         story.append(Paragraph(f"• 試算日期：{date.today()}", styleN))
         story.append(Paragraph(f"• 退休年齡：{retire_age} 歲", styleN))
         story.append(Paragraph(f"• 預估壽命：{life_expectancy} 歲", styleN))

@@ -9,14 +9,21 @@ st.set_page_config(
     layout="centered"
 )
 
-# 初始化狀態
+# 頁面標題
+st.markdown("""
+# 《影響力》傳承風格探索
+""")
+
+# 初始化 session_state
 for key in ["submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
     if key not in st.session_state:
         st.session_state[key] = False
 
+# 首頁跳轉提示
 if "start_from_home" in st.session_state and st.session_state.start_from_home:
     st.session_state.start_from_home = False
-    st.success("✅ 已為您啟動《影響力》傳承探索流程")
+    st.success("✅ 已為您啟動《影響力》探索流程")
+
 
 # 傳承風格小測驗
 if not st.session_state.legacy_quiz_done:

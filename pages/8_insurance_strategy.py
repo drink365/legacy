@@ -7,19 +7,24 @@ from io import BytesIO
 
 # 頁面設定
 st.set_page_config(
-    page_title="保單策略規劃 | 永傳家族傳承教練",
+    page_title="《影響力》保單策略設計",
     page_icon="📦",
     layout="centered"
 )
 
-# 標題與副標
-st.image("logo.png", width=300)
-st.markdown("## 📦 保單策略規劃")
-st.markdown("為高資產家庭設計最適保障結構，讓每一分資源，都能守護最重要的事。")
+# 標題區
+st.markdown("""
+<div style='text-align: center; margin-top: 1em;'>
+    <h1>📦 《影響力》保單策略設計</h1>
+    <p style='font-size: 18px; color: #666;'>為高資產家庭設計最適保障結構，讓每一分資源，都能守護最重要的事。</p>
+</div>
+""", unsafe_allow_html=True)
+
 st.markdown("---")
 
-# 使用者輸入條件
+# 步驟一：輸入條件
 st.markdown("### 🔍 步驟一：輸入您的規劃條件")
+
 age = st.number_input("年齡", min_value=18, max_value=90, value=45)
 gender = st.radio("性別", ["女性", "男性"])
 budget = st.number_input("預計投入金額（單位：萬元）", min_value=100, step=50)
@@ -32,10 +37,11 @@ selected_goals = st.multiselect("您的規劃目標（可複選）", GOALS)
 if selected_goals:
     st.success("✅ 已選擇目標：" + "、".join(selected_goals))
 
-# 策略建議
+# 步驟二：系統建議
 if st.button("📌 取得建議策略組合"):
     st.markdown("---")
     st.markdown("### 🧩 步驟二：系統建議策略")
+
     recs = get_recommendations(age, gender, budget, pay_years, selected_goals)
 
     if recs:
@@ -45,7 +51,7 @@ if st.button("📌 取得建議策略組合"):
             st.markdown(f"**組合結構說明：** {r['description']}")
             st.markdown("---")
 
-        # PDF 匯出
+        # PDF 下載
         pdf_bytes = generate_insurance_strategy_pdf(age, gender, budget, currency, pay_years, selected_goals, recs)
         st.download_button(
             label="📄 下載建議報告 PDF",
@@ -56,16 +62,17 @@ if st.button("📌 取得建議策略組合"):
     else:
         st.info("尚未有符合條件的建議，請重新調整您的目標或條件。")
 
-# CTA 行動導引
+# 行動導引
 st.markdown("---")
 st.markdown("### 📬 想討論更進一步的保單設計？")
+st.markdown("歡迎預約 1 對 1 專屬對談，讓我們陪您設計最安心的保障架構。")
 st.markdown("👉 <a href='mailto:123@gracefo.com?subject=預約保單策略諮詢' target='_blank'>點我寄信預約對談</a>", unsafe_allow_html=True)
 
+# 頁尾資訊
 st.markdown("---")
 st.markdown("""
 <div style='text-align: center; font-size: 14px; color: gray;'>
-永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
+《影響力》傳承策略平台｜永傳家族辦公室 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
 聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)
-

@@ -1,19 +1,21 @@
 from io import BytesIO
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
 import streamlit as st
+import re
 
 # 用來移除 emoji 的方法
-import re
 def remove_emojis(text):
     """移除文本中的 emoji 表情符號"""
-    emoji_pattern = re.compile("[\U00010000-\U0010ffff]", flags=re.UNICODE)
-    return emoji_pattern.sub(r'', text)
+    if isinstance(text, str):  # 確保傳遞的資料是字串
+        emoji_pattern = re.compile("[\U00010000-\U0010ffff]", flags=re.UNICODE)
+        return emoji_pattern.sub(r'', text)
+    return text
 
 # 生成資產圖和建議摘要的 PDF
 def generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text, remove_emojis=False):

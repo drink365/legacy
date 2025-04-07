@@ -17,33 +17,37 @@ st.markdown("""
 
 st.markdown("---")
 
-# --- 工具 1 ---
+# --- 工具 1：樂活退休試算器 ---
 st.markdown("### 💰 樂活退休試算器")
-st.write("預估未來30年生活＋醫療＋長照支出與缺口，規劃安心的退休生活。")
+st.write("我想知道：如果我現在就退休，資產夠用嗎？")
+st.write("這個工具幫助你預估未來 30 年的生活、醫療與長照支出，提早看見缺口。")
 if st.button("👉 前往試算：樂活退休", key="go_retirement"):
     st.switch_page("pages/6_retirement.py")
 
 st.markdown("---")
 
-# --- 工具 2 ---
+# --- 工具 2：AI秒算遺產稅 ---
 st.markdown("### 🧮 AI秒算遺產稅")
-st.write("快速估算遺產稅與現金缺口，提前準備稅源與保全架構。")
+st.write("我想知道：萬一我離開，資產會產生多少稅？")
+st.write("輸入簡單資料，即可立即試算遺產稅與現金缺口，為傳承做好準備。")
 if st.button("👉 前往試算：遺產稅", key="go_tax"):
     st.switch_page("pages/5_estate_tax.py")
 
 st.markdown("---")
 
-# --- 工具 3 ---
+# --- 工具 3：資產結構圖 ---
 st.markdown("### 🗺️ 資產結構圖")
-st.write("輸入六大類資產，視覺化呈現風險集中與傳承建議。")
+st.write("我想知道：我的資產分布合理嗎？風險在哪？")
+st.write("輸入六大類資產，系統幫你畫出傳承風險圖，搭配建議摘要一目了然。")
 if st.button("👉 開始建立：資產結構圖", key="map_tool"):
     st.switch_page("pages/7_asset_map.py")
 
 st.markdown("---")
 
-# --- 工具 4 ---
+# --- 工具 4：保單策略設計 ---
 st.markdown("### 📦 保單策略設計")
-st.write("根據年齡、目標與預算，模擬最適保單組合與保障結構。")
+st.write("我想知道：保單怎麼配置最適合我的傳承目標？")
+st.write("根據年齡、目標與預算，設計出最適的保障組合與稅務配置策略。")
 if st.button("👉 啟動設計：保單策略", key="insurance_tool"):
     st.switch_page("pages/8_insurance_strategy.py")
 

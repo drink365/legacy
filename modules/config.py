@@ -2,7 +2,7 @@
 
 import streamlit as st
 
-def setup_page(title="永傳 AI 傳承教練", icon_path="logo.png", layout="centered"):
+def setup_page(title="永傳《影響力》傳承規劃平台", icon_path="logo.png", layout="centered"):
     """
     統一設定 Streamlit 頁面樣式：
     - title：頁面標題

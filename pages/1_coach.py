@@ -12,7 +12,7 @@ st.set_page_config(
 # 頁面標題（水平置中）
 st.markdown("""
 <div style='text-align: center; margin-top: 1em;'>
-    <h1 style='font-size: 36px;'>《影響力》傳承風格探索</h1>
+    <h1 style='font-size: 36px;'>🌿《影響力》傳承風格探索</h1>
 </div>
 """, unsafe_allow_html=True)
 

@@ -1,11 +1,12 @@
+# --- pages/7_asset_map.py ---
+
 import streamlit as st
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfbase import pdfmetrics
 from io import BytesIO
+from modules.pdf_generator import generate_asset_pdf
 
-# 註冊字型給 matplotlib 使用
+# 字型設定
 font_path = "NotoSansTC-Regular.ttf"
 font_prop = font_manager.FontProperties(fname=font_path)
 plt.rcParams["font.family"] = font_prop.get_name()
@@ -13,7 +14,7 @@ plt.rcParams["font.family"] = font_prop.get_name()
 # 頁面設定
 st.set_page_config(
     page_title="傳承風險圖與建議摘要",
-    page_icon="📊",
+    page_icon="\ud83d\udcca",
     layout="centered"
 )
 
@@ -30,11 +31,10 @@ insurance = st.number_input("保單", min_value=0, value=3000, step=100)
 offshore = st.number_input("海外資產", min_value=0, value=2000, step=100)
 others = st.number_input("其他資產", min_value=0, value=1000, step=100)
 
-# 整合輸入
 labels = ["公司股權", "不動產", "金融資產", "保單", "海外資產", "其他"]
 values = [company, real_estate, financial, insurance, offshore, others]
 
-# 圓餅圖呈現
+# 圖表呈現
 fig, ax = plt.subplots(figsize=(6, 6))
 wedges, texts, autotexts = ax.pie(
     values,
@@ -46,60 +46,61 @@ wedges, texts, autotexts = ax.pie(
 ax.axis("equal")
 st.pyplot(fig)
 
-# 總資產與比例摘要
+# 資產摘要
 total_assets = sum(values)
 percentages = [v / total_assets * 100 if total_assets else 0 for v in values]
 
-st.markdown("### 💰 資產總覽")
-st.write(f"📦 資產總額：**{total_assets:,.0f} 萬元**")
+st.markdown("### \ud83d\udcb0 資產總覽")
+st.write(f"\ud83d\udcc6 資產總額：**{total_assets:,.0f} 萬元**")
 
 cols = st.columns(2)
 for i, (label, val, pct) in enumerate(zip(labels, values, percentages)):
     with cols[i % 2]:
-        st.markdown(f"▫️**{label}**：{val:,} 萬元（{pct:.1f}%）")
+        st.markdown(f"\u25ab\ufe0f**{label}**：{val:,} 萬元（{pct:.1f}%）")
 
-# 建議摘要（進階版本）
+# 建議摘要
 st.markdown("---")
-st.markdown("### 📝 規劃建議摘要")
+st.markdown("### \ud83d\udcdd 規劃建議摘要")
 
-# 條件設定
 suggestions = []
-
-# 保單比重不足
 if total_assets > 0 and (insurance / total_assets) < 0.2:
-    suggestions.append("📌 **保單佔比偏低**，建議補強稅源工具，以降低未來繳稅與資產分配風險。")
-
-# 公司股權佔比過高
+    suggestions.append("\ud83d\udccc **保單佔比偏低**，建議補強稅源工具，以降低未來繳稅與資產分配風險。")
 if (company / total_assets) > 0.4:
-    suggestions.append("🏢 **公司股權超過 40%**，資產過度集中，應考慮股權信託或接班配置。")
-
-# 不動產比重高
+    suggestions.append("\ud83c\udfe2 **公司股權超過 40%**，資產過度集中，應考慮股權信託或接班配置。")
 if (real_estate / total_assets) > 0.3:
-    suggestions.append("🏠 **不動產比重高**，變現難度高，建議預留現金資源或補強保單稅源。")
-
-# 金融資產偏低
+    suggestions.append("\ud83c\udfe1 **不動產比重高**，變現難度高，建議預留現金資源或補強保單稅源。")
 if (financial / total_assets) < 0.2:
-    suggestions.append("💸 **金融資產不足**，流動性可能無法應付突發稅務或照護支出。")
-
-# 海外資產提醒
+    suggestions.append("\ud83d\udcb8 **金融資產不足**，流動性可能無法應付突發稅務或照護支出。")
 if offshore > 0:
-    suggestions.append("🌐 **您有海外資產**，請留意 CRS、FBAR 等申報義務與相關罰則風險。")
-
-# 高資產提醒
+    suggestions.append("\ud83c\udf10 **您有海外資產**，請留意 CRS、FBAR 等申報義務與相關罰則風險。")
 if total_assets >= 30000:
-    suggestions.append("📊 **總資產已超過 3 億元**，建議進行整體信託、控股與資產保全架構設計。")
+    suggestions.append("\ud83d\udcca **總資產已超過 3 億元**，建議進行整體信託、控股與資產保全架構設計。")
 
-# 顯示建議
 if suggestions:
-    for tip in suggestions:
-        st.info(tip)
+    for s in suggestions:
+        st.info(s)
 else:
-    st.success("👍 目前資產結構整體平衡，仍建議定期檢視傳承架構與稅源預備狀況。")
+    st.success("\ud83d\udc4d 目前資產結構整體平衡，仍建議定期檢視傳承架構與稅源預備狀況。")
 
-# 行動導引 CTA
+# 匯出 PDF 報告
+chart_buffer = BytesIO()
+fig.savefig(chart_buffer, format="png")
+chart_buffer.seek(0)
+
+st.markdown("### \ud83d\udcc5 產出報告")
+if st.button("\ud83d\udcc4 匯出 PDF 報告"):
+    pdf_file = generate_asset_pdf(labels, values, suggestions, chart_buffer)
+    st.download_button(
+        label="\u2b07\ufe0f 下載我的資產風險報告",
+        data=pdf_file,
+        file_name="asset_risk_report.pdf",
+        mime="application/pdf"
+    )
+
+# 行動導引
 st.markdown("---")
-st.markdown("📊 想知道這些資產會產生多少遺產稅？")
-if st.button("🧮 立即前往 AI秒算遺產稅"):
+st.markdown("\ud83d\udcca 想知道這些資產會產生多少遺產稅？")
+if st.button("\ud83e\uddee 立即前往 AI秒算遺產稅"):
     st.switch_page("pages/5_estate_tax.py")
 
 # 頁尾資訊

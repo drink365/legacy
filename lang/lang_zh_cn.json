@@ -1,11 +1,18 @@
 {
-  "title_platform": "《影响力》传承策略平台",
-  "subtitle_platform": "让每一份资源，都成为你影响力的延伸",
-  "client_home_intro": "👤 我是个人用户，希望规划退休和传承",
-  "advisor_home_intro": "👥 我是顾问，希望协助客户设计传承架构",
-  "start_explore": "开始探索",
-  "asset_map": "资产结构图",
-  "estate_tax": "遗产税试算",
-  "insurance_plan": "保单策略设计",
-  "retirement_tool": "乐活退休试算"
+  "brand_name": "影响力",
+  "brand_subtitle": "高净值家庭的 传承策略平台",
+  "brand_slogan": "让每一份资源，成为你影响力的延伸",
+  "brand_intro_line1": "《影响力》是一个专为高净值家庭打造的传承策略平台。",
+  "brand_intro_line2": "我们陪你设计每一份资源的去向，",
+  "brand_intro_line3": "让它能守护最重要的人，延续你真正的价值。",
+  "value_1_title": "富足结构",
+  "value_1_desc": "为资产设计流动性与稳定性，让财富更高效地守护人生阶段。",
+  "value_2_title": "风险预备",
+  "value_2_desc": "从保单、税源到信托制度，打造资产的防御系统与转移机制。",
+  "value_3_title": "价值传递",
+  "value_3_desc": "不仅是金钱，更是精神、信任与选择，实现跨世代的连接。",
+  "entry_title": "请选择您的身份",
+  "client_button": "我是高净值家庭／企业主",
+  "advisor_button": "我是顾问／财税专业人员",
+  "logo_warning": "⚠️ 无法加载 logo.png，请确认文件是否存在"
 }

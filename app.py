@@ -27,7 +27,7 @@ except:
 st.markdown("""
 <div style='text-align: center; margin-top: 2em;'>
     <h1 style='font-size: 48px; font-weight: bold;'>影響力</h1>
-    <p style='font-size: 20px; color: #555; font-weight: bold;'>高資產家庭的傳承策略平台</p>
+    <p style='font-size: 24px; color: #555; font-weight: bold;'>高資產家庭的傳承策略平台</p>
 </div>
 """, unsafe_allow_html=True)
 

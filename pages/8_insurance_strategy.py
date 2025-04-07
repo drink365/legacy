@@ -24,7 +24,7 @@ age = st.number_input("年齡", min_value=18, max_value=90, value=45)
 gender = st.radio("性別", ["女性", "男性"])
 budget = st.number_input("預計投入金額（單位：萬元）", min_value=100, step=50)
 currency = st.radio("預算幣別", ["台幣", "美元"])
-pay_years = st.selectbox("繳費年期偏好", ["一次繳", "3年期", "5年期", "10年期"])
+pay_years = st.selectbox("繳費年期偏好", ["䠢繳", "6年期", "10年期", "15年期", "20年期"])
 
 GOALS = ["稅源預備", "資產傳承", "退休現金流", "子女教育金", "重大醫療/長照", "資產保全與信託"]
 selected_goals = st.multiselect("您的規劃目標（可複選）", GOALS)

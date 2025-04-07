@@ -62,8 +62,8 @@ st.markdown("### 📝 規劃建議摘要")
 suggestions = []
 if total_assets > 0 and (insurance / total_assets) < 0.2:
     suggestions.append("📌 保單佔比偏低，建議補強稅源工具，以降低未來繳稅與資產分配風險。")
-if (company / total_assets) > 0.4:
-    suggestions.append("🏢 公司股權超過 40%，資產過度集中，應考慮股權信託或接班配置。")
+if (company / total_assets) > 0.3:
+    suggestions.append("🏢 公司股權超過 30%，資產過度集中，應考慮股權信託或接班配置。")
 if (real_estate / total_assets) > 0.3:
     suggestions.append("🏠 不動產比重高，變現難度高，建議預留現金資源或補強保單稅源。")
 if (financial / total_assets) < 0.2:
@@ -71,7 +71,7 @@ if (financial / total_assets) < 0.2:
 if offshore > 0:
     suggestions.append("🌐 您有海外資產，請留意 CRS、FBAR 等申報義務與相關罰則風險。")
 if total_assets >= 30000:
-    suggestions.append("🔒 總資產已超過 3 億元，建議進行整體信託、控股與資產保全架構設計。")
+    suggestions.append("🔒 總資產已超過 3 億元，建議進行整體資產保全架構設計。")
 
 if suggestions:
     for s in suggestions:

@@ -4,18 +4,19 @@ from modules.pdf_generator import generate_pdf
 from modules.cta_section import render_cta
 
 st.set_page_config(
-    page_title="永傳 AI 傳承教練",
+    page_title="《影響力》傳承風格探索",
     page_icon="🌿",
     layout="centered"
 )
 
+# 初始化狀態
 for key in ["submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
     if key not in st.session_state:
         st.session_state[key] = False
 
 if "start_from_home" in st.session_state and st.session_state.start_from_home:
     st.session_state.start_from_home = False
-    st.success("✅ 已為您啟動永傳 AI 傳承教練探索流程")
+    st.success("✅ 已為您啟動《影響力》傳承探索流程")
 
 # 傳承風格小測驗
 if not st.session_state.legacy_quiz_done:
@@ -40,11 +41,11 @@ if not st.session_state.legacy_quiz_done:
         c_count = sum([s.startswith("我的理念") or s.startswith("引導") or s.startswith("後代") or s.startswith("敘說") or s.startswith("領航者") for s in selections])
 
         if a_count >= max(b_count, c_count):
-            st.session_state.legacy_style_result = "❤️ 關係守護者型：您重視家庭和諧、情感平衡，適合建立家族共識與柔性傳承策略。"
+            st.session_state.legacy_style_result = "關係守護者型：您重視家庭和諧、情感平衡，適合建立家族共識與柔性傳承策略。"
         elif b_count >= max(a_count, c_count):
-            st.session_state.legacy_style_result = "💼 策略家型：您偏好制度與規劃，適合以信託、股權與稅務工具建構穩定架構。"
+            st.session_state.legacy_style_result = "策略家型：您偏好制度與規劃，適合以信託、股權與稅務工具建構穩定架構。"
         else:
-            st.session_state.legacy_style_result = "🧭 領航者型：您重視理念與精神的延續，適合透過願景建立、生命故事傳承影響力。"
+            st.session_state.legacy_style_result = "領航者型：您重視理念與精神的延續，適合透過願景建立、生命故事傳承影響力。"
 
         st.session_state.legacy_quiz_done = True
 
@@ -138,7 +139,7 @@ if st.session_state.module_four_done:
     st.download_button(
         label="下載我的探索紀錄報告（PDF）",
         data=pdf,
-        file_name="永傳AI探索報告.pdf",
+        file_name="影響力_探索紀錄.pdf",
         mime="application/pdf"
     )
 

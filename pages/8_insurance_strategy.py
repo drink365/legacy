@@ -22,7 +22,8 @@ st.markdown("---")
 st.markdown("### 🔍 步驟一：輸入您的規劃條件")
 age = st.number_input("年齡", min_value=18, max_value=90, value=45)
 gender = st.radio("性別", ["女性", "男性"])
-budget = st.number_input("預計投入金額（萬元）", min_value=100, step=50)
+budget = st.number_input("預計投入金額（單位：萬元）", min_value=100, step=50)
+currency = st.radio("預算幣別", ["台幣", "美元"])
 pay_years = st.selectbox("繳費年期偏好", ["一次繳", "3年期", "5年期", "10年期"])
 
 GOALS = ["稅源預備", "資產傳承", "退休現金流", "子女教育金", "重大醫療/長照", "資產保全與信託"]
@@ -45,7 +46,7 @@ if st.button("📌 取得建議策略組合"):
             st.markdown("---")
 
         # PDF 匯出
-        pdf_bytes = generate_insurance_strategy_pdf(age, gender, budget, pay_years, selected_goals, recs)
+        pdf_bytes = generate_insurance_strategy_pdf(age, gender, budget, currency, pay_years, selected_goals, recs)
         st.download_button(
             label="📄 下載建議報告 PDF",
             data=pdf_bytes,

@@ -1,18 +1,25 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="案例分享｜永傳 AI 傳承教練",
+    page_title="《影響力》｜傳承案例分享",
     page_icon="📚",
     layout="centered"
 )
 
-st.markdown("# 📚 案例分享")
+st.markdown("""
+<div style='text-align: center;'>
+    <h1 style='font-size: 36px;'>《影響力》傳承案例分享</h1>
+    <p style='font-size: 18px; color: gray;'>從真實故事，看見更多選擇的可能</p>
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("""
-在這個單元，我們將陸續分享不同家族的真實傳承故事。
-這些案例都經過去識別化處理，盡可能保留當事人面對抉擇時的心境與智慧。
+這裡集結了不同家族的傳承故事，
+有些是企業主的思索，有些是高齡長輩的轉念，
+也有些，是家人之間終於開始的那場對話。
 
-希望您能從中獲得啟發，也看見更多可能性。
+每一則案例，都是《影響力》陪伴客戶的真實過程，
+經過去識別化處理，保留原有的抉擇與感動。
 
 ---
 
@@ -76,5 +83,11 @@ st.markdown("""
 ---
 
 💌 如果您也願意分享您的經歷（可匿名），我們非常歡迎。  
-請來信：📧 [123@gracefo.com](mailto:123@gracefo.com)
-""")
+請來信：📧 <a href="mailto:123@gracefo.com">123@gracefo.com</a>
+
+---
+<div style='text-align: center; font-size: 14px; color: gray;'>
+永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
+聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
+</div>
+""", unsafe_allow_html=True)

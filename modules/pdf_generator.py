@@ -9,7 +9,11 @@ from reportlab.lib.units import mm
 import streamlit as st
 import re
 
-# 字型與樣式設定
+# ✅ 表情符號清除器（僅 PDF 用）
+def remove_emojis(text):
+    return re.sub(r"[^\u0000-\uFFFF]", "", text)
+
+# ✅ 字型與樣式設定
 font_path = "NotoSansTC-Regular.ttf"
 pdfmetrics.registerFont(TTFont('NotoSansTC', font_path))
 
@@ -18,12 +22,7 @@ styleH = ParagraphStyle(name='Heading2', fontName='NotoSansTC', fontSize=14, spa
 styleC = ParagraphStyle(name='Center', fontName='NotoSansTC', fontSize=10, alignment=TA_CENTER)
 
 
-# ✅ 表情符號清除器（僅 PDF 用）
-def remove_emojis(text):
-    return re.sub(r"[^\u0000-\uFFFF]", "", text)
-
-
-# ✅ 產生傳承教練模組 PDF
+# ✅ 傳承教練探索紀錄 PDF 產生器
 def generate_legacy_pdf():
     buffer = BytesIO()
     logo_path = "logo.png"
@@ -31,7 +30,7 @@ def generate_legacy_pdf():
     story = []
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
 
-    # Logo & 標語
+    # Logo 與標語
     logo = Image(logo_path, width=80 * mm, height=20 * mm)
     logo.hAlign = 'CENTER'
     story.append(logo)
@@ -42,14 +41,12 @@ def generate_legacy_pdf():
     story.append(Spacer(1, 24))
     story.append(Paragraph("永傳 AI 傳承教練探索紀錄", styleH))
 
-    # 傳承風格
     if "legacy_style_result" in st.session_state:
         text = remove_emojis(st.session_state.legacy_style_result)
         story.append(Spacer(1, 12))
         story.append(Paragraph("您的傳承風格：", styleH))
         story.append(Paragraph(text, styleN))
 
-    # 模組二
     if "key_issues" in st.session_state:
         story.append(Spacer(1, 12))
         story.append(Paragraph("模組二：您最在意的重點", styleH))
@@ -58,7 +55,6 @@ def generate_legacy_pdf():
         if st.session_state.get("reason"):
             story.append(Paragraph(f"原因：{st.session_state.reason}", styleN))
 
-    # 模組三
     if "directions" in st.session_state:
         story.append(Spacer(1, 12))
         story.append(Paragraph("模組三：您期望的未來方向", styleH))
@@ -84,15 +80,14 @@ def generate_legacy_pdf():
     return buffer
 
 
-# ✅ 產生資產風險圖 PDF
-def generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text, remove_emojis=False):
+# ✅ 傳承風險圖與建議摘要 PDF
+def generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text, remove_emojis=True):
     buffer = BytesIO()
     logo_path = "logo.png"
 
     story = []
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
 
-    # Logo & 標題
     logo = Image(logo_path, width=80 * mm, height=20 * mm)
     logo.hAlign = 'CENTER'
     story.append(logo)
@@ -101,31 +96,26 @@ def generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text, re
     story.append(Spacer(1, 10))
     story.append(Paragraph(f"總資產：約 {total:,.0f} 萬元", styleN))
 
-    # 資產細項
     story.append(Spacer(1, 10))
     for k, v in asset_data.items():
         story.append(Paragraph(f"• {k}：{v:,.0f} 萬元", styleN))
 
-    # 風險提醒
     story.append(Spacer(1, 12))
     story.append(Paragraph("風險提示與建議", styleH))
     for line in risk_suggestions:
         cleaned = remove_emojis(line) if remove_emojis else line
         story.append(Paragraph(f"• {cleaned}", styleN))
 
-    # 總體摘要
     story.append(Spacer(1, 12))
     story.append(Paragraph("總體風險評估", styleH))
     story.append(Paragraph(summary_text, styleN))
 
-    # 行動清單
     story.append(Spacer(1, 12))
     story.append(Paragraph("建議行動清單", styleH))
     for a in get_action_suggestions():
         cleaned = remove_emojis(a) if remove_emojis else a
         story.append(Paragraph(f"• {cleaned}", styleN))
 
-    # 結尾資訊
     story.append(Spacer(1, 20))
     story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
     story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
@@ -135,7 +125,7 @@ def generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text, re
     return buffer
 
 
-# ✅ 行動建議清單
+# ✅ 提供建議行動清單
 def get_action_suggestions():
     return [
         "📌 重新檢視資產結構，確認是否已涵蓋流動性、稅源與保障需求。",

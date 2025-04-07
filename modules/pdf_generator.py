@@ -9,6 +9,7 @@ from reportlab.lib.units import mm
 from reportlab.lib import colors
 import streamlit as st
 
+
 def generate_pdf():
     buffer = BytesIO()
     logo_path = "logo.png"
@@ -126,6 +127,50 @@ def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
         story.append(Paragraph("目前資產結構整體平衡，仍建議定期檢視傳承架構與稅源預備狀況。", styleN))
 
     story.append(Spacer(1, 20))
+    story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
+    story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
+
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
+    doc.build(story)
+    buffer.seek(0)
+    return buffer
+
+
+# --- modules/pdf_generator.py 中新增函式 ---
+
+# 📦 保單策略規劃 PDF 產出函式
+def generate_insurance_strategy_pdf(age, gender, budget, pay_years, goals, strategies):
+    buffer = BytesIO()
+    logo_path = "logo.png"
+    font_path = "NotoSansTC-Regular.ttf"
+
+    pdfmetrics.registerFont(TTFont('NotoSansTC', font_path))
+    styleN = ParagraphStyle(name='Normal', fontName='NotoSansTC', fontSize=12)
+    styleH = ParagraphStyle(name='Heading2', fontName='NotoSansTC', fontSize=14, spaceAfter=10)
+    styleC = ParagraphStyle(name='Center', fontName='NotoSansTC', fontSize=10, alignment=TA_CENTER)
+
+    story = []
+    story.append(Image(logo_path, width=80 * mm, height=20 * mm))
+    story.append(Spacer(1, 12))
+    story.append(Paragraph("📦 保單策略規劃 | 永傳家族傳承教練", styleC))
+    story.append(Spacer(1, 18))
+
+    story.append(Paragraph("基本資料", styleH))
+    story.append(Paragraph(f"年齡：{age} 歲　性別：{gender}　預算：約 {budget:,} 萬元　繳費年期：{pay_years}", styleN))
+    story.append(Paragraph(f"規劃目標：{'、'.join(goals)}", styleN))
+    story.append(Spacer(1, 18))
+
+    story.append(Paragraph("建議策略組合", styleH))
+    for s in strategies:
+        story.append(Paragraph(f"🎯 {s['name']}", styleN))
+        story.append(Paragraph(f"✔ 適合目標：{'、'.join(s['matched_goals'])}", styleN))
+        story.append(Paragraph(f"📌 結構說明：{s['description']}", styleN))
+        story.append(Spacer(1, 12))
+
+    story.append(Spacer(1, 18))
+    story.append(Paragraph("下一步，我們可以一起完成", styleH))
+    story.append(Paragraph("如果這份策略讓您浮現了想法，我們誠摯邀請您預約對談，讓保單成為資產任務的最佳助手。", styleN))
+    story.append(Spacer(1, 12))
     story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
     story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
 

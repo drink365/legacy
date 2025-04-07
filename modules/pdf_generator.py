@@ -1,12 +1,17 @@
+# --- modules/pdf_generator.py ---
+
 from io import BytesIO
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Table, TableStyle
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
+from reportlab.lib import colors
 import streamlit as st
+
+# 原本的傳承教練 PDF 產出函式
 
 def generate_pdf():
     buffer = BytesIO()
@@ -63,6 +68,61 @@ def generate_pdf():
     story.append(Paragraph("如果這份紀錄讓您浮現了願景，我們誠摯邀請您預約對談，一起為未來鋪路。", styleN))
     story.append(Spacer(1, 12))
     story.append(Spacer(1, 6))
+    story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
+    story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
+
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
+    doc.build(story)
+    buffer.seek(0)
+    return buffer
+
+# 資產結構 PDF 產出函式
+
+def generate_asset_pdf(labels, values, suggestions, chart_image_bytes):
+    buffer = BytesIO()
+    logo_path = "logo.png"
+    font_path = "NotoSansTC-Regular.ttf"
+
+    pdfmetrics.registerFont(TTFont('NotoSansTC', font_path))
+    styleN = ParagraphStyle(name='Normal', fontName='NotoSansTC', fontSize=12)
+    styleH = ParagraphStyle(name='Heading2', fontName='NotoSansTC', fontSize=14, spaceAfter=10)
+    styleC = ParagraphStyle(name='Center', fontName='NotoSansTC', fontSize=10, alignment=TA_CENTER)
+
+    story = []
+    story.append(Image(logo_path, width=80 * mm, height=20 * mm))
+    story.append(Spacer(1, 12))
+    story.append(Paragraph("永傳 AI 傳承教練｜資產結構與風險建議報告", styleC))
+    story.append(Spacer(1, 18))
+
+    data = [["資產類別", "金額（萬元）"]]
+    for label, val in zip(labels, values):
+        data.append([label, f"{val:,.0f}"])
+
+    table = Table(data, colWidths=[80 * mm, 50 * mm])
+    table.setStyle(TableStyle([
+        ("FONTNAME", (0, 0), (-1, -1), "NotoSansTC"),
+        ("FONTSIZE", (0, 0), (-1, -1), 12),
+        ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+    ]))
+    story.append(Paragraph("\ud83d\udcca 資產分布明細", styleH))
+    story.append(table)
+    story.append(Spacer(1, 18))
+
+    chart = Image(chart_image_bytes, width=150 * mm, height=150 * mm)
+    chart.hAlign = "CENTER"
+    story.append(Paragraph("\ud83d\udcc8 資產結構圖", styleH))
+    story.append(chart)
+    story.append(Spacer(1, 18))
+
+    story.append(Paragraph("\ud83d\udcdd 系統建議摘要", styleH))
+    if suggestions:
+        for s in suggestions:
+            story.append(Paragraph(f"• {s}", styleN))
+    else:
+        story.append(Paragraph("\ud83d\udc4d 目前資產結構整體平衡，仍建議定期檢視傳承架構與稅源預備狀況。", styleN))
+
+    story.append(Spacer(1, 20))
     story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
     story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
 

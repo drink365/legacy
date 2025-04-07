@@ -1,6 +1,4 @@
 import streamlit as st
-st.set_page_config(page_title="傳承風險圖與建議摘要", page_icon="📊", layout="centered")
-
 import matplotlib.font_manager as fm
 import pandas as pd
 from modules.pdf_generator import generate_asset_map_pdf
@@ -8,6 +6,7 @@ from modules.pdf_generator import generate_asset_map_pdf
 # 設定中文字型
 font_path = "NotoSansTC-Regular.ttf"
 prop = fm.FontProperties(fname=font_path)
+st.set_page_config(page_title="傳承風險圖與建議摘要", page_icon="📊", layout="centered")
 st.markdown("""
     <style>
     * { font-family: 'NotoSansTC-Regular', sans-serif; }
@@ -19,23 +18,20 @@ st.markdown("透過簡單輸入，盤點您的資產分布，預見風險、提�
 st.markdown("---")
 
 # 六大類資產輸入表單
-if "submitted_asset_map" not in st.session_state:
-    st.session_state.submitted_asset_map = False
+with st.form("asset_form"):
+    col1, col2 = st.columns(2)
+    with col1:
+        equity = st.number_input("公司股權 (萬元)", min_value=0, value=0, step=100)
+        real_estate = st.number_input("不動產 (萬元)", min_value=0, value=0, step=100)
+        financial = st.number_input("金融資產（存款、股票、基金等）(萬元)", min_value=0, value=0, step=100)
+    with col2:
+        insurance = st.number_input("保單 (萬元)", min_value=0, value=0, step=100)
+        overseas = st.number_input("海外資產 (萬元)", min_value=0, value=0, step=100)
+        others = st.number_input("其他資產 (萬元)", min_value=0, value=0, step=100)
 
-if not st.session_state.submitted_asset_map:
-    with st.form("asset_form"):
-        col1, col2 = st.columns(2)
-        with col1:
-            equity = st.number_input("公司股權 (萬元)", min_value=0, value=0, step=100)
-            real_estate = st.number_input("不動產 (萬元)", min_value=0, value=0, step=100)
-            financial = st.number_input("金融資產（存款、股票、基金等）(萬元)", min_value=0, value=0, step=100)
-        with col2:
-            insurance = st.number_input("保單 (萬元)", min_value=0, value=0, step=100)
-            overseas = st.number_input("海外資產 (萬元)", min_value=0, value=0, step=100)
-            others = st.number_input("其他資產 (萬元)", min_value=0, value=0, step=100)
+    submitted = st.form_submit_button("產生建議摘要")
 
-        submitted = st.form_submit_button("產生建議摘要")
-
+if submitted or "asset_data" in st.session_state:
     if submitted:
         st.session_state.asset_data = {
             "公司股權": equity,
@@ -45,10 +41,7 @@ if not st.session_state.submitted_asset_map:
             "海外資產": overseas,
             "其他資產": others
         }
-        st.session_state.submitted_asset_map = True
-        st.rerun()
 
-if st.session_state.submitted_asset_map:
     asset_data = st.session_state.asset_data
     total = sum(asset_data.values())
 
@@ -122,7 +115,7 @@ if st.session_state.submitted_asset_map:
     - 若不動產占比高：可考慮不動產信託、換屋或出售部分資產。
     - 若未配置保單：可初步評估保額、稅源與家族成員的保障需求。
     - 若有海外資產：請確保已做 FBAR/CRS 合規申報，並評估海外信託規劃。
-    - 若有其他資產：建議詳細盤點內容，考慮變現與分配的難易度。
+    - 若有其他資產：請逐項盤點其價值與流動性，規劃適當移轉方式。
     """)
 
     st.markdown("---")
@@ -140,8 +133,3 @@ if st.session_state.submitted_asset_map:
     st.markdown("## 延伸工具")
     st.link_button("🧮 前往 AI秒算遺產稅 模組", url="/5_estate_tax", use_container_width=True)
     st.link_button("📞 預約 1 對 1 傳承諮詢", url="/4_contact", use_container_width=True)
-
-    st.markdown("---")
-    if st.button("🔄 修改資產資料"):
-        st.session_state.submitted_asset_map = False
-        st.rerun()

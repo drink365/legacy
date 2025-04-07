@@ -15,7 +15,7 @@ st.set_page_config(
 # 標題區
 st.markdown("""
 <div style='text-align: center; margin-top: 1em;'>
-    <h1>📦 《影響力》保單策略規劃</h1>
+    <h2>📦 《影響力》保單策略規劃</h2>
     <p style='font-size: 18px; color: #666;'>為高資產家庭設計最適保障結構，讓每一分資源，都能守護最重要的事。</p>
 </div>
 """, unsafe_allow_html=True)

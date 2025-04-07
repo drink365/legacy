@@ -60,4 +60,12 @@ if st.button("📌 取得建議策略組合"):
 st.markdown("---")
 st.markdown("### 📬 想討論更進一步的保單設計？")
 st.markdown("👉 <a href='mailto:123@gracefo.com?subject=預約保單策略諮詢' target='_blank'>點我寄信預約對談</a>", unsafe_allow_html=True)
-st.markdown("👉 或加入我們的 <a href='https://line.me/R/ti/p/@yourlineid' target='_blank'>LINE 官方帳號</a> 諮詢", unsafe_allow_html=True)
+
+st.markdown("---")
+st.markdown("""
+<div style='text-align: center; font-size: 14px; color: gray;'>
+永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
+聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
+</div>
+""", unsafe_allow_html=True)
+

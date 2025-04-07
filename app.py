@@ -26,7 +26,7 @@ except:
 # --- 品牌標語區 ---
 st.markdown("""
 <div style='text-align: center; margin-top: 2em;'>
-    <h2 style='font-size: 48px; font-weight: bold;'>影響力|高資產家庭的傳承策略平台</h2>
+    <h2 style='font-size: 36px; font-weight: bold;'>影響力|高資產家庭的傳承策略平台</h2>
 
 </div>
 """, unsafe_allow_html=True)

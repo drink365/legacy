@@ -1,99 +1,83 @@
-import streamlit as st
-from modules.pdf_generator import generate_asset_map_pdf, get_action_suggestions
 from io import BytesIO
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.styles import ParagraphStyle
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.units import mm
+import re
 
-st.set_page_config(page_title="傳承風險圖與建議摘要", page_icon="📊", layout="centered")
+# 註冊中文字型
+pdfmetrics.registerFont(TTFont('NotoSansTC', 'NotoSansTC-Regular.ttf'))
 
-st.title("📊 傳承風險圖與建議摘要")
-st.caption("透過簡單輸入，盤點您的資產分佈，預見風險，提前準備。")
-st.markdown("---")
+def remove_emoji(text):
+    return re.sub(r"[^\u0000-\uFFFF]", "", text)
 
-# 使用 session_state 儲存使用者輸入
-if 'asset_data' not in st.session_state:
-    st.session_state.asset_data = {
-        "公司股權": 0,
-        "不動產": 0,
-        "金融資產": 0,
-        "保單": 0,
-        "海外資產": 0,
-        "其他資產": 0
-    }
+def get_action_suggestions():
+    return [
+        "📌 重新檢視資產結構，確認是否已涵蓋流動性、稅源與保障需求。",
+        "📌 檢查壽險與信託設計是否能對應潛在風險。",
+        "📌 評估家族內部共識與接班安排是否已明確。",
+        "📌 若擁有海外資產，應尋求專業稅務建議。",
+        "📌 安排一次家族會議，開啟世代間傳承的對話。"
+    ]
 
-st.header("✅ 資產總覽")
-st.caption("請輸入每項資產的預估金額（萬元）")
+def generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text, remove_emojis=False):
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
 
-cols = st.columns(3)
-keys = list(st.session_state.asset_data.keys())
-for i, key in enumerate(keys):
-    with cols[i % 3]:
-        st.session_state.asset_data[key] = st.number_input(
-            f"{key}", min_value=0, step=100, value=st.session_state.asset_data[key], key=key
-        )
+    styleN = ParagraphStyle(name='Normal', fontName='NotoSansTC', fontSize=12)
+    styleH = ParagraphStyle(name='Heading2', fontName='NotoSansTC', fontSize=14, spaceAfter=10)
+    styleC = ParagraphStyle(name='Center', fontName='NotoSansTC', fontSize=10, alignment=TA_CENTER)
 
-asset_data = st.session_state.asset_data
-total = sum(asset_data.values())
-st.write(f"總資產：約 {total:,.0f} 萬元")
+    def clean(text):
+        return remove_emoji(text) if remove_emojis else text
 
-# 顯示表格
-st.table({"資產類別": asset_data.keys(), "金額（萬元）": asset_data.values()})
+    story = []
 
-st.markdown("---")
+    # Logo
+    try:
+        logo = Image("logo.png", width=80 * mm, height=20 * mm)
+        logo.hAlign = 'CENTER'
+        story.append(logo)
+    except:
+        pass
 
-# 風險提示
-st.subheader("📌 傳承風險提示與建議")
-risk_suggestions = []
+    story.append(Spacer(1, 6))
+    story.append(Paragraph(clean("傳承您的影響力"), styleC))
+    story.append(Paragraph(clean("每一位家族的掌舵者，都是家族傳承的種子。"), styleC))
+    story.append(Paragraph(clean("我們陪您，讓這份影響力持續茁壯。"), styleC))
+    story.append(Spacer(1, 24))
 
-if asset_data["公司股權"] > 0:
-    risk_suggestions.append("📌 公司股權應留意接班設計與股權流動性，建議結合信託與治理規劃。")
-if asset_data["不動產"] > 0:
-    risk_suggestions.append("📌 不動產具價值穩定性但流動性較差，建議搭配保單以補足稅源。")
-if asset_data["金融資產"] > 0:
-    risk_suggestions.append("📌 金融資產雖流動性較好，但仍會在繼承發生時被凍結，建議搭配壽險安排。")
-if asset_data["保單"] == 0:
-    risk_suggestions.append("📌 尚未配置保單，建議初步評估稅源缺口與家族成員的保障需求。")
-else:
-    risk_suggestions.append("📌 已有壽險，請確認受益人設計與規劃目的，同時確認整體稅源是否足夠。")
-if asset_data["海外資產"] > 0:
-    risk_suggestions.append("📌 請確認海外資產已完成申報，並評估海外信託或當地稅務風險。")
-if asset_data["其他資產"] > 0:
-    risk_suggestions.append("📌 請逐項盤點其他資產的性質與風險，規劃適當移轉方式。")
+    story.append(Paragraph("📊 傳承風險圖與建議摘要", styleH))
+    story.append(Spacer(1, 12))
 
-if total == 0:
-    st.info("尚未輸入資產，無法提供風險提示。")
-else:
-    for suggestion in risk_suggestions:
-        st.write(f"- {suggestion}")
+    story.append(Paragraph("一、資產總覽", styleH))
+    for k, v in asset_data.items():
+        story.append(Paragraph(f"{clean(k)}：{v:,.0f} 萬元", styleN))
+    story.append(Paragraph(f"總資產：約 {total:,.0f} 萬元", styleN))
+    story.append(Spacer(1, 12))
 
-# 總體評估
-st.markdown("---")
-st.subheader("📊 總體風險評估")
-if total == 0:
-    summary_text = "尚未輸入資產，無法進行風險評估。"
-else:
-    summary_text = "您的資產分佈風險相對穩定，建議持續觀察並定期盤點。"
-st.success(summary_text)
+    if total > 0:
+        story.append(Paragraph("二、傳承風險提示", styleH))
+        for tip in risk_suggestions:
+            story.append(Paragraph(f"- {clean(tip)}", styleN))
+        story.append(Spacer(1, 12))
 
-# 建議行動清單
-st.markdown("---")
-st.subheader("🛠️ 建議行動清單")
-for action in get_action_suggestions():
-    st.markdown(f"- {action}")
+        story.append(Paragraph("三、總體風險評估", styleH))
+        story.append(Paragraph(clean(summary_text), styleN))
+        story.append(Spacer(1, 12))
 
-# PDF 下載按鈕
-st.markdown("---")
-st.subheader("📄 下載風險摘要報告")
-pdf_bytes = generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text, remove_emojis=True)
-st.download_button(
-    label="📥 下載 PDF 報告",
-    data=pdf_bytes,
-    file_name="傳承風險圖與建議摘要.pdf",
-    mime="application/pdf"
-)
+        story.append(Paragraph("四、建議行動清單", styleH))
+        for act in get_action_suggestions():
+            story.append(Paragraph(f"- {clean(act)}", styleN))
+        story.append(Spacer(1, 12))
 
-# 導引按鈕改為單行顯示
-st.markdown("---")
-if st.button("🧮 前往 AI秒算遺產稅 模組"):
-    st.switch_page("pages/5_estate_tax.py")
+    story.append(Spacer(1, 20))
+    story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
+    story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
 
-if st.button("🤝 預約 1 對 1 傳承諮詢"):
-    st.switch_page("pages/4_contact.py")
+    doc.build(story)
+    buffer.seek(0)
+    return buffer

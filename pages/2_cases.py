@@ -8,7 +8,7 @@ st.set_page_config(
 
 st.markdown("""
 <div style='text-align: center;'>
-    <h1 style='font-size: 36px;'>《影響力》傳承案例分享</h1>
+    <h1 style='font-size: 36px;'>📚《影響力》傳承案例分享</h1>
     <p style='font-size: 18px; color: gray;'>從真實故事，看見更多選擇的可能</p>
 </div>
 """, unsafe_allow_html=True)

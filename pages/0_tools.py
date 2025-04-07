@@ -10,7 +10,7 @@ st.set_page_config(
 # --- 頁首標題區塊 ---
 st.markdown("""
 <div style='text-align: center;'>
-    <h1>🧰《影響力》探索工具箱</h1>
+    <h2>🧰《影響力》探索工具箱</h2>
     <p style='font-size: 18px;'>傳承規劃的每一步，都有工具陪伴你設計</p>
 </div>
 """, unsafe_allow_html=True)

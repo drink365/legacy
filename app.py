@@ -1,4 +1,5 @@
 import streamlit as st
+import base64
 from modules.lang_utils import set_language, get_text as _
 
 # 頁面基本設定
@@ -8,7 +9,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# 初始化語言（第一次進入頁面時）
+# 初始化語言
 if "app_language" not in st.session_state:
     st.session_state.app_language = "zh-TW"
 
@@ -18,11 +19,16 @@ if lang_changed:
     st.success("🌐 語言已切換，重新整理中...")
     st.experimental_rerun()
 
-# 顯示 LOGO
-logo_path = "logo.png"
+# 顯示 LOGO（使用 base64 轉換）
+def load_logo_base64(image_path):
+    with open(image_path, "rb") as img_file:
+        return base64.b64encode(img_file.read()).decode()
+
+logo_base64 = load_logo_base64("logo.png")
+
 st.markdown(f"""
 <div style='text-align: center;'>
-    <img src='data:image/png;base64,{open(logo_path, "rb").read().encode("base64").decode()}' width='200'/>
+    <img src='data:image/png;base64,{logo_base64}' width='200'/>
 </div>
 """, unsafe_allow_html=True)
 

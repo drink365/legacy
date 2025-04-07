@@ -91,7 +91,7 @@ if st.button("啟動保單設計", key="go_insurance"):
 st.markdown("---")
 st.markdown("""
 <div style='text-align: center; font-size: 14px; color: gray;'>
-永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
+《影響力》傳承策略平台｜永傳家族辦公室 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
 聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)

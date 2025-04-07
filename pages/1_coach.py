@@ -12,6 +12,7 @@ st.set_page_config(
 # 頁面標題
 st.markdown("""
 # 《影響力》傳承風格探索
+layout="centered"
 """)
 
 # 初始化 session_state
@@ -27,7 +28,7 @@ if "start_from_home" in st.session_state and st.session_state.start_from_home:
 
 # 傳承風格小測驗
 if not st.session_state.legacy_quiz_done:
-    st.markdown("## 傳承風格小測驗：我是怎麼看待家族傳承的？")
+    st.markdown("### 傳承風格小測驗：我是怎麼看待家族傳承的？")
     st.markdown("請根據您的直覺選出最貼近您想法的選項。")
 
     questions = [

@@ -1,6 +1,9 @@
 import streamlit as st
-from modules.pdf_generator import generate_asset_map_pdf, get_action_suggestions
+from modules.pdf_generator import generate_asset_map_pdf
 from io import BytesIO
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.rcParams['font.family'] = 'Noto Sans TC'
 
 st.set_page_config(page_title="傳承風險圖與建議摘要", page_icon="📊", layout="centered")
 
@@ -37,9 +40,7 @@ st.write(f"總資產：約 {total:,.0f} 萬元")
 # 顯示表格
 st.table({"資產類別": asset_data.keys(), "金額（萬元）": asset_data.values()})
 
-st.markdown("---")
-
-# 風險提示
+# 顯示風險提示
 st.subheader("📌 傳承風險提示與建議")
 risk_suggestions = []
 
@@ -76,7 +77,14 @@ st.success(summary_text)
 # 建議行動清單
 st.markdown("---")
 st.subheader("🛠️ 建議行動清單")
-for action in get_action_suggestions():
+action_suggestions = [
+    "📌 重新檢視資產結構，確認是否已涵蓋流動性、稅源與保障需求。",
+    "📌 檢查壽險與信託設計是否能對應潛在風險。",
+    "📌 評估家族內部共識與接班安排是否已明確。",
+    "📌 若擁有海外資產，應尋求專業稅務建議。",
+    "📌 安排一次家族會議，開啟世代間傳承的對話。"
+]
+for action in action_suggestions:
     st.markdown(f"- {action}")
 
 # PDF 下載按鈕

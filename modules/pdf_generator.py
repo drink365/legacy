@@ -90,16 +90,20 @@ def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
     story.append(Paragraph("永傳 AI 傳承教練｜資產結構與風險建議報告", styleC))
     story.append(Spacer(1, 18))
 
-    data = [["資產類別", "金額（萬元）"]]
+    total = sum(values)
+    data = [["資產類別", "金額（萬元）", "佔比"]]
     for label, val in zip(labels, values):
-        data.append([label, f"{val:,.0f}"])
+        pct = f"{(val / total * 100):.1f}%" if total > 0 else "0.0%"
+        data.append([label, f"{val:,.0f}", pct])
+    data.append(["總資產", f"{total:,.0f}", "100.0%"])
 
-    table = Table(data, colWidths=[80 * mm, 50 * mm])
+    table = Table(data, colWidths=[60 * mm, 50 * mm, 30 * mm])
     table.setStyle(TableStyle([
         ("FONTNAME", (0, 0), (-1, -1), "NotoSansTC"),
         ("FONTSIZE", (0, 0), (-1, -1), 12),
         ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
         ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("BACKGROUND", (0, -1), (-1, -1), colors.whitesmoke),
     ]))
     story.append(Paragraph("資產分布明細", styleH))
     story.append(table)

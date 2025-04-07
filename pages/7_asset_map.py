@@ -1,9 +1,6 @@
 import streamlit as st
 from modules.pdf_generator import generate_asset_map_pdf, get_action_suggestions
 from io import BytesIO
-import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.rcParams['font.family'] = 'Noto Sans TC'
 
 st.set_page_config(page_title="傳承風險圖與建議摘要", page_icon="📊", layout="centered")
 
@@ -39,15 +36,6 @@ st.write(f"總資產：約 {total:,.0f} 萬元")
 
 # 顯示表格
 st.table({"資產類別": asset_data.keys(), "金額（萬元）": asset_data.values()})
-
-# 簡易長條圖
-if total > 0:
-    fig, ax = plt.subplots(figsize=(5, 3))
-    ax.bar(asset_data.keys(), asset_data.values(), color='#6fa8dc')
-    ax.set_ylabel("金額（萬元）")
-    ax.set_title("資產類別分佈圖")
-    plt.xticks(rotation=45, ha='right')
-    st.pyplot(fig)
 
 st.markdown("---")
 

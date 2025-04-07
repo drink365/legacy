@@ -9,17 +9,23 @@ st.set_page_config(
     layout="centered"
 )
 
-# 初始化語言
+# 初始化 session_state
 if "app_language" not in st.session_state:
     st.session_state.app_language = "zh-TW"
+if "lang_changed" not in st.session_state:
+    st.session_state.lang_changed = False
 
-# 多語系切換邏輯
+# 處理語言切換
 lang_changed = set_language()
 if lang_changed:
-    st.success("🌐 語言已切換，重新整理中...")
+    st.session_state.lang_changed = True
+
+# 延遲觸發重新整理
+if st.session_state.lang_changed:
+    st.session_state.lang_changed = False
     st.experimental_rerun()
 
-# 顯示 LOGO（使用 base64 轉換）
+# 顯示 LOGO
 def load_logo_base64(image_path):
     with open(image_path, "rb") as img_file:
         return base64.b64encode(img_file.read()).decode()

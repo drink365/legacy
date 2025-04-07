@@ -15,8 +15,7 @@ font_path = "NotoSansTC-Regular.ttf"
 font_prop = font_manager.FontProperties(fname=font_path)
 plt.rcParams["font.family"] = font_prop.get_name()
 
-# Logo 與標題
-st.image("logo.png", width=300)
+# 標題
 st.markdown("""
 <div style='text-align: center;'>
     <h2>《影響力》資產結構圖與風險建議</h2>

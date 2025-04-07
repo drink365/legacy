@@ -3,7 +3,7 @@ import base64
 
 # --- 頁面設定 ---
 st.set_page_config(
-    page_title="影響力｜高資產家庭的傳承策略平台",
+    page_title="影響力平台 | 高資產家庭的傳承策略入口",
     page_icon="🌿",
     layout="centered"
 )
@@ -26,15 +26,18 @@ except:
 # --- 品牌標語區 ---
 st.markdown("""
 <div style='text-align: center; margin-top: 2em;'>
-    <h2 style='font-size: 36px; font-weight: bold;'>影響力 | 高資產家庭的傳承策略平台</h2>
-
+    <h1 style='font-size: 48px; font-weight: bold;'>影響力 Influence</h1>
+    <p style='font-size: 18px; color: #555; font-weight: bold;'>高資產家庭的傳承策略專屬入口</p>
+    <p style='font-size: 14px; color: #888; margin-top: -10px;'>
+        這不只是平台，而是設計你影響力的起點。
+    </p>
 </div>
 """, unsafe_allow_html=True)
 
 # --- 品牌開場語 ---
 st.markdown("""
 <div style='text-align: center; margin-top: 3em; font-size: 18px; line-height: 1.8;'>
-    你的人生，不只是擁有，更是一種影響力。<br>
+    《影響力》是一個專為高資產家庭打造的傳承策略平台。<br>
     我們陪你設計每一分資源的去向，<br>
     讓它能守護最重要的人，延續你真正的價值。
 </div>
@@ -42,16 +45,16 @@ st.markdown("""
 
 # --- 三大價值主張 ---
 st.markdown("""
-<div style='display: flex; justify-content: center; gap: 40px; margin-top: 3em;'>
-    <div style='width: 30%; text-align: center;'>
+<div style='display: flex; justify-content: center; gap: 40px; margin-top: 3em; flex-wrap: wrap;'>
+    <div style='width: 280px; text-align: center;'>
         <h3>🏛️ 富足結構</h3>
         <p>為資產設計流動性與穩定性，讓財富更有效率地守護人生階段。</p>
     </div>
-    <div style='width: 30%; text-align: center;'>
+    <div style='width: 280px; text-align: center;'>
         <h3>🛡️ 風險預備</h3>
         <p>從保單、稅源到信託制度，設計資產的防禦系統與轉移機制。</p>
     </div>
-    <div style='width: 30%; text-align: center;'>
+    <div style='width: 280px; text-align: center;'>
         <h3>🌱 價值傳遞</h3>
         <p>不只是金錢，更是精神、信任與選擇，成就跨世代的連結。</p>
     </div>

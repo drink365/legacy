@@ -21,12 +21,12 @@ st.markdown("## 傳承風險圖與建議摘要")
 
 # 用戶輸入資產金額
 st.markdown("請輸入各類資產的金額（單位：萬元）")
-company = st.number_input("公司股權", min_value=0, value=3000, step=100)
-real_estate = st.number_input("不動產", min_value=0, value=2000, step=100)
-financial = st.number_input("金融資產（存款、股票、基金等）", min_value=0, value=1000, step=100)
-insurance = st.number_input("保單", min_value=0, value=300, step=100)
-offshore = st.number_input("海外資產", min_value=0, value=0, step=100)
-others = st.number_input("其他資產", min_value=0, value=0, step=100)
+company = st.number_input("公司股權", min_value=0, value=10000, step=100)
+real_estate = st.number_input("不動產", min_value=0, value=3000, step=100)
+financial = st.number_input("金融資產（存款、股票、基金等）", min_value=0, value=3000, step=100)
+insurance = st.number_input("保單", min_value=0, value=1000, step=100)
+offshore = st.number_input("海外資產", min_value=0, value=100, step=100)
+others = st.number_input("其他資產", min_value=0, value=50, step=100)
 
 labels = ["公司股權", "不動產", "金融資產", "保單", "海外資產", "其他"]
 values = [company, real_estate, financial, insurance, offshore, others]

@@ -1,18 +1,22 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="聯絡我們｜永傳 AI 傳承教練",
+    page_title="聯絡我們｜《影響力》傳承策略平台",
     page_icon="📬",
     layout="centered"
 )
 
 st.markdown("""
-## 📬 聯絡我們
+<div style='text-align: center;'>
+    <h2>📬 聯絡我們</h2>
+    <p style='font-size: 16px;'>歡迎與《影響力》團隊聯繫，我們樂意協助您進一步了解平台服務或安排一對一傳承對談。</p>
+</div>
+""", unsafe_allow_html=True)
 
-如果您對永傳 AI 傳承教練有任何問題，或想進一步了解我們的服務，歡迎與我們聯繫。
-
+st.markdown("""
 ---
-### 📧 電子信箱
+
+### 📧 聯絡信箱
 <a href="mailto:123@gracefo.com">123@gracefo.com</a>
 
 ### 🌐 官方網站
@@ -27,6 +31,5 @@ st.markdown("""
 
 ---
 
-我們會盡快回覆您的訊息，感謝您的關注與信任！
-
+我們重視每一位用戶的提問與回饋，期待為您提供最貼近需求的傳承規劃協助。
 """, unsafe_allow_html=True)

@@ -21,13 +21,13 @@ pdfmetrics.registerFont(TTFont('NotoSansTC', 'NotoSansTC-Regular.ttf'))
 
 st.markdown("""
 <div style='text-align: center;'>
-    <h1>💰 樂活退休試算</h1>
+    <h2>💰 樂活退休試算</h2>
     <p style='font-size: 18px; margin-top: -10px;'>由《影響力》傳承策略平台陪您看見未來，預作準備</p>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("""
-<br>
+
 《影響力》陪您一起看清未來 30 年的生活輪廓：
 
 ✅ 預估退休期間的年支出（生活、醫療、長照）  

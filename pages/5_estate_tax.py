@@ -16,9 +16,10 @@ st.markdown("""
 <div style='text-align: center; margin-top: 1em;'>
     <h1 style='font-size: 36px;'>🧮 AI秒算遺產稅</h1>
     <p style='font-size: 20px; color: #555;'>快速預估潛在稅負，為資產傳承提前預留稅源</p>
+    <br>
 </div>
 """, unsafe_allow_html=True)
-<br>
+
 st.markdown("""
 👉 這是一個為高資產家庭設計的簡易稅務試算工具，協助您掌握未來遺產稅額與現金需求，進一步思考保險與信託等安排。  
 👉 試算結果僅供初步參考，實際稅務依各國法令與申報內容而定，建議與專業顧問討論。

@@ -16,3 +16,4 @@ showSidebarNavigation = true
 "pages/4_contact.py" = "📩 聯絡預約"
 "pages/5_estate_tax.py" = "🧮 AI 秒算遺產稅"
 "pages/6_retirement.py" = "💰 樂活退休試算"
+"pages/7_asset_map.py" = "🗺️ 傳承風險圖與建議摘要"

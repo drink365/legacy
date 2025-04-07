@@ -46,6 +46,7 @@ if not st.session_state.submitted_asset_map:
             "其他資產": others
         }
         st.session_state.submitted_asset_map = True
+        st.rerun()
 
 if st.session_state.submitted_asset_map:
     asset_data = st.session_state.asset_data
@@ -118,10 +119,10 @@ if st.session_state.submitted_asset_map:
     st.markdown("以下是針對風險提示，您可以採取的下一步行動：")
     st.markdown("""
     - 若股權占比高：請洽顧問討論股權信託與公司治理設計。
-    - 若不動產占比高：可考慮不動產信託、換屋或出售部分資產，以提升流動性與分配彈性。
+    - 若不動產占比高：可考慮不動產信託、換屋或出售部分資產。
     - 若未配置保單：可初步評估保額、稅源與家族成員的保障需求。
     - 若有海外資產：請確保已做 FBAR/CRS 合規申報，並評估海外信託規劃。
-    - 若有其他資產：請盤點細項並考慮信託、遺囑等方式管理移轉。
+    - 若有其他資產：建議詳細盤點內容，考慮變現與分配的難易度。
     """)
 
     st.markdown("---")
@@ -139,3 +140,8 @@ if st.session_state.submitted_asset_map:
     st.markdown("## 延伸工具")
     st.link_button("🧮 前往 AI秒算遺產稅 模組", url="/5_estate_tax", use_container_width=True)
     st.link_button("📞 預約 1 對 1 傳承諮詢", url="/4_contact", use_container_width=True)
+
+    st.markdown("---")
+    if st.button("🔄 修改資產資料"):
+        st.session_state.submitted_asset_map = False
+        st.rerun()

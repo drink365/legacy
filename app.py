@@ -1,16 +1,19 @@
-# --- app.py ---
-
 import streamlit as st
 import base64
+from modules.lang_utils import set_language, get_text as _
 
-# --- 頁面設定 ---
+# 頁面設定
 st.set_page_config(
-    page_title="《影響力》 | 高資產家庭的傳承策略平台",
+    page_title="《影響力》 | 高資產家庭的傳承策略入口",
     page_icon="🌿",
     layout="centered"
 )
 
-# --- 讀取 logo ---
+# 語言選擇器
+lang = st.selectbox("🌐 Language 語言選擇 / Language", ["繁體中文", "English", "简体中文"])
+set_language(lang)
+
+# 讀取 logo
 def load_logo_base64(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
@@ -23,45 +26,63 @@ try:
     </div>
     """, unsafe_allow_html=True)
 except:
-    st.warning("⚠️ 無法載入 logo.png，請確認檔案存在")
+    st.warning(_("warn_logo"))
 
-# --- 品牌標語區 ---
-st.markdown("""
+# 標題與標語
+st.markdown(f"""
 <div style='text-align: center; margin-top: 2em;'>
-    <h1 style='font-size: 36px; font-weight: bold;'>《影響力》</h1>
+    <h1 style='font-size: 36px; font-weight: bold;'>{_('title_platform')}</h1>
     <p style='font-size: 24px; color: #333; font-weight: bold; letter-spacing: 0.5px;'>
-        高資產家庭的 <span style="color:#006666;">傳承策略平台</span>
+        {_('subtitle_platform')}
     </p>
     <p style='font-size: 18px; color: #888; margin-top: -10px;'>
-        讓每一分資源，都成為你影響力的延伸
+        {_('slogan')}
     </p>
 </div>
 """, unsafe_allow_html=True)
 
+# 開場語
+st.markdown(f"""
+<div style='text-align: center; margin-top: 3em; font-size: 18px; line-height: 1.8;'>
+    {_('intro_text')}
+</div>
+""", unsafe_allow_html=True)
+
+# 三大價值主張
+st.markdown(f"""
+<div style='display: flex; justify-content: center; gap: 40px; margin-top: 3em; flex-wrap: wrap;'>
+    <div style='width: 280px; text-align: center;'>
+        <h3>🏛️ {_('value_structure')}</h3>
+        <p>{_('value_structure_text')}</p>
+    </div>
+    <div style='width: 280px; text-align: center;'>
+        <h3>🛡️ {_('value_risk')}</h3>
+        <p>{_('value_risk_text')}</p>
+    </div>
+    <div style='width: 280px; text-align: center;'>
+        <h3>🌱 {_('value_legacy')}</h3>
+        <p>{_('value_legacy_text')}</p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# 使用者分流選擇
 st.markdown("---")
-
-# --- 分流入口 ---
-st.markdown("### 👥 請選擇您的角色")
+st.markdown(f"### {_('choose_identity')}")
 col1, col2 = st.columns(2)
-
 with col1:
-    st.markdown("#### 🧑‍💼 我是顧問")
-    st.write("我想使用《影響力》協助客戶進行規劃")
-    if st.button("🔑 進入顧問工作台"):
+    if st.button("🙋 " + _("identity_client")):
+        st.switch_page("pages/client_home.py")
+with col2:
+    if st.button("👩‍💼 " + _("identity_advisor")):
         st.switch_page("pages/advisor_home.py")
 
-with col2:
-    st.markdown("#### 👨‍👩‍👧‍👦 我是客戶")
-    st.write("我想釐清自己在傳承上的方向與選擇")
-    if st.button("🌿 開始個人探索"):
-        st.switch_page("pages/client_home.py")
-
-# --- 頁尾資訊 ---
+# 頁尾資訊
 st.markdown("---")
-st.markdown("""
+st.markdown(f"""
 <div style='text-align: center; font-size: 14px; color: gray;'>
-《影響力》傳承策略平台｜永傳家族辦公室  
+《影響力》傳承策略平台｜永傳家族辦公室<br>
 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
-聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
+{_('contact_email')} <a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)

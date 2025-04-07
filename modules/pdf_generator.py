@@ -101,22 +101,22 @@ def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
         ("BACKGROUND", (0, 0), (-1, 0), colors.lightgrey),
         ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
     ]))
-    story.append(Paragraph("\ud83d\udcca 資產分布明細", styleH))
+    story.append(Paragraph("資產分布明細", styleH))
     story.append(table)
     story.append(Spacer(1, 18))
 
     chart = Image(chart_image_bytes, width=150 * mm, height=150 * mm)
     chart.hAlign = "CENTER"
-    story.append(Paragraph("\ud83d\udcc8 資產結構圖", styleH))
+    story.append(Paragraph("資產結構圖", styleH))
     story.append(chart)
     story.append(Spacer(1, 18))
 
-    story.append(Paragraph("\ud83d\udcdd 系統建議摘要", styleH))
+    story.append(Paragraph("系統建議摘要", styleH))
     if suggestions:
         for s in suggestions:
             story.append(Paragraph(f"• {s}", styleN))
     else:
-        story.append(Paragraph("\ud83d\udc4d 目前資產結構整體平衡，仍建議定期檢視傳承架構與稅源預備狀況。", styleN))
+        story.append(Paragraph("目前資產結構整體平衡，仍建議定期檢視傳承架構與稅源預備狀況。", styleN))
 
     story.append(Spacer(1, 20))
     story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))

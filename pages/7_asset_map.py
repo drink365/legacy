@@ -1,81 +1,75 @@
 import streamlit as st
-from modules.pdf_generator import generate_asset_map_pdf, get_action_suggestions
-from io import BytesIO
 import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.rcParams['font.family'] = 'Noto Sans TC'
+from matplotlib import font_manager
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+from io import BytesIO
 
-st.set_page_config(page_title="傳承風險圖與建議摘要", page_icon="📊", layout="centered")
+# 註冊字型給 matplotlib 使用
+font_path = "NotoSansTC-Regular.ttf"
+font_prop = font_manager.FontProperties(fname=font_path)
+plt.rcParams["font.family"] = font_prop.get_name()
 
-st.title("📊 傳承風險圖與建議摘要")
-st.caption("透過簡單輸入，盤點您的資產分佈，預見風險，提前準備。")
-st.markdown("---")
-
-# 使用 session_state 儲存使用者輸入
-if 'asset_data' not in st.session_state:
-    st.session_state.asset_data = {
-        "公司股權": 0,
-        "不動產": 0,
-        "金融資產": 0,
-        "保單": 0,
-        "海外資產": 0,
-        "其他資產": 0
-    }
-
-st.header("✅ 資產總覽")
-st.caption("請輸入每項資產的預估金額（萬元）")
-
-cols = st.columns(3)
-keys = list(st.session_state.asset_data.keys())
-for i, key in enumerate(keys):
-    with cols[i % 3]:
-        st.session_state.asset_data[key] = st.number_input(
-            f"{key}", min_value=0, step=100, value=st.session_state.asset_data[key], key=key
-        )
-
-# 資產總額
-asset_data = st.session_state.asset_data
-total = sum(asset_data.values())
-st.write(f"總資產：約 {total:,.0f} 萬元")
-
-# 顯示表格
-st.table({"資產類別": asset_data.keys(), "金額（萬元）": asset_data.values()})
-
-# 風險提示
-st.subheader("📌 傳承風險提示與建議")
-risk_suggestions = []
-if asset_data["公司股權"] > 0:
-    risk_suggestions.append("📌 公司股權應留意接班設計與股權流動性，建議結合信託與治理規劃。")
-if asset_data["不動產"] > 0:
-    risk_suggestions.append("📌 不動產具價值穩定性但流動性較差，建議搭配保單以補足稅源。")
-if asset_data["金融資產"] > 0:
-    risk_suggestions.append("📌 金融資產雖流動性較好，但仍會在繼承發生時被凍結，建議搭配壽險安排。")
-if asset_data["保單"] == 0:
-    risk_suggestions.append("📌 尚未配置保單，建議初步評估稅源缺口與家族成員的保障需求。")
-else:
-    risk_suggestions.append("📌 已有壽險，請確認受益人設計與規劃目的，同時確認整體稅源是否足夠。")
-
-if total == 0:
-    st.info("尚未輸入資產，無法提供風險提示。")
-else:
-    for suggestion in risk_suggestions:
-        st.write(f"- {suggestion}")
-
-# PDF 下載按鈕
-st.markdown("---")
-st.subheader("📄 下載風險摘要報告")
-pdf_bytes = generate_asset_map_pdf(asset_data, total, risk_suggestions, "資產分佈風險穩定")
-st.download_button(
-    label="📥 下載 PDF 報告",
-    data=pdf_bytes,
-    file_name="傳承風險圖與建議摘要.pdf",
-    mime="application/pdf"
+# 頁面設定
+st.set_page_config(
+    page_title="傳承風險圖與建議摘要",
+    page_icon="📊",
+    layout="centered"
 )
 
-# 導引按鈕
+# Logo與標題
+st.image("logo.png", width=300)
+st.markdown("## 傳承風險圖與建議摘要")
+
+# 用戶輸入資產金額
+st.markdown("請輸入各類資產的金額（單位：萬元）")
+company = st.number_input("公司股權", min_value=0, value=10000, step=100)
+real_estate = st.number_input("不動產", min_value=0, value=8000, step=100)
+financial = st.number_input("金融資產（存款、股票、基金等）", min_value=0, value=5000, step=100)
+insurance = st.number_input("保單", min_value=0, value=3000, step=100)
+offshore = st.number_input("海外資產", min_value=0, value=2000, step=100)
+others = st.number_input("其他資產", min_value=0, value=1000, step=100)
+
+# 總覽與風險提示
+labels = ["公司股權", "不動產", "金融資產", "保單", "海外資產", "其他"]
+values = [company, real_estate, financial, insurance, offshore, others]
+
+# 圖表呈現
+fig, ax = plt.subplots(figsize=(6, 6))
+wedges, texts, autotexts = ax.pie(
+    values,
+    labels=labels,
+    autopct="%1.1f%%",
+    startangle=140,
+    textprops={"fontsize": 12, "fontproperties": font_prop}
+)
+ax.axis("equal")
+st.pyplot(fig)
+
+# 建議摘要
 st.markdown("---")
-if st.button("🧮 前往 AI秒算遺產稅 模組"):
+st.markdown("### 📝 規劃建議摘要")
+
+if insurance < (company + financial + real_estate) * 0.2:
+    st.warning("📌 建議保單比重可再強化，以利稅源預留與資產傳承。")
+
+if offshore > 0:
+    st.info("🌐 您有海外資產，請留意申報義務與稅務風險。")
+
+if company > financial:
+    st.info("🏢 公司股權佔比較高，建議思考股權配置與接班安排。")
+
+# 行動導引 CTA
+st.markdown("---")
+st.markdown("📊 想知道這些資產會產生多少遺產稅？")
+if st.button("🧮 立即前往 AI秒算遺產稅"):
     st.switch_page("pages/5_estate_tax.py")
 
-if st.button("🤝 預約 1 對 1 傳承諮詢"):
-    st.switch_page("pages/4_contact.py")
+# 頁尾資訊
+st.markdown("---")
+st.markdown("""
+<div style='text-align: center; font-size: 14px; color: gray;'>
+永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
+聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
+</div>
+""", unsafe_allow_html=True)

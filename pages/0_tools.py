@@ -9,9 +9,9 @@ st.set_page_config(
 
 # --- 頁首標題區塊 ---
 st.markdown("""
-<div style='text-align: center;'>
+<div style='text-align: center; margin-top: 1em;'>
     <h2>🧰《影響力》探索工具箱</h2>
-    <p style='font-size: 18px;'>傳承規劃的每一步，都有工具陪伴你設計</p>
+    <p style='font-size: 18px; color: #555;'>傳承規劃的每一步，都有工具陪伴你設計</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -51,11 +51,11 @@ st.write("依目標、預算與年齡，配置專屬保單與稅務策略。")
 if st.button("👉 啟動設計：保單策略", key="insurance_tool"):
     st.switch_page("pages/8_insurance_strategy.py")
 
-# --- 頁尾資訊 ---
+# --- 統一頁尾資訊 ---
 st.markdown("---")
 st.markdown("""
 <div style='text-align: center; font-size: 14px; color: gray;'>
-永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
+《影響力》傳承策略平台｜永傳家族辦公室 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
 聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)

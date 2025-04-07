@@ -29,7 +29,7 @@ def generate_pdf():
     story.append(Paragraph("我們陪您，讓這份影響力持續茁壯。", styleC))
     story.append(Spacer(1, 24))
 
-    story.append(Paragraph("永傳 AI 傳承教練探索紀錄", styleH))
+    story.append(Paragraph("探索紀錄摘要", styleH))
     story.append(Spacer(1, 20))
 
     if "legacy_style_result" in st.session_state:
@@ -64,15 +64,14 @@ def generate_pdf():
     story.append(Paragraph("如果這份紀錄讓您浮現了願景，我們誠摯邀請您預約對談，一起為未來鋪路。", styleN))
     story.append(Spacer(1, 12))
     story.append(Spacer(1, 6))
-    story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
-    story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
+    story.append(Paragraph("《影響力》傳承策略平台｜永傳家族辦公室 https://gracefo.com", styleC))
+    story.append(Paragraph("聯絡信箱：123@gracefo.com", styleC))
 
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
     doc.build(story)
     buffer.seek(0)
     return buffer
 
-# 新增給 7_asset_map.py 用的報表函式
 
 def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
     buffer = BytesIO()
@@ -103,13 +102,12 @@ def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
     story = []
     story.append(Image(logo_path, width=80 * mm, height=20 * mm))
     story.append(Spacer(1, 12))
-    story.append(Paragraph("永傳 AI 傳承教練｜資產結構與風險建議報告", styleC))
+    story.append(Paragraph("《影響力》傳承策略平台｜資產結構與風險建議報告", styleC))
     story.append(Spacer(1, 18))
     story.append(Paragraph("資產分布明細", styleH))
     story.append(table)
     story.append(Spacer(1, 18))
 
-    # 圓餅圖只顯示非零資產
     if any(val > 0 for val in values):
         story.append(Paragraph("資產結構圖", styleH))
         chart = Image(chart_image_bytes, width=150 * mm, height=150 * mm)
@@ -120,14 +118,14 @@ def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
     story.append(Paragraph("系統建議摘要", styleH))
     if suggestions:
         for s in suggestions:
-            s_clean = s.replace("📌", "").replace("🏢", "").replace("🏠", "").replace("💵", "").replace("🌐", "").replace("🔒", "").replace("👍", "").strip()
+            s_clean = s.translate({ord(c): None for c in "📌🏢🏠💵🌐🔒👍"}).strip()
             story.append(Paragraph(f"• {s_clean}", styleN))
     else:
         story.append(Paragraph("目前資產結構整體平衡，仍建議定期檢視傳承架構與稅源預備狀況。", styleN))
 
     story.append(Spacer(1, 20))
-    story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
-    story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
+    story.append(Paragraph("《影響力》傳承策略平台｜永傳家族辦公室 https://gracefo.com", styleC))
+    story.append(Paragraph("聯絡信箱：123@gracefo.com", styleC))
 
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
     doc.build(story)
@@ -135,9 +133,6 @@ def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
     return buffer
 
 
-# --- modules/pdf_generator.py 中新增函式 ---
-
-# 📦 保單策略規劃 PDF 產出函式
 def generate_insurance_strategy_pdf(age, gender, budget, currency, pay_years, goals, strategies):
     buffer = BytesIO()
     logo_path = "logo.png"
@@ -151,7 +146,7 @@ def generate_insurance_strategy_pdf(age, gender, budget, currency, pay_years, go
     story = []
     story.append(Image(logo_path, width=80 * mm, height=20 * mm))
     story.append(Spacer(1, 12))
-    story.append(Paragraph("保單策略規劃 | 永傳家族傳承教練", styleC))
+    story.append(Paragraph("《影響力》傳承策略平台｜保單策略建議摘要", styleC))
     story.append(Spacer(1, 18))
 
     story.append(Paragraph("基本資料", styleH))
@@ -170,8 +165,8 @@ def generate_insurance_strategy_pdf(age, gender, budget, currency, pay_years, go
     story.append(Paragraph("下一步，我們可以一起完成", styleH))
     story.append(Paragraph("如果這份策略讓您浮現了想法，我們誠摯邀請您預約對談，讓保單成為資產任務的最佳助手。", styleN))
     story.append(Spacer(1, 12))
-    story.append(Paragraph("永傳家族辦公室｜https://gracefo.com/", styleC))
-    story.append(Paragraph("聯絡我們：123@gracefo.com", styleC))
+    story.append(Paragraph("《影響力》傳承策略平台｜永傳家族辦公室 https://gracefo.com", styleC))
+    story.append(Paragraph("聯絡信箱：123@gracefo.com", styleC))
 
     doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=30)
     doc.build(story)

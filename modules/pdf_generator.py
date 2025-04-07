@@ -72,8 +72,8 @@ def generate_pdf():
     buffer.seek(0)
     return buffer
 
+# 新增給 7_asset_map.py 用的報表函式
 
-# ✅ 資產結構與風險建議報告
 def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
     buffer = BytesIO()
     logo_path = "logo.png"
@@ -84,21 +84,9 @@ def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
     styleH = ParagraphStyle(name='Heading2', fontName='NotoSansTC', fontSize=14, spaceAfter=10)
     styleC = ParagraphStyle(name='Center', fontName='NotoSansTC', fontSize=10, alignment=TA_CENTER)
 
-    # 過濾掉金額為 0 的資產
-    filtered = [(label, val) for label, val in zip(labels, values) if val > 0]
-    filtered_labels = [f[0] for f in filtered]
-    filtered_values = [f[1] for f in filtered]
-    total = sum(filtered_values)
-
-    story = []
-    story.append(Image(logo_path, width=80 * mm, height=20 * mm))
-    story.append(Spacer(1, 12))
-    story.append(Paragraph("永傳 AI 傳承教練｜資產結構與風險建議報告", styleC))
-    story.append(Spacer(1, 18))
-
-    # 表格：資產類別、金額、佔比
+    total = sum(values)
     data = [["資產類別", "金額（萬元）", "佔比"]]
-    for label, val in zip(filtered_labels, filtered_values):
+    for label, val in zip(labels, values):
         pct = f"{(val / total * 100):.1f}%" if total > 0 else "0.0%"
         data.append([label, f"{val:,.0f}", pct])
     data.append(["總資產", f"{total:,.0f}", "100.0%"])
@@ -111,18 +99,24 @@ def generate_asset_map_pdf(labels, values, suggestions, chart_image_bytes):
         ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
         ("BACKGROUND", (0, -1), (-1, -1), colors.whitesmoke),
     ]))
+
+    story = []
+    story.append(Image(logo_path, width=80 * mm, height=20 * mm))
+    story.append(Spacer(1, 12))
+    story.append(Paragraph("永傳 AI 傳承教練｜資產結構與風險建議報告", styleC))
+    story.append(Spacer(1, 18))
     story.append(Paragraph("資產分布明細", styleH))
     story.append(table)
     story.append(Spacer(1, 18))
 
-    # 圓餅圖圖片
-    chart = Image(chart_image_bytes, width=150 * mm, height=150 * mm)
-    chart.hAlign = "CENTER"
-    story.append(Paragraph("資產結構圖", styleH))
-    story.append(chart)
-    story.append(Spacer(1, 18))
+    # 圓餅圖只顯示非零資產
+    if any(val > 0 for val in values):
+        story.append(Paragraph("資產結構圖", styleH))
+        chart = Image(chart_image_bytes, width=150 * mm, height=150 * mm)
+        chart.hAlign = "CENTER"
+        story.append(chart)
+        story.append(Spacer(1, 18))
 
-    # 系統建議
     story.append(Paragraph("系統建議摘要", styleH))
     if suggestions:
         for s in suggestions:

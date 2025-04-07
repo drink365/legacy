@@ -2,7 +2,7 @@ import streamlit as st
 
 # --- 頁面設定 ---
 st.set_page_config(
-    page_title="探索工具箱 | 影響力平台",
+    page_title="《影響力》探索工具箱",
     page_icon="🧰",
     layout="centered"
 )
@@ -10,8 +10,8 @@ st.set_page_config(
 # --- 頁首標題區塊 ---
 st.markdown("""
 <div style='text-align: center;'>
-    <h1>🧰 探索工具箱</h1>
-    <p style='font-size: 18px;'>讓規劃變得更直覺，也更安心</p>
+    <h1>🧰《影響力》探索工具箱</h1>
+    <p style='font-size: 18px;'>傳承規劃的每一步，都有工具陪伴你設計</p>
 </div>
 """, unsafe_allow_html=True)
 

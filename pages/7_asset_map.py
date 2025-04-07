@@ -8,7 +8,7 @@ from modules.pdf_generator import generate_asset_map_pdf
 from modules.config import setup_page  # 共用頁面設定
 
 # 頁面設定
-setup_page("傳承風險圖與建議摘要")
+setup_page("《影響力》資產結構圖與風險建議")
 
 # 中文字型
 font_path = "NotoSansTC-Regular.ttf"
@@ -17,7 +17,11 @@ plt.rcParams["font.family"] = font_prop.get_name()
 
 # Logo 與標題
 st.image("logo.png", width=300)
-st.markdown("## 傳承風險圖與建議摘要")
+st.markdown("""
+<div style='text-align: center;'>
+    <h2>《影響力》資產結構圖與風險建議</h2>
+</div>
+""", unsafe_allow_html=True)
 
 # 輸入資產金額
 st.markdown("請輸入各類資產的金額（單位：萬元）")
@@ -109,7 +113,7 @@ if st.button("🧮 立即前往 AI秒算遺產稅"):
 st.markdown("---")
 st.markdown("""
 <div style='text-align: center; font-size: 14px; color: gray;'>
-永傳家族辦公室｜<a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
+《影響力》傳承策略平台｜永傳家族辦公室 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
 聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)

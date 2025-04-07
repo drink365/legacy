@@ -11,7 +11,9 @@ import re
 
 # ✅ 表情符號清除器（僅 PDF 用）
 def remove_emojis(text):
-    return re.sub(r"[^\u0000-\uFFFF]", "", text)
+    if isinstance(text, str):  # 確保是字串
+        return re.sub(r"[^\u0000-\uFFFF]", "", text)
+    return text
 
 # ✅ 字型與樣式設定
 font_path = "NotoSansTC-Regular.ttf"

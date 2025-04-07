@@ -8,7 +8,7 @@ st.title("📊 傳承風險圖與建議摘要")
 st.caption("透過簡單輸入，盤點您的資產分佈，預見風險，提前準備。")
 st.markdown("---")
 
-# 初始化輸入框
+# 使用 session_state 儲存使用者輸入
 if 'asset_data' not in st.session_state:
     st.session_state.asset_data = {
         "公司股權": 0,
@@ -19,23 +19,27 @@ if 'asset_data' not in st.session_state:
         "其他資產": 0
     }
 
-# 輸入表單
 st.header("✅ 資產總覽")
 st.caption("請輸入每項資產的預估金額（萬元）")
+
 cols = st.columns(3)
-for i, key in enumerate(st.session_state.asset_data.keys()):
+keys = list(st.session_state.asset_data.keys())
+for i, key in enumerate(keys):
     with cols[i % 3]:
         st.session_state.asset_data[key] = st.number_input(
-            f"{key}", min_value=0, step=100, value=st.session_state.asset_data[key], key=f"input_{key}"
+            f"{key}", min_value=0, step=100, value=st.session_state.asset_data[key], key=key
         )
 
 asset_data = st.session_state.asset_data
 total = sum(asset_data.values())
 st.write(f"總資產：約 {total:,.0f} 萬元")
 
+# 顯示表格
+st.table({"資產類別": asset_data.keys(), "金額（萬元）": asset_data.values()})
+
 st.markdown("---")
 
-# 傳承風險提示
+# 風險提示
 st.subheader("📌 傳承風險提示與建議")
 risk_suggestions = []
 
@@ -75,7 +79,7 @@ st.subheader("🛠️ 建議行動清單")
 for action in get_action_suggestions():
     st.markdown(f"- {action}")
 
-# PDF 匯出
+# PDF 下載按鈕
 st.markdown("---")
 st.subheader("📄 下載風險摘要報告")
 pdf_bytes = generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text, remove_emojis=True)
@@ -86,7 +90,7 @@ st.download_button(
     mime="application/pdf"
 )
 
-# CTA 導引按鈕（單獨一行顯示）
+# 導引按鈕改為單行顯示
 st.markdown("---")
 if st.button("🧮 前往 AI秒算遺產稅 模組"):
     st.switch_page("pages/5_estate_tax.py")

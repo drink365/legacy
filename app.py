@@ -27,9 +27,11 @@ except:
 st.markdown("""
 <div style='text-align: center; margin-top: 2em;'>
     <h1 style='font-size: 36px; font-weight: bold;'>《影響力》</h1>
-    <p style='font-size: 24px; color: #555; font-weight: bold;'>高資產家庭的傳承策略平台</p>
+    <p style='font-size: 24px; color: #333; font-weight: bold; letter-spacing: 0.5px;'>
+        高資產家庭的 <span style="color:#006666;">傳承策略平台</span>
+    </p>
     <p style='font-size: 18px; color: #888; margin-top: -10px;'>
-        是設計你影響力的起點
+        讓每一分資源，都成為你影響力的延伸
     </p>
 </div>
 """, unsafe_allow_html=True)

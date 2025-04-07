@@ -49,20 +49,42 @@ if submitted:
 
     st.markdown("---")
     st.markdown("### 🔍 傳承風險提示與建議")
+    high_risk_count = 0
     for category, value in asset_data.items():
         if total == 0:
             continue
         ratio = value / total
         if category == "公司股權" and ratio > 0.4:
             st.warning("💼 您的『公司股權』占比偏高，建議提前規劃股權信託與接班結構。")
+            high_risk_count += 1
         elif category == "不動產" and ratio > 0.4:
             st.warning("🏠 『不動產』占比較大，可能影響繼承時分配彈性，建議規劃信託或分批移轉。")
+            high_risk_count += 1
         elif category == "金融資產" and ratio > 0.5:
             st.info("💰 金融資產雖流動性較好，但仍會在繼承發生時被凍結，建議搭配壽險安排。")
-        elif category == "保單" and value > 0:
-            st.success("📄 已配置保單，有助於現金補充與稅源預留，建議確認受益人與規劃目的。")
+        elif category == "保單":
+            if value > 0:
+                st.success("📄 已配置保單，有助於現金補充與稅源預留，建議確認受益人與規劃目的，同時留意整體稅源是否足夠。")
+            else:
+                st.warning("📄 尚未配置保單，可能缺乏稅源預留與資金彈性，建議儘早評估保險規劃作為遺產稅源預備。")
+                high_risk_count += 1
         elif category == "海外資產" and value > 0:
             st.warning("🌍 海外資產需留意境外稅務與申報合規，建議搭配信託與法遵規劃。")
+            high_risk_count += 1
+        elif category == "其他資產" and value > 0:
+            st.info("📦 其他資產類型多元，建議進一步盤點細項（如藝術品、車輛、收藏等），以便評估其流動性與分配彈性。")
+
+    # 總體評估
+    st.markdown("---")
+    st.markdown("### 📈 總體風險評估")
+    if total == 0:
+        st.info("尚未輸入資產，無法進行風險評估。")
+    elif high_risk_count == 0:
+        st.success("✅ 您的資產分布風險相對穩定，建議持續觀察並定期盤點。")
+    elif high_risk_count <= 2:
+        st.warning("⚠️ 整體風險中等，建議針對特定項目進行優化，例如稅源預留、股權安排或資產結構。")
+    else:
+        st.error("🚨 資產結構風險偏高，建議盡快與專業顧問討論具體的傳承與稅務安排。")
 
     st.markdown("---")
     st.markdown("### 📎 下載 PDF 建議報告")

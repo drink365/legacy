@@ -152,7 +152,7 @@ def generate_insurance_strategy_pdf(age, gender, budget, pay_years, goals, strat
     story = []
     story.append(Image(logo_path, width=80 * mm, height=20 * mm))
     story.append(Spacer(1, 12))
-    story.append(Paragraph("📦 保單策略規劃 | 永傳家族傳承教練", styleC))
+    story.append(Paragraph("保單策略規劃 | 永傳家族傳承教練", styleC))
     story.append(Spacer(1, 18))
 
     story.append(Paragraph("基本資料", styleH))
@@ -162,9 +162,9 @@ def generate_insurance_strategy_pdf(age, gender, budget, pay_years, goals, strat
 
     story.append(Paragraph("建議策略組合", styleH))
     for s in strategies:
-        story.append(Paragraph(f"🎯 {s['name']}", styleN))
-        story.append(Paragraph(f"✔ 適合目標：{'、'.join(s['matched_goals'])}", styleN))
-        story.append(Paragraph(f"📌 結構說明：{s['description']}", styleN))
+        story.append(Paragraph(f"{s['name']}", styleN))
+        story.append(Paragraph(f"適合目標：{'、'.join(s['matched_goals'])}", styleN))
+        story.append(Paragraph(f"結構說明：{s['description']}", styleN))
         story.append(Spacer(1, 12))
 
     story.append(Spacer(1, 18))

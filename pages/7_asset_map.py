@@ -1,5 +1,5 @@
 import streamlit as st
-from modules.pdf_generator import generate_asset_map_pdf
+from modules.pdf_generator import generate_asset_map_pdf, get_action_suggestions
 from io import BytesIO
 import matplotlib.pyplot as plt
 import matplotlib
@@ -40,7 +40,18 @@ st.write(f"總資產：約 {total:,.0f} 萬元")
 # 顯示表格
 st.table({"資產類別": asset_data.keys(), "金額（萬元）": asset_data.values()})
 
-# 顯示風險提示
+# 簡易長條圖
+if total > 0:
+    fig, ax = plt.subplots(figsize=(5, 3))
+    ax.bar(asset_data.keys(), asset_data.values(), color='#6fa8dc')
+    ax.set_ylabel("金額（萬元）")
+    ax.set_title("資產類別分佈圖")
+    plt.xticks(rotation=45, ha='right')
+    st.pyplot(fig)
+
+st.markdown("---")
+
+# 風險提示
 st.subheader("📌 傳承風險提示與建議")
 risk_suggestions = []
 
@@ -77,20 +88,13 @@ st.success(summary_text)
 # 建議行動清單
 st.markdown("---")
 st.subheader("🛠️ 建議行動清單")
-action_suggestions = [
-    "📌 重新檢視資產結構，確認是否已涵蓋流動性、稅源與保障需求。",
-    "📌 檢查壽險與信託設計是否能對應潛在風險。",
-    "📌 評估家族內部共識與接班安排是否已明確。",
-    "📌 若擁有海外資產，應尋求專業稅務建議。",
-    "📌 安排一次家族會議，開啟世代間傳承的對話。"
-]
-for action in action_suggestions:
+for action in get_action_suggestions():
     st.markdown(f"- {action}")
 
 # PDF 下載按鈕
 st.markdown("---")
 st.subheader("📄 下載風險摘要報告")
-pdf_bytes = generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text, remove_emojis=True)
+pdf_bytes = generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text)
 st.download_button(
     label="📥 下載 PDF 報告",
     data=pdf_bytes,

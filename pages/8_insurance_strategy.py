@@ -7,7 +7,7 @@ from io import BytesIO
 
 # 頁面設定
 st.set_page_config(
-    page_title="📦 保單策略規劃 | 永傳家族傳承教練",
+    page_title="保單策略規劃 | 永傳家族傳承教練",
     page_icon="📦",
     layout="centered"
 )

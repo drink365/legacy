@@ -8,7 +8,7 @@ st.set_page_config(
 
 st.markdown("""
 <div style='text-align: center;'>
-    <h2>🌿關於《影響力》</h2>
+    <h2>🌿 關於《影響力》</h2>
 </div>
 """, unsafe_allow_html=True)
 

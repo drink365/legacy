@@ -30,11 +30,11 @@ insurance = st.number_input("保單", min_value=0, value=3000, step=100)
 offshore = st.number_input("海外資產", min_value=0, value=2000, step=100)
 others = st.number_input("其他資產", min_value=0, value=1000, step=100)
 
-# 總覽與風險提示
+# 整合輸入
 labels = ["公司股權", "不動產", "金融資產", "保單", "海外資產", "其他"]
 values = [company, real_estate, financial, insurance, offshore, others]
 
-# 圖表呈現
+# 圓餅圖呈現
 fig, ax = plt.subplots(figsize=(6, 6))
 wedges, texts, autotexts = ax.pie(
     values,
@@ -45,6 +45,18 @@ wedges, texts, autotexts = ax.pie(
 )
 ax.axis("equal")
 st.pyplot(fig)
+
+# 總資產與比例摘要
+total_assets = sum(values)
+percentages = [v / total_assets * 100 if total_assets else 0 for v in values]
+
+st.markdown("### 💰 資產總覽")
+st.write(f"📦 資產總額：**{total_assets:,.0f} 萬元**")
+
+cols = st.columns(2)
+for i, (label, val, pct) in enumerate(zip(labels, values, percentages)):
+    with cols[i % 2]:
+        st.markdown(f"▫️**{label}**：{val:,} 萬元（{pct:.1f}%）")
 
 # 建議摘要
 st.markdown("---")

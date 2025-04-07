@@ -131,5 +131,5 @@ if submitted or "asset_data" in st.session_state:
 
     st.markdown("---")
     st.markdown("## 延伸工具")
-    st.link_button("前往 AI秒算遺產稅 模組", url="/5_estate_tax", use_container_width=True)
-    st.link_button("預約 1 對 1 傳承諮詢", url="/4_contact", use_container_width=True)
+    st.link_button("前往 AI秒算遺產稅 模組", url="/5_estate_tax.py", use_container_width=True)
+    st.link_button("預約 1 對 1 傳承諮詢", url="/4_contact.py", use_container_width=True)

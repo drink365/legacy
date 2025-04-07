@@ -120,9 +120,9 @@ if submitted or "asset_data" in st.session_state:
 
     st.markdown("---")
     st.markdown("## 下載 PDF 建議報告")
-    pdf_bytes = generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text)
+    pdf_bytes = generate_asset_map_pdf(asset_data, total, risk_suggestions, summary_text, remove_emojis=True)
     st.download_button(
-        label="📄 下載傳承風險圖報告 (PDF)",
+        label="下載傳承風險圖報告 (PDF)",
         data=pdf_bytes,
         file_name="asset_map_summary.pdf",
         mime="application/pdf",
@@ -131,5 +131,5 @@ if submitted or "asset_data" in st.session_state:
 
     st.markdown("---")
     st.markdown("## 延伸工具")
-    st.link_button("🧮 前往 AI秒算遺產稅 模組", url="/5_estate_tax", use_container_width=True)
-    st.link_button("📞 預約 1 對 1 傳承諮詢", url="/4_contact", use_container_width=True)
+    st.link_button("前往 AI秒算遺產稅 模組", url="/5_estate_tax", use_container_width=True)
+    st.link_button("預約 1 對 1 傳承諮詢", url="/4_contact", use_container_width=True)

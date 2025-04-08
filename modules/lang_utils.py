@@ -1,30 +1,20 @@
-import streamlit as st
 import json
 import os
+import streamlit as st
 
-# 語言資料夾路徑（已改為 i18n）
-LANG_DIR = "i18n"
+LANG_DIR = "i18n"  # 確保你的語言檔都放在 i18n 資料夾下
 
-# 支援語言清單（可自行擴充）
-LANGUAGES = {
-    "zh-TW": "繁體中文",
-    "en": "English",
-    "zh-CN": "简体中文"
-}
-
-# 初始化語言
-def set_language():
-    if "language" not in st.session_state:
-        st.session_state.language = "zh-TW"  # 預設語言
-
-# 讀取語言對應文字
-def get_text(key: str) -> str:
-    lang = st.session_state.get("language", "zh-TW")
-    lang_file = os.path.join(LANG_DIR, f"{lang}.json")
-
+def set_language(lang_code: str):
+    """設定語言並載入對應語言檔"""
+    if "language" not in st.session_state or st.session_state.language != lang_code:
+        st.session_state.language = lang_code
+    lang_file_path = os.path.join(LANG_DIR, f"{lang_code}.json")
     try:
-        with open(lang_file, "r", encoding="utf-8") as f:
-            translations = json.load(f)
-        return translations.get(key, key)
-    except Exception as e:
-        return key  # 若找不到翻譯，就回傳原 key
+        with open(lang_file_path, "r", encoding="utf-8") as f:
+            st.session_state.translations = json.load(f)
+    except FileNotFoundError:
+        st.session_state.translations = {}
+
+def get_text(key: str) -> str:
+    """取得翻譯字串，若無對應則回傳 key 本身"""
+    return st.session_state.get("translations", {}).get(key, key)

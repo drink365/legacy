@@ -1,57 +1,61 @@
 # --- pages/client_home.py ---
 
 import streamlit as st
+from modules.lang_utils import get_text as _, set_language
+
+# 初始化語言
+set_language()
 
 st.set_page_config(
-    page_title="我是客戶｜《影響力》傳承策略平台",
+    page_title=_("client_home_title"),
     page_icon="🌿",
     layout="centered"
 )
 
 # --- 頁首區 ---
-st.markdown("""
+st.markdown(f"""
 <div style='text-align: center;'>
-    <h2>🌿 歡迎使用《影響力》</h2>
-    <p style='font-size: 18px;'>這裡是專屬高資產家庭的傳承策略起點</p>
+    <h2>🌿 {_('client_home_welcome')}</h2>
+    <p style='font-size: 18px;'>{_('client_home_subtitle')}</p>
 </div>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
 
 # --- 使用者導引 ---
-st.markdown("### 🧭 請問您想從哪裡開始？")
+st.markdown(f"### 🧭 {_('client_home_start_title')}")
 
-st.markdown("#### 🔍 1. 找出我的傳承風格")
-st.write("透過小測驗與引導式提問，幫助您釐清內心想法與優先順序。")
-if st.button("👉 開始風格探索"):
+st.markdown(f"#### 🔍 1. {_('client_home_step1_title')}")
+st.write(_( "client_home_step1_desc"))
+if st.button("👉 " + _("client_home_step1_btn")):
     st.switch_page("pages/1_coach.py")
 
-st.markdown("#### 💰 2. 試算退休與稅務需求")
-st.write("預估退休支出、遺產稅缺口，看見未來現金需求與規劃起點。")
+st.markdown(f"#### 💰 2. {_('client_home_step2_title')}")
+st.write(_( "client_home_step2_desc"))
 col1, col2 = st.columns(2)
 with col1:
-    if st.button("📊 樂活退休試算"):
+    if st.button("📊 " + _("client_home_retirement_btn")):
         st.switch_page("pages/6_retirement.py")
 with col2:
-    if st.button("🧮 遺產稅快速試算"):
+    if st.button("🧮 " + _("client_home_tax_btn")):
         st.switch_page("pages/5_estate_tax.py")
 
-st.markdown("#### 📦 3. 保單與資產結構設計")
-st.write("輸入資產類別，立即看見風險圖與保單建議。")
+st.markdown(f"#### 📦 3. {_('client_home_step3_title')}")
+st.write(_( "client_home_step3_desc"))
 col3, col4 = st.columns(2)
 with col3:
-    if st.button("🗺️ 資產結構圖"):
+    if st.button("🗺️ " + _("client_home_map_btn")):
         st.switch_page("pages/7_asset_map.py")
 with col4:
-    if st.button("📦 保單策略設計"):
+    if st.button("📦 " + _("client_home_insurance_btn")):
         st.switch_page("pages/8_insurance_strategy.py")
 
 # --- 頁尾 ---
 st.markdown("---")
-st.markdown("""
+st.markdown(f"""
 <div style='text-align: center; font-size: 14px; color: gray;'>
-《影響力》傳承策略平台｜永傳家族辦公室  
+《{_('brand_name')}》{_('brand_tagline')}｜{_('brand_company')}<br>
 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
-聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
+📧 <a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)

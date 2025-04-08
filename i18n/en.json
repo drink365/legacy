@@ -1,18 +1,10 @@
 {
-  "brand_name": "Legacy Impact",
-  "brand_subtitle": "A Legacy Strategy Platform for High-Net-Worth Families",
-  "brand_slogan": "Turn every asset into a legacy of influence.",
-  "brand_intro_line1": "Legacy Impact is a strategy platform tailored for high-net-worth families.",
-  "brand_intro_line2": "We help you plan where your assets should go,",
-  "brand_intro_line3": "so they can protect your loved ones and carry on your true values.",
-  "value_1_title": "Wealth Structure",
-  "value_1_desc": "Design liquidity and stability for your assets to support every life stage efficiently.",
-  "value_2_title": "Risk Preparedness",
-  "value_2_desc": "From insurance to taxation and trusts, build your defense and transfer systems.",
-  "value_3_title": "Value Transmission",
-  "value_3_desc": "Beyond wealth — it's about spirit, trust, and choices across generations.",
-  "entry_title": "Please select your role",
-  "client_button": "I'm a HNW family / business owner",
-  "advisor_button": "I'm an advisor / finance or tax professional",
-  "logo_warning": "⚠️ Unable to load logo.png. Please make sure the file exists."
+  "main_title": "Legacy | Family Wealth Strategy Platform",
+  "main_subtitle": "Make every resource an extension of your influence",
+  "entry_prompt": "Please choose your role",
+  "client_entry_btn": "I am a family member",
+  "advisor_entry_btn": "I am an advisor / professional",
+  "brand_name": "Legacy",
+  "brand_slogan": "Wealth Strategy Platform",
+  "contact_email": "Contact Email"
 }

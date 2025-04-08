@@ -1,24 +1,10 @@
 {
-  "client_home_title": "我是客户｜《影响力》传承策略平台",
-  "client_home_welcome": "欢迎使用《影响力》",
-  "client_home_subtitle": "这是专属高净值家庭的传承策略起点",
-  "client_home_start_title": "请问您想从哪里开始？",
-
-  "client_home_step1_title": "找出我的传承风格",
-  "client_home_step1_desc": "透过小测验与引导式提问，帮助您厘清内心想法与优先顺序。",
-  "client_home_step1_btn": "开始风格探索",
-
-  "client_home_step2_title": "试算退休与税务需求",
-  "client_home_step2_desc": "预估退休支出、遗产税缺口，了解未来现金需求与规划起点。",
-  "client_home_retirement_btn": "乐活退休试算",
-  "client_home_tax_btn": "遗产税快速试算",
-
-  "client_home_step3_title": "保单与资产结构设计",
-  "client_home_step3_desc": "输入资产类别，即刻查看风险图与保单建议。",
-  "client_home_map_btn": "资产结构图",
-  "client_home_insurance_btn": "保单策略设计",
-
+  "main_title": "《影响力》传承策略平台",
+  "main_subtitle": "让每一分资源，成为你影响力的延伸",
+  "entry_prompt": "请选择您的身份",
+  "client_entry_btn": "我是家族成员",
+  "advisor_entry_btn": "我是顾问／专业人员",
   "brand_name": "影响力",
-  "brand_tagline": "传承策略平台",
-  "brand_company": "永传家族办公室"
+  "brand_slogan": "传承策略平台",
+  "contact_email": "联系邮箱"
 }

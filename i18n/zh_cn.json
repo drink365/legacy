@@ -1,18 +1,10 @@
 {
+  "main_title": "《影响力》传承策略平台",
+  "main_subtitle": "让每一分资源，成为你影响力的延伸",
+  "entry_prompt": "请选择您的身份",
+  "client_entry_btn": "我是家族成员",
+  "advisor_entry_btn": "我是顾问／专业人员",
   "brand_name": "影响力",
-  "brand_subtitle": "高净值家庭的 传承策略平台",
-  "brand_slogan": "让每一份资源，成为你影响力的延伸",
-  "brand_intro_line1": "《影响力》是一个专为高净值家庭打造的传承策略平台。",
-  "brand_intro_line2": "我们陪你设计每一份资源的去向，",
-  "brand_intro_line3": "让它能守护最重要的人，延续你真正的价值。",
-  "value_1_title": "富足结构",
-  "value_1_desc": "为资产设计流动性与稳定性，让财富更高效地守护人生阶段。",
-  "value_2_title": "风险预备",
-  "value_2_desc": "从保单、税源到信托制度，打造资产的防御系统与转移机制。",
-  "value_3_title": "价值传递",
-  "value_3_desc": "不仅是金钱，更是精神、信任与选择，实现跨世代的连接。",
-  "entry_title": "请选择您的身份",
-  "client_button": "我是高净值家庭／企业主",
-  "advisor_button": "我是顾问／财税专业人员",
-  "logo_warning": "⚠️ 无法加载 logo.png，请确认文件是否存在"
+  "brand_slogan": "传承策略平台",
+  "contact_email": "联系邮箱"
 }

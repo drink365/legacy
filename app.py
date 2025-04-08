@@ -1,6 +1,5 @@
 import streamlit as st
 import base64
-from modules.lang_utils import set_language, get_text as _
 
 # 設定頁面
 st.set_page_config(

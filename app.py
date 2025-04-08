@@ -1,78 +1,88 @@
 import streamlit as st
 import base64
-import os
 from modules.lang_utils import set_language, get_text as _
 
-# 設定頁面屬性
+# 設定頁面
 st.set_page_config(
-    page_title="《影響力》| 傳承策略平台",
+    page_title="《影響力》 | 高資產家庭的傳承策略入口",
     page_icon="🌿",
     layout="centered"
 )
 
-# 啟用語言設定
-set_language()
 
-# 語言選擇下拉選單
-lang_display = {
-    "zh-TW": "繁體中文",
-    "en": "English",
-    "zh-CN": "简体中文"
-}
-
-selected_lang = st.selectbox(
-    "🌐 選擇語言｜Language",
-    options=list(lang_display.keys()),
-    format_func=lambda x: lang_display[x],
-    index=list(lang_display.keys()).index(st.session_state.language)
-)
-
-# 若語言切換，儲存並重新載入
-if selected_lang != st.session_state.language:
-    st.session_state.language = selected_lang
-    st.rerun()
-
-# 顯示 logo
+# 讀取 logo
 def load_logo_base64(image_path):
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-logo_path = "logo.png"
-if os.path.exists(logo_path):
-    logo_base64 = load_logo_base64(logo_path)
+try:
+    logo_base64 = load_logo_base64("logo.png")
     st.markdown(f"""
     <div style='text-align: center;'>
-        <img src='data:image/png;base64,{logo_base64}' width='200'/>
+        <img src='data:image/png;base64,{logo_base64}' width='200'><br>
     </div>
     """, unsafe_allow_html=True)
+except:
+    st.warning(_("logo_warning"))  # 需在 lang_xx.json 中新增 "logo_warning": "⚠️ 無法載入 logo.png，請確認檔案存在"
 
-# 主標題與副標語
+# --- 品牌標語區 ---
 st.markdown(f"""
 <div style='text-align: center; margin-top: 2em;'>
-    <h1 style='font-size: 36px; font-weight: bold;'>{_('main_title')}</h1>
-    <p style='font-size: 20px; color: #555;'>{_('main_subtitle')}</p>
+    <h1 style='font-size: 36px; font-weight: bold;'>《{_('brand_name')}》</h1>
+    <p style='font-size: 24px; color: #333; font-weight: bold; letter-spacing: 0.5px;'>
+        {_('brand_subtitle')}
+    </p>
+    <p style='font-size: 18px; color: #888; margin-top: -10px;'>
+        {_('brand_slogan')}
+    </p>
 </div>
 """, unsafe_allow_html=True)
 
-# 使用者分流
-st.markdown("---")
-st.markdown(f"### {_('entry_prompt')}")
+# --- 品牌開場語 ---
+st.markdown(f"""
+<div style='text-align: center; margin-top: 3em; font-size: 18px; line-height: 1.8;'>
+    {_('brand_intro_line1')}<br>
+    {_('brand_intro_line2')}<br>
+    {_('brand_intro_line3')}
+</div>
+""", unsafe_allow_html=True)
 
+# --- 三大價值主張 ---
+st.markdown(f"""
+<div style='display: flex; justify-content: center; gap: 40px; margin-top: 3em; flex-wrap: wrap;'>
+    <div style='width: 280px; text-align: center;'>
+        <h3>🏛️ {_('value_1_title')}</h3>
+        <p>{_('value_1_desc')}</p>
+    </div>
+    <div style='width: 280px; text-align: center;'>
+        <h3>🛡️ {_('value_2_title')}</h3>
+        <p>{_('value_2_desc')}</p>
+    </div>
+    <div style='width: 280px; text-align: center;'>
+        <h3>🌱 {_('value_3_title')}</h3>
+        <p>{_('value_3_desc')}</p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+# --- 使用者分流 ---
+st.markdown("---")
+st.markdown(f"### {_('entry_title')}")
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button(f"👨‍👩‍👧‍👦 {_('client_entry_btn')}", use_container_width=True):
+    if st.button(f"🙋 {_('client_button')}", use_container_width=True):
         st.switch_page("pages/client_home.py")
 
 with col2:
-    if st.button(f"🧑‍💼 {_('advisor_entry_btn')}", use_container_width=True):
+    if st.button(f"🧑‍💼 {_('advisor_button')}", use_container_width=True):
         st.switch_page("pages/advisor_home.py")
 
-# 頁尾資訊
+# --- 聯絡資訊 ---
 st.markdown("---")
 st.markdown(f"""
 <div style='text-align: center; font-size: 14px; color: gray;'>
-《{_('brand_name')}》{_('brand_slogan')}｜永傳家族辦公室 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
-📧 {_('contact_email')}：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
+《{_('brand_name')}》傳承策略平台｜永傳家族辦公室 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
+📧 <a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)

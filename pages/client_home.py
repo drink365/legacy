@@ -6,6 +6,7 @@ from modules.lang_utils import get_text as _, set_language
 # 初始化語言
 set_language()
 
+# 頁面設定
 st.set_page_config(
     page_title=_("client_home_title"),
     page_icon="🌿",

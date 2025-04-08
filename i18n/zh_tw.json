@@ -1,18 +1,10 @@
 {
+  "main_title": "《影響力》傳承策略平台",
+  "main_subtitle": "讓每一分資源，都成為你影響力的延伸",
+  "entry_prompt": "請選擇您的角色",
+  "client_entry_btn": "我是家族成員",
+  "advisor_entry_btn": "我是顧問／專業人員",
   "brand_name": "影響力",
-  "brand_subtitle": "高資產家庭的 傳承策略平台",
-  "brand_slogan": "讓每一分資源，都成為你影響力的延伸",
-  "brand_intro_line1": "《影響力》是一個專為高資產家庭打造的傳承策略平台。",
-  "brand_intro_line2": "我們陪你設計每一分資源的去向，",
-  "brand_intro_line3": "讓它能守護最重要的人，延續你真正的價值。",
-  "value_1_title": "富足結構",
-  "value_1_desc": "為資產設計流動性與穩定性，讓財富更有效率地守護人生階段。",
-  "value_2_title": "風險預備",
-  "value_2_desc": "從保單、稅源到信託制度，設計資產的防禦系統與轉移機制。",
-  "value_3_title": "價值傳遞",
-  "value_3_desc": "不只是金錢，更是精神、信任與選擇，成就跨世代的連結。",
-  "entry_title": "請選擇您的角色",
-  "client_button": "我是高資產家庭／企業主",
-  "advisor_button": "我是顧問／財稅專業人員",
-  "logo_warning": "⚠️ 無法載入 logo.png，請確認檔案存在"
+  "brand_slogan": "傳承策略平台",
+  "contact_email": "聯絡信箱"
 }

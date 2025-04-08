@@ -1,10 +1,24 @@
 {
-  "main_title": "Legacy | Family Wealth Strategy Platform",
-  "main_subtitle": "Make every resource an extension of your influence",
-  "entry_prompt": "Please choose your role",
-  "client_entry_btn": "I am a family member",
-  "advisor_entry_btn": "I am an advisor / professional",
-  "brand_name": "Legacy",
-  "brand_slogan": "Wealth Strategy Platform",
-  "contact_email": "Contact Email"
+  "client_home_title": "I'm a Client｜Legacy Strategy Platform",
+  "client_home_welcome": "Welcome to Legacy Impact",
+  "client_home_subtitle": "This is your starting point for legacy planning",
+  "client_home_start_title": "Where would you like to begin?",
+
+  "client_home_step1_title": "Discover Your Legacy Style",
+  "client_home_step1_desc": "Take a short quiz and guided questions to clarify your priorities.",
+  "client_home_step1_btn": "Start Legacy Style Quiz",
+
+  "client_home_step2_title": "Retirement & Estate Needs",
+  "client_home_step2_desc": "Estimate your retirement needs and estate taxes to see future cash gaps.",
+  "client_home_retirement_btn": "Retirement Planner",
+  "client_home_tax_btn": "Estate Tax Estimator",
+
+  "client_home_step3_title": "Insurance & Asset Planning",
+  "client_home_step3_desc": "Input your asset types to generate a risk chart and insurance strategy.",
+  "client_home_map_btn": "Asset Map",
+  "client_home_insurance_btn": "Insurance Strategy",
+
+  "brand_name": "Legacy Impact",
+  "brand_tagline": "Legacy Strategy Platform",
+  "brand_company": "Grace Legacy Family Office"
 }

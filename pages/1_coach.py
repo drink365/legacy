@@ -18,9 +18,12 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 初始化 session_state
-for key in ["submitted", "module_two_done", "module_three_done", "module_four_done", "legacy_quiz_done"]:
+for key in [
+    "submitted", "module_two_done", "module_three_done", "module_four_done",
+    "legacy_quiz_done", "legacy_style_code", "legacy_style_result"
+]:
     if key not in st.session_state:
-        st.session_state[key] = False
+        st.session_state[key] = False if "done" in key or key == "submitted" else ""
 
 if st.session_state.get("start_from_home"):
     st.session_state.start_from_home = False
@@ -46,10 +49,13 @@ if not st.session_state.legacy_quiz_done:
         c_count = sum([s.startswith("理念") or s.startswith("引導") or s.startswith("後代") or s.startswith("敘說") or s.startswith("領航者") for s in selections])
 
         if a_count >= max(b_count, c_count):
+            st.session_state.legacy_style_code = "guardian"
             st.session_state.legacy_style_result = "❤️ 關係守護者型：您重視家庭和諧、情感平衡，適合建立家族共識與柔性傳承策略。"
         elif b_count >= max(a_count, c_count):
+            st.session_state.legacy_style_code = "planner"
             st.session_state.legacy_style_result = "💼 策略家型：您偏好制度與規劃，適合以信託、股權與稅務工具建構穩定架構。"
         else:
+            st.session_state.legacy_style_code = "visionary"
             st.session_state.legacy_style_result = "🧭 領航者型：您重視理念與精神的延續，適合透過願景建立、生命故事傳承影響力。"
 
         st.session_state.legacy_quiz_done = True

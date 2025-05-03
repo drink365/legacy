@@ -1,6 +1,10 @@
 import streamlit as st
 
 st.set_page_config(
+    page_title="《影響力》 | 高資產家庭的傳承策略入口",
+    page_icon="🌿",
+    layout="centered"
+)
 
 # --- 導覽控制區 ---
 if "page" not in st.session_state:

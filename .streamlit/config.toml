@@ -18,3 +18,15 @@ showSidebarNavigation = true
 "pages/6_retirement.py" = "💰 樂活退休試算"
 "pages/7_asset_map.py" = "🗺️ 傳承風險圖與建議摘要"
 "pages/8_insurance_strategy.py" = "📦 保單策略規劃"
+
+[theme]
+base="light"
+
+[server]
+headless=true
+
+[browser]
+gatherUsageStats=false
+
+[ui]
+hideSidebarNav=true

@@ -20,8 +20,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 1. 輸入並顯示現在的情況
-st.markdown("## 1. 目前資產分佈（現在的情況）")
+# 1. 現在的情況：資產分佈
+st.markdown("## 1. 當前資產分佈（現在的情況）")
 st.markdown("請輸入各類資產的金額（單位：萬元）以檢視當前結構：")
 company = st.number_input("公司股權", min_value=0, value=0, step=100)
 real_estate = st.number_input("不動產", min_value=0, value=0, step=100)
@@ -41,7 +41,7 @@ filtered_values = [val for _, val in filtered]
 
 if filtered_values:
     fig, ax = plt.subplots(figsize=(6, 6))
-    wedges, texts, autotexts = ax.pie(
+    ax.pie(
         filtered_values,
         labels=filtered_labels,
         autopct="%1.1f%%",
@@ -52,7 +52,7 @@ if filtered_values:
     ax.axis('equal')
     st.pyplot(fig)
 
-    # 資產總覽
+    # 資產總覽數據
     st.markdown("### 資產總覽")
     st.write(f"📊 資產總額：**{total_assets:,.0f} 萬元**")
     percentages = [v / total_assets * 100 if total_assets else 0 for v in values]
@@ -63,36 +63,10 @@ if filtered_values:
 else:
     st.info("尚未輸入任何資產，無法顯示當前結構")
 
-# 2. 情境模擬
-if filtered_values:
-    st.markdown("---")
-    st.markdown("## 2. 市場情境模擬")
-    st.markdown("透過滑桿調整整體市場變動幅度，觀察各類資產分佈在不同情境下的變化：")
-    drop_pct = st.slider("模擬市場跌幅（-50% 至 +50%）：", -50, 50, 0)
-    scenario_values = [v * (1 + drop_pct / 100) for v in filtered_values]
-    fig2, ax2 = plt.subplots(figsize=(6, 6))
-    wedges2, texts2, autotexts2 = ax2.pie(
-        scenario_values,
-        labels=filtered_labels,
-        autopct="%1.1f%%",
-        startangle=140,
-        textprops={"fontsize": 12, "fontproperties": font_prop}
-    )
-    ax2.set_title(f"市場變動 {drop_pct:+d}% 後的資產分布", fontproperties=font_prop, fontsize=14)
-    ax2.axis('equal')
-    st.pyplot(fig2)
-
-    # 顯示模擬後數據
-    sim_total = sum(scenario_values)
-    sim_percentages = [v / sim_total * 100 if sim_total else 0 for v in scenario_values]
-    st.markdown("### 模擬後資產分佈數據")
-    for lbl, val, pct in zip(filtered_labels, scenario_values, sim_percentages):
-        st.write(f"- {lbl}：{val:,.0f} 萬元 ({pct:.1f}%)")
-
-# 3. 規劃建議摘要
+# 2. 規劃建議摘要
 if total_assets > 0:
     st.markdown("---")
-    st.markdown("## 3. 規劃建議摘要")
+    st.markdown("## 2. 規劃建議摘要")
     suggestions = []
     if (insurance / total_assets) < 0.2:
         suggestions.append("保單佔比偏低，建議補強稅源工具，以降低未來繳稅與資產分配風險。")
@@ -112,9 +86,9 @@ if total_assets > 0:
     else:
         st.success("目前資產結構整體平衡，仍建議定期檢視傳承架構與稅源預備狀況。")
 
-    # 4. 下載報告
+    # 3. 下載我的資產風險報告
     st.markdown("---")
-    st.markdown("## 4. 下載我的資產風險報告")
+    st.markdown("## 3. 下載我的資產風險報告")
     chart_buffer = BytesIO()
     fig.savefig(chart_buffer, format="png")
     chart_buffer.seek(0)
@@ -126,7 +100,32 @@ if total_assets > 0:
         mime="application/pdf"
     )
 
-    # 5. 行動導引
+    # 4. 市場情境模擬
+    st.markdown("---")
+    st.markdown("## 4. 市場情境模擬")
+    st.markdown("透過滑桿調整整體市場變動幅度，觀察各類資產分佈在不同情境下的變化：")
+    drop_pct = st.slider("模擬市場跌幅（-50% 至 +50%）：", -50, 50, 0)
+    scenario_values = [v * (1 + drop_pct / 100) for v in filtered_values]
+    fig2, ax2 = plt.subplots(figsize=(6, 6))
+    ax2.pie(
+        scenario_values,
+        labels=filtered_labels,
+        autopct="%1.1f%%",
+        startangle=140,
+        textprops={"fontsize": 12, "fontproperties": font_prop}
+    )
+    ax2.set_title(f"市場變動 {drop_pct:+d}% 後的資產分布", fontproperties=font_prop, fontsize=14)
+    ax2.axis('equal')
+    st.pyplot(fig2)
+
+    # 顯示模擬後數據
+    sim_total = sum(scenario_values)
+    sim_percentages = [v / sim_total * 100 if sim_total else 0 for v in scenario_values]
+    st.markdown("### 模擬後資產分佈數據")
+    for lbl, val, pct in zip(filtered_labels, scenario_values, sim_percentages):
+        st.write(f"- {lbl}：{val:,.0f} 萬元 ({pct:.1f}%)")
+
+    # 5. 進一步規劃引導
     st.markdown("---")
     st.markdown("## 5. 進一步規劃")
     st.markdown("📊 想知道這些資產會產生多少遺產稅？")

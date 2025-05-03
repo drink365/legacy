@@ -1,7 +1,13 @@
+
 import streamlit as st
 
 # --- 頁面設定 ---
 st.set_page_config(page_title="傳承風險盤點測驗", layout="centered")
+
+# --- 初始狀態 ---
+for key in ["risk_quiz_done", "risk_flags"]:
+    if key not in st.session_state:
+        st.session_state[key] = False if key == "risk_quiz_done" else []
 
 # --- 標題區 ---
 st.markdown("<h1 style='text-align: center;'>🛡️ 傳承風險盤點測驗</h1>", unsafe_allow_html=True)
@@ -17,27 +23,22 @@ questions = [
     ("家庭成員之間是否已共識財產分配方向？", "缺乏共識 → 潛藏親情裂痕與衝突風險")
 ]
 
-# --- 初始狀態設定 ---
-if "risk_quiz_done" not in st.session_state:
-    st.session_state.risk_quiz_done = False
-if "risk_flags" not in st.session_state:
-    st.session_state.risk_flags = []
-
-# --- 填答階段 ---
+# --- 測驗未完成階段 ---
 if not st.session_state.risk_quiz_done:
+    answers = []
     for idx, (q, _) in enumerate(questions):
-        st.radio(f"{idx+1}. {q}", ["是", "否"], key=f"risk_{idx}")
+        answer = st.radio(f"{idx+1}. {q}", ["是", "否"], key=f"q_{idx}")
+        answers.append(answer)
 
     if st.button("🔍 產出我的風險清單"):
         flags = []
-        for idx, (_, risk) in enumerate(questions):
-            answer = st.session_state.get(f"risk_{idx}")
-            if answer == "否":
-                flags.append(risk)
+        for i, ans in enumerate(answers):
+            if ans == "否":
+                flags.append(questions[i][1])
         st.session_state.risk_flags = flags
         st.session_state.risk_quiz_done = True
 
-# --- 結果顯示階段 ---
+# --- 測驗完成階段 ---
 else:
     st.success("✅ 傳承風險盤點完成")
 
@@ -57,10 +58,12 @@ else:
         with col2:
             st.markdown("[📞 預約顧問諮詢](mailto:123@gracefo.com)", unsafe_allow_html=True)
 
-
     else:
         st.balloons()
         st.markdown("🎉 恭喜您，目前家族傳承結構相對完整！")
 
     if st.button("🔁 重新填寫"):
         st.session_state.risk_quiz_done = False
+        for idx in range(len(questions)):
+            st.session_state.pop(f"q_{idx}", None)
+        st.session_state.risk_flags = []

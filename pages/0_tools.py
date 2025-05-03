@@ -18,21 +18,21 @@ st.markdown("""
 
 st.markdown("---")
 
-# --- 工具 1：傳承風格探索 ---
-st.markdown("### 🧭 傳承風格探索")
-st.markdown("**Q：我的風格適合什麼樣的傳承策略？**")
-st.write("了解自己在傳承規劃中的角色定位與溝通風格，找到最適起點。")
-if st.button("👉 開始測驗：風格探索", key="coach_tool"):
-    st.switch_page("pages/1_coach.py")
-
-st.markdown("---")
-
-# --- 工具 2：傳承風險盤點 ---
+# --- 工具 1：傳承風險盤點 ---
 st.markdown("### 🛡️ 傳承風險盤點")
 st.markdown("**Q：我們家目前有哪些傳承風險？**")
 st.write("從六大關鍵問題快速盤點風險，對應建議與行動優先順序。")
 if st.button("👉 開始檢視：風險盤點", key="risk_tool"):
     st.switch_page("pages/9_risk_check.py")
+
+st.markdown("---")
+
+# --- 工具 2：傳承風格探索 ---
+st.markdown("### 🧭 傳承風格探索")
+st.markdown("**Q：我的風格適合什麼樣的傳承策略？**")
+st.write("了解自己在傳承規劃中的角色定位與溝通風格，找到最適起點。")
+if st.button("👉 開始測驗：風格探索", key="coach_tool"):
+    st.switch_page("pages/1_coach.py")
 
 st.markdown("---")
 

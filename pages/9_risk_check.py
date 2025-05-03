@@ -6,7 +6,6 @@ st.set_page_config(page_title="傳承風險盤點測驗", layout="centered")
 st.markdown("<h1 style='text-align: center;'>🛡️ 傳承風險盤點測驗</h1>", unsafe_allow_html=True)
 st.markdown("請依實際情況回答以下問題，我們將快速協助您辨識家族傳承中的潛在風險。")
 
-# 題目與風險對應
 questions = [
     ("您的父母或長輩是否已立下遺囑？", "未立遺囑 → 恐有未來爭產風險"),
     ("您是否清楚目前家庭資產結構（包含股權、保單、不動產等）？", "資產結構不明 → 傳承規劃難以落實"),
@@ -16,20 +15,23 @@ questions = [
     ("家庭成員之間是否已共識財產分配方向？", "缺乏共識 → 潛藏親情裂痕與衝突風險")
 ]
 
-# 回答儲存與風險累計
 if "submitted_risk" not in st.session_state:
     st.session_state.submitted_risk = False
     st.session_state.risk_flags = []
 
 if not st.session_state.submitted_risk:
-    flags = []
-    for idx, (q, risk) in enumerate(questions, 1):
-        ans = st.radio(f"{idx}. {q}", ["是", "否"], key=f"risk{idx}")
-        if ans == "否":
-            flags.append(risk)
+    for idx, (q, _) in enumerate(questions, 1):
+        st.radio(f"{idx}. {q}", ["是", "否"], key=f"risk{idx}")
+
     if st.button("🔍 產出我的風險清單"):
-        st.session_state.submitted_risk = True
+        flags = []
+        for idx, (_, risk) in enumerate(questions, 1):
+            ans = st.session_state.get(f"risk{idx}")
+            if ans == "否":
+                flags.append(risk)
         st.session_state.risk_flags = flags
+        st.session_state.submitted_risk = True
+        st.experimental_rerun()
 
 else:
     st.success("✅ 傳承風險盤點完成")
@@ -48,3 +50,4 @@ else:
 
     if st.button("🔁 重新填寫"):
         st.session_state.submitted_risk = False
+        st.experimental_rerun()

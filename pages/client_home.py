@@ -30,7 +30,7 @@ st.write("快速檢視六大潛在風險，讓您知道從哪裡開始規劃最�
 if st.button("🛡️ 檢視我的風險清單", key="go_risk_check_client"):
     st.switch_page("pages/9_risk_check.py")
 
-st.markdown("#### 🗺️ 3. 資產結構圖")
+st.markdown("#### 🗺️ 3. 資產結構與現金流模擬")
 st.write("輸入您的資產分布，系統自動整理結構與風險建議。")
 if st.button("🗺️ 建立我的資產圖", key="go_asset_map_client"):
     st.switch_page("pages/7_asset_map.py")

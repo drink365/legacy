@@ -65,7 +65,7 @@ st.markdown("""
 
 # --- 使用者分流 ---
 st.markdown("---")
-st.markdown("### 🧭 請問您是誰？")
+st.markdown("### 🧭 請選擇您的身份：")
 
 col1, col2 = st.columns(2)
 with col1:

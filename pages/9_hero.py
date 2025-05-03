@@ -41,12 +41,14 @@ questions = {
     ]
 }
 
-# 儲存答案
-scores = {"A": 0, "B": 0, "C": 0, "D": 0}
+# 初始化狀態
 if 'submitted' not in st.session_state:
     st.session_state.submitted = False
+    st.session_state.answers = {}
 
+# 問答區域
 if not st.session_state.submitted:
+    scores = {"A": 0, "B": 0, "C": 0, "D": 0}
     for idx, (q, opts) in enumerate(questions.items(), 1):
         choice = st.radio(f"{q}", [label for _, label in opts], key=f"q{idx}")
         for code, label in opts:
@@ -56,10 +58,9 @@ if not st.session_state.submitted:
     if st.button("送出答案，看看你的傳承風格"):
         st.session_state.submitted = True
         st.session_state.scores = scores
-        st.experimental_rerun()
 
 # 呈現結果
-else:
+if st.session_state.submitted:
     scores = st.session_state.scores
     top_choice = max(scores, key=scores.get)
 
@@ -84,4 +85,3 @@ else:
 
     if st.button("🔁 再玩一次"):
         st.session_state.submitted = False
-        st.experimental_rerun()

@@ -1,4 +1,3 @@
-# --- pages/advisor_home.py ---
 
 import streamlit as st
 
@@ -36,7 +35,12 @@ st.write("依照預算、年齡與目標，自動生成策略組合與PDF建議�
 if st.button("📦 啟用保單模擬器", key="go_insurance_advisor"):
     st.switch_page("pages/8_insurance_strategy.py")
 
-st.markdown("#### 🧮 4. 遺產稅與退休試算")
+st.markdown("#### 🛡️ 4. 傳承風險盤點工具")
+st.write("協助客戶從六大面向盤點風險，導入後續顧問規劃建議。")
+if st.button("🛡️ 啟用風險盤點工具", key="go_risk_check_advisor"):
+    st.switch_page("pages/9_risk_check.py")
+
+st.markdown("#### 🧮 5. 遺產稅與退休試算")
 st.write("快速掌握現金缺口與保險／稅源設計依據。")
 col1, col2 = st.columns(2)
 with col1:

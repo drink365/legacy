@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 # --- 頁面設定 ---
@@ -9,6 +8,10 @@ if "risk_quiz_done" not in st.session_state:
     st.session_state.risk_quiz_done = False
 if "risk_flags" not in st.session_state:
     st.session_state.risk_flags = []
+if "navigate" not in st.session_state:
+    st.session_state.navigate = None
+if "consult" not in st.session_state:
+    st.session_state.consult = False
 
 # --- 標題區 ---
 st.markdown("<h1 style='text-align: center;'>🛡️ 傳承風險盤點測驗</h1>", unsafe_allow_html=True)
@@ -26,25 +29,31 @@ questions = [
 ]
 
 if not st.session_state.risk_quiz_done:
+    # 題目回答
     all_answered = True
     for idx, (q, _) in enumerate(questions):
-        answer = st.radio(f"{idx+1}. {q}", ["是", "否"], key=f"q_{idx}")
-        if answer not in ["是", "否"]:
+        st.radio(f"{idx+1}. {q}", ["是", "否"], key=f"q_{idx}", horizontal=True)
+        # 檢查是否已回答
+        if f"q_{idx}" not in st.session_state:
             all_answered = False
 
-    if all_answered:
-        if st.button("🔍 產出我的風險清單"):
-            flags = []
-            for i, (_, risk) in enumerate(questions):
-                if st.session_state.get(f"q_{i}") == "否":
-                    flags.append(risk)
-            st.session_state.risk_flags = flags
-            st.session_state.risk_quiz_done = True
-    else:
-        st.info("請完成所有題目後再產出風險清單。")
+    # 按鈕回呼：產出風險清單
+def produce_risk_list():
+    flags = []
+    for i, (_, risk) in enumerate(questions):
+        if st.session_state.get(f"q_{i}") == "否":
+            flags.append(risk)
+    st.session_state.risk_flags = flags
+    st.session_state.risk_quiz_done = True
+
+    # 顯示按鈕
+if not st.session_state.risk_quiz_done and all_answered:
+    st.button("🔍 產出我的風險清單", on_click=produce_risk_list, use_container_width=True)
+elif not all_answered:
+    st.info("請完成所有題目後再產出風險清單。")
 
 # --- 結果階段 ---
-else:
+if st.session_state.risk_quiz_done:
     st.success("✅ 傳承風險盤點完成")
 
     if st.session_state.risk_flags:
@@ -56,31 +65,46 @@ else:
         st.markdown("### 🎯 建議行動")
         st.markdown("每一個風險背後，都藏著一次為家族更周全準備的機會。")
 
-        if st.button("📊 使用 AI 傳承教練"):
-            st.switch_page("pages/1_coach.py")
+        # 按鈕回呼：導向 AI 傳承教練
+        def go_to_coach():
+            st.session_state.navigate = "pages/1_coach.py"
+        st.button("📊 使用 AI 傳承教練", on_click=go_to_coach, use_container_width=True)
 
-        if st.button("📞 預約顧問諮詢"):
-            st.markdown("請來信至：123@gracefo.com")  # 可替換為跳轉頁或連結
+        # 按鈕回呼：顧問諮詢
+        def make_consult():
+            st.session_state.consult = True
+        st.button("📞 預約顧問諮詢", on_click=make_consult, use_container_width=True)
+
+        if st.session_state.consult:
+            st.markdown("請來信至：123@gracefo.com")
 
     else:
         st.balloons()
         st.markdown("🎉 恭喜您，目前家族傳承結構相對完整！")
 
-    if st.button("🔁 重新填寫"):
+    # 按鈕回呼：重新填寫
+    def reset_quiz():
         st.session_state.risk_quiz_done = False
         st.session_state.risk_flags = []
         for idx in range(len(questions)):
             st.session_state.pop(f"q_{idx}", None)
+        st.session_state.consult = False
+        st.session_state.navigate = None
+    st.button("🔁 重新填寫", on_click=reset_quiz, use_container_width=True)
 
+# --- 導向頁面 ---
+if st.session_state.navigate:
+    st.switch_page(st.session_state.navigate)
 
 # --- 聯絡資訊 ---
 st.markdown("---")
-st.markdown("""
-<div style='display: flex; justify-content: center; align-items: center; gap: 1.5em; font-size: 14px; color: gray;'>
-  <!-- 根路徑“/”會帶回到 app.py -->
-  <a href='/' style='color:#006666; text-decoration: underline;'>《影響力》傳承策略平台</a>
-  <a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>
-  <a href='mailto:123@gracefo.com'>123@gracefo.com</a>
-</div>
-""", unsafe_allow_html=True)
-
+st.markdown(
+    """
+    <div style='display: flex; justify-content: center; align-items: center; gap: 1.5em; font-size: 14px; color: gray;'>
+      <a href='/' style='color:#006666; text-decoration: underline;'>《影響力》傳承策略平台</a>
+      <a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>
+      <a href='mailto:123@gracefo.com'>123@gracefo.com</a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)

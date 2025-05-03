@@ -58,7 +58,7 @@ else:
 
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("📊 使用 AI 傳承教練"):
+            if st.button("📊 回到首頁"):
                 st.switch_page("pages/1_coach.py")
         with col2:
             st.markdown("[📞 預約顧問諮詢](mailto:123@gracefo.com)", unsafe_allow_html=True)

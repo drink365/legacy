@@ -2,7 +2,7 @@ import streamlit as st
 
 # 頁面設定
 st.set_page_config(
-    page_title="永傳家族傳承教練",
+    page_title="《影響力》 | 高資產家庭的傳承策略入口",
     page_icon="🌿",
     layout="wide",
 )
@@ -14,7 +14,7 @@ st.markdown(
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     footer:after {
-        content: "永傳家族辦公室";
+        content: "《影響力》";
         display: block;
         color: #BBB;
         padding: 5px;
@@ -49,6 +49,7 @@ st.markdown(
         color: #555;
         margin-bottom: 1em;
     }}
+    </style>
     """,
     unsafe_allow_html=True,
 )
@@ -72,12 +73,12 @@ if not mode:
     with col1:
         st.write("")
     with col2:
-        st.image("logo.png", use_column_width=True)
+        st.image("logo.png", use_container_width=True)
         st.markdown(
             "<div style='text-align:center; margin-top:20px;'>"
-            "<h1>永傳家族傳承教練</h1>"
-            "<p style='font-size:18px; color:#555;'>"  
-            "在這裡，我們陪伴您釐清家族傳承重點，打造專屬的永續傳承方案。"  
+            "<h1>《影響力》 | 高資產家庭的傳承策略入口</h1>"
+            "<p style='font-size:18px; color:#555;'>"
+            "在這裡，我們陪伴您釐清家族傳承重點，打造專屬的永續傳承方案。"
             "</p>"
             "</div>",
             unsafe_allow_html=True
@@ -87,10 +88,10 @@ if not mode:
 
     # 分流按鈕
     st.markdown("<div style='text-align:center; margin-top:30px;'>", unsafe_allow_html=True)
-    if st.button("家族版工具", key="family_btn", help="家族版：快速釐清您的傳承重點", on_click=lambda: st.experimental_set_query_params(mode="family"), args=None):
+    if st.button("家族版工具", key="family_btn", help="家族版：快速釐清您的傳承重點", on_click=lambda: st.experimental_set_query_params(mode="family")):
         pass
     st.write(" ")
-    if st.button("顧問版工具", key="advisor_btn", help="顧問版：專業工具＋報告生成", on_click=lambda: st.experimental_set_query_params(mode="advisor"), args=None):
+    if st.button("顧問版工具", key="advisor_btn", help="顧問版：專業工具＋報告生成", on_click=lambda: st.experimental_set_query_params(mode="advisor")):
         pass
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -106,6 +107,6 @@ elif mode == "advisor":
 
 # 底部溫暖落款
 st.markdown(
-    "<div style='text-align:center; margin-top:2em; font-size:12px; color:#777;'>期待與您一起，讓影響力永續傳承 ❤️</div>",
+    "<div style='text-align:center; margin-top:2em; font-size:14px; color:#777;'>期待與您一起，讓《影響力》永續傳承 ❤️</div>",
     unsafe_allow_html=True,
 )

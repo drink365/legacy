@@ -20,28 +20,37 @@ st.markdown("---")
 # --- 顧問功能導覽 ---
 st.markdown("### 🧰 協助客戶進行策略設計")
 
-st.markdown("#### 👥 1. 引導客戶探索傳承風格")
-st.write("使用互動模組，協助客戶釐清價值觀與關注重點。")
-if st.button("🌿 啟動傳承探索工具", key="go_coach_advisor"):
+with st.expander("#### 👥 1. 引導客戶探索傳承風格"):
+
+    st.write("使用互動模組，協助客戶釐清價值觀與關注重點。")
+    if st.button("🌿 啟動傳承探索工具", key="go_coach_advisor"):
     st.switch_page("pages/1_coach.py")
 
-st.markdown("#### 📊 2. 建立資產結構圖")
-st.write("輸入資產項目後，自動產出風險建議與圖像報告。")
-if st.button("🗺️ 開始資產建構", key="go_asset_map_advisor"):
+
+with st.expander("#### 📊 2. 建立資產結構圖"):
+
+    st.write("輸入資產項目後，自動產出風險建議與圖像報告。")
+    if st.button("🗺️ 開始資產建構", key="go_asset_map_advisor"):
     st.switch_page("pages/7_asset_map.py")
 
-st.markdown("#### 📦 3. 保單建議模擬器")
-st.write("依照預算、年齡與目標，自動生成策略組合與PDF建議書。")
-if st.button("📦 啟用保單模擬器", key="go_insurance_advisor"):
+
+with st.expander("#### 📦 3. 保單建議模擬器"):
+
+    st.write("依照預算、年齡與目標，自動生成策略組合與PDF建議書。")
+    if st.button("📦 啟用保單模擬器", key="go_insurance_advisor"):
     st.switch_page("pages/8_insurance_strategy.py")
 
-st.markdown("#### 🛡️ 4. 傳承風險盤點工具")
-st.write("協助客戶從六大面向盤點風險，導入後續顧問規劃建議。")
-if st.button("🛡️ 啟用風險盤點工具", key="go_risk_check_advisor"):
+
+with st.expander("#### 🛡️ 4. 傳承風險盤點工具"):
+
+    st.write("協助客戶從六大面向盤點風險，導入後續顧問規劃建議。")
+    if st.button("🛡️ 啟用風險盤點工具", key="go_risk_check_advisor"):
     st.switch_page("pages/9_risk_check.py")
 
-st.markdown("#### 🧮 5. 遺產稅與退休試算")
-st.write("快速掌握現金缺口與保險／稅源設計依據。")
+
+with st.expander("#### 🧮 5. 遺產稅與退休試算"):
+
+    st.write("快速掌握現金缺口與保險／稅源設計依據。")
 col1, col2 = st.columns(2)
 with col1:
     if st.button("🧮 遺產稅試算", key="go_tax_advisor"):
@@ -59,3 +68,7 @@ st.markdown("""
 聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)
+
+
+if st.button("🔙 返回首頁", use_container_width=True):
+    st.switch_page("app.py")

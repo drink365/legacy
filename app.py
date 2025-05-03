@@ -1,10 +1,6 @@
 import streamlit as st
 
 st.set_page_config(
-    page_title="《影響力》 | 高資產家庭的傳承策略入口",
-    page_icon="🌿",
-    layout="centered"
-)
 
 # --- 導覽控制區 ---
 if "page" not in st.session_state:
@@ -43,10 +39,6 @@ if st.session_state.page == "client_home":
 elif st.session_state.page == "advisor_home":
     import advisor_home
     st.stop()
-    page_title="《影響力》 | 高資產家庭的傳承策略入口",
-    page_icon="🌿",
-    layout="centered"
-)
 
 # 讀取 logo
 def load_logo_base64(image_path):

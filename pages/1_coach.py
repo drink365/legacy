@@ -152,15 +152,22 @@ if st.session_state.module_four_done:
     # CTA 區塊
     render_cta()
 
-    # 頁尾資訊
-    st.markdown("""
-    ---
-    <div style='text-align: center; font-size: 14px; color: gray;'>
-    《影響力》傳承策略平台｜永傳家族辦公室 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
-    聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
-    </div>
-    """, unsafe_allow_html=True)
+
 
     st.markdown("---")
     st.markdown("感謝您完成這段探索。我們相信，每一次釐清與行動，都是為未來鋪路的開始。")
     st.markdown("願您的影響力，代代傳承。🌿")
+
+
+# --- 聯絡資訊 ---
+st.markdown("---")
+st.markdown(
+    """
+    <div style='display: flex; justify-content: center; align-items: center; gap: 1.5em; font-size: 14px; color: gray;'>
+      <a href='?' style='color:#006666; text-decoration: underline;'>《影響力》傳承策略平台</a>
+      <a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>
+      <a href='mailto:123@gracefo.com'>123@gracefo.com</a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)

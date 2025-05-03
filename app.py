@@ -3,7 +3,7 @@ import streamlit as st
 
 st.set_page_config(page_title="永傳家族傳承教練", layout="centered")
 
-st.image("logo.png", use_column_width=True)
+st.image("logo.png", use_container_width=True)
 st.title("歡迎來到永傳家族傳承教練")
 
 col1, col2 = st.columns(2, gap="medium")

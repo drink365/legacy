@@ -54,7 +54,7 @@ st.markdown(
 )
 
 # 讀取 URL 參數以決定分流
-query_params = st.experimental_get_query_params()
+query_params = st.query_params
 mode = query_params.get("mode", [None])[0]
 
 # 顯示麵包屑

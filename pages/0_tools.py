@@ -1,4 +1,4 @@
-
+木
 import streamlit as st
 
 # --- 頁面設定 ---
@@ -55,7 +55,7 @@ if st.button("👉 前往試算：遺產稅", key="go_tax"):
 st.markdown("---")
 
 # --- 工具 5：資產結構圖 ---
-st.markdown("### 🗺️ 資產結構圖")
+st.markdown("### 🗺️ 資產結構圖與現金流模擬")
 st.markdown("**Q：我的資產分布合理嗎？風險集中在哪裡？**")
 st.write("輸入六大類資產，生成視覺化風險圖與建議摘要。")
 if st.button("👉 建立分析：資產結構圖", key="map_tool"):

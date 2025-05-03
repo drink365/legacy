@@ -1,3 +1,15 @@
+
+if "page" not in st.session_state:
+    st.session_state["page"] = None
+
+if st.session_state["page"] == "client_home":
+    import client_home
+    st.stop()
+elif st.session_state["page"] == "advisor_home":
+    import advisor_home
+    st.stop()
+
+
 import streamlit as st
 import base64
 
@@ -70,10 +82,10 @@ st.markdown("### 🧭 請問您是誰？")
 col1, col2 = st.columns(2)
 with col1:
     if st.button("🙋 我是客戶", use_container_width=True):
-        st.switch_page("client_home.py")
+        st.session_state["page"] = "client_home"
 with col2:
     if st.button("🧑‍💼 我是顧問", use_container_width=True):
-        st.switch_page("advisor_home.py")
+        st.session_state["page"] = "advisor_home"
 
 # --- 聯絡資訊 ---
 st.markdown("---")

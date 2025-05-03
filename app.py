@@ -23,6 +23,18 @@ if "page" not in st.session_state:
 if st.session_state.page == "client_home":
     import client_home
     st.stop()
+
+# --- 導覽控制區 ---
+if "page" not in st.session_state:
+    st.session_state.page = None
+
+if st.session_state.page == "client_home":
+    import client_home
+    st.stop()
+elif st.session_state.page == "advisor_home":
+    import advisor_home
+    st.stop()
+
 elif st.session_state.page == "advisor_home":
     import advisor_home
     st.stop()

@@ -15,29 +15,35 @@ questions = [
     ("家庭成員之間是否已共識財產分配方向？", "缺乏共識 → 潛藏親情裂痕與衝突風險")
 ]
 
-if "submitted_risk" not in st.session_state:
-    st.session_state.submitted_risk = False
-    st.session_state.risk_flags = []
+# 初始化狀態
+if "risk_answers" not in st.session_state:
+    st.session_state.risk_answers = {}
+if "show_risk_result" not in st.session_state:
+    st.session_state.show_risk_result = False
 
-if not st.session_state.submitted_risk:
+# 問答區域或結果區
+if not st.session_state.show_risk_result:
+    st.markdown("### 請回答以下問題：")
     for idx, (q, _) in enumerate(questions, 1):
-        st.radio(f"{idx}. {q}", ["是", "否"], key=f"risk{idx}")
-
+        st.session_state.risk_answers[f"risk{idx}"] = st.radio(
+            f"{idx}. {q}",
+            ["是", "否"],
+            key=f"risk{idx}_key"
+        )
     if st.button("🔍 產出我的風險清單"):
-        flags = []
-        for idx, (_, risk) in enumerate(questions, 1):
-            ans = st.session_state.get(f"risk{idx}")
-            if ans == "否":
-                flags.append(risk)
-        st.session_state.risk_flags = flags
-        st.session_state.submitted_risk = True
-        st.experimental_rerun()
+        st.session_state.show_risk_result = True
 
 else:
     st.success("✅ 傳承風險盤點完成")
-    if st.session_state.risk_flags:
+    flags = []
+    for idx, (_, risk) in enumerate(questions, 1):
+        ans = st.session_state.risk_answers.get(f"risk{idx}")
+        if ans == "否":
+            flags.append(risk)
+
+    if flags:
         st.markdown("### ⚠️ 您的潛在風險如下：")
-        for r in st.session_state.risk_flags:
+        for r in flags:
             st.markdown(f"- ❗ {r}")
         st.markdown("---")
         st.markdown("### 🎯 建議行動")
@@ -49,5 +55,4 @@ else:
         st.markdown("🎉 恭喜您，目前家族傳承結構相對完整！")
 
     if st.button("🔁 重新填寫"):
-        st.session_state.submitted_risk = False
-        st.experimental_rerun()
+        st.session_state.show_risk_result = False

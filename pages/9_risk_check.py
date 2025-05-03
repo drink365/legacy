@@ -2,6 +2,7 @@
 import streamlit as st
 
 # --- 頁面設定 ---
+st.set_page_config(page_title="傳承風險盤點測驗", layout="centered")
 
 # --- 初始化狀態變數 ---
 if "risk_quiz_done" not in st.session_state:

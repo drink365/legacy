@@ -4,6 +4,7 @@ from modules.pdf_generator import generate_pdf
 from modules.cta_section import render_cta
 
 # 頁面設定
+st.set_page_config(
     page_title="《影響力》傳承風格探索",
     page_icon="🌿",
     layout="centered"

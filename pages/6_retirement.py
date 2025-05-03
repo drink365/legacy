@@ -12,6 +12,7 @@ import os
 from modules.cta_section import render_cta
 
 # 頁面設定
+st.set_page_config(
     page_title="樂活退休試算｜《影響力》傳承策略平台",
     page_icon="💰",
     layout="centered"

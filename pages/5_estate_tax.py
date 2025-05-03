@@ -5,6 +5,7 @@ from modules.estate_tax_ui import render_estate_tax_ui
 from modules.cta_section import render_cta
 
 # 頁面設定
+st.set_page_config(
     page_title="AI秒算遺產稅｜《影響力》傳承策略平台",
     page_icon="🧮",
     layout="wide"

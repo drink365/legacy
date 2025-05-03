@@ -4,7 +4,7 @@ import streamlit as st
 # 頁面設定
 st.set_page_config(page_title="傳承人生：你能守住多少家族財富？", layout="centered")
 
-st.markdown("<h1 style='text-align: center;'>傳承人生：你能守住多少家族財富？</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>《傳承人生》：你能守住多少家族財富？</h1>", unsafe_allow_html=True)
 st.markdown("請依直覺作答，每一題都沒有對錯，只有更貼近你的人生思維。")
 
 # 題目與選項設定

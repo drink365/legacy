@@ -38,11 +38,11 @@ col1, col2 = st.columns(2)
 with col1:
     if st.button("🙋 我是客戶", use_container_width=True):
         st.session_state.page = "client"
-        st.switch_page("client_home.py")
+        st.switch_page("pages/client_home.py")
 with col2:
     if st.button("🧑‍💼 我是顧問", use_container_width=True):
         st.session_state.page = "advisor"
-        st.switch_page("advisor_home.py")
+        st.switch_page("pages/advisor_home.py")
 
 # 聯絡資訊
 st.markdown("---")

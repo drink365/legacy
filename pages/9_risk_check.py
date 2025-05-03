@@ -28,16 +28,7 @@ questions = [
     ("家庭成員之間是否已共識財產分配方向？", "缺乏共識 → 潛藏親情裂痕與衝突風險")
 ]
 
-if not st.session_state.risk_quiz_done:
-    # 題目回答
-    all_answered = True
-    for idx, (q, _) in enumerate(questions):
-        st.radio(f"{idx+1}. {q}", ["是", "否"], key=f"q_{idx}", horizontal=True)
-        # 檢查是否已回答
-        if f"q_{idx}" not in st.session_state:
-            all_answered = False
-
-    # 按鈕回呼：產出風險清單
+# --- 風險清單產出回呼 ---
 def produce_risk_list():
     flags = []
     for i, (_, risk) in enumerate(questions):
@@ -46,43 +37,44 @@ def produce_risk_list():
     st.session_state.risk_flags = flags
     st.session_state.risk_quiz_done = True
 
-    # 顯示按鈕
-if not st.session_state.risk_quiz_done and all_answered:
-    st.button("🔍 產出我的風險清單", on_click=produce_risk_list, use_container_width=True)
-elif not all_answered:
-    st.info("請完成所有題目後再產出風險清單。")
+# --- 互動區 ---
+if not st.session_state.risk_quiz_done:
+    # 收集回應並檢查
+    all_answered = True
+    for idx, (q, _) in enumerate(questions):
+        st.radio(f"{idx+1}. {q}", ["是", "否"], key=f"q_{idx}", horizontal=True)
+        if f"q_{idx}" not in st.session_state:
+            all_answered = False
+    # 顯示按鈕或提示
+    if all_answered:
+        st.button("🔍 產出我的風險清單", on_click=produce_risk_list, use_container_width=True)
+    else:
+        st.info("請完成所有題目後再產出風險清單。")
 
 # --- 結果階段 ---
-if st.session_state.risk_quiz_done:
+else:
     st.success("✅ 傳承風險盤點完成")
-
     if st.session_state.risk_flags:
         st.markdown("### ⚠️ 您的潛在風險如下：")
         for r in st.session_state.risk_flags:
             st.markdown(f"- ❗ {r}")
-
         st.markdown("---")
         st.markdown("### 🎯 建議行動")
         st.markdown("每一個風險背後，都藏著一次為家族更周全準備的機會。")
-
-        # 按鈕回呼：導向 AI 傳承教練
+        # AI 傳承教練
         def go_to_coach():
             st.session_state.navigate = "pages/1_coach.py"
         st.button("📊 使用 AI 傳承教練", on_click=go_to_coach, use_container_width=True)
-
-        # 按鈕回呼：顧問諮詢
+        # 預約顧問
         def make_consult():
             st.session_state.consult = True
         st.button("📞 預約顧問諮詢", on_click=make_consult, use_container_width=True)
-
         if st.session_state.consult:
             st.markdown("請來信至：123@gracefo.com")
-
     else:
         st.balloons()
         st.markdown("🎉 恭喜您，目前家族傳承結構相對完整！")
-
-    # 按鈕回呼：重新填寫
+    # 重新填寫
     def reset_quiz():
         st.session_state.risk_quiz_done = False
         st.session_state.risk_flags = []

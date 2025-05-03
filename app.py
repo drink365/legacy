@@ -88,6 +88,6 @@ st.markdown("""
   《影響力》傳承策略平台
 </a>｜永傳家族辦公室  <br>
 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
-📧 <a href="mailto:123@gracefo.com">123@gracefo.com</a>
+<a href="mailto:123@gracefo.com">123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)

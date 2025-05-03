@@ -1,12 +1,17 @@
 import streamlit as st
-import plotly.express as px
-import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib import font_manager
 from io import BytesIO
 from modules.pdf_generator import generate_asset_map_pdf
 from modules.config import setup_page  # 共用頁面設定
 
 # 頁面設定
 setup_page("《影響力》資產結構圖與風險建議")
+
+# 中文字型
+font_path = "NotoSansTC-Regular.ttf"
+font_prop = font_manager.FontProperties(fname=font_path)
+plt.rcParams["font.family"] = font_prop.get_name()
 
 # 標題
 st.markdown("""
@@ -29,10 +34,11 @@ values = [company, real_estate, financial, insurance, offshore, others]
 total_assets = sum(values)
 
 # 過濾非零資產
-filtered_labels = [label for label, val in zip(labels, values) if val > 0]
-filtered_values = [val for val in values if val > 0]
+filtered = [(lbl, val) for lbl, val in zip(labels, values) if val > 0]
+filtered_labels = [lbl for lbl, _ in filtered]
+filtered_values = [val for _, val in filtered]
 
-# 風險評估基準（示例）
+# 風險評估基準
 risk_scores_map = {
     "公司股權": 0.7,
     "不動產": 0.6,
@@ -42,56 +48,55 @@ risk_scores_map = {
     "其他": 0.5,
 }
 
-# 計算風險等級
-filtered_risk_scores = [risk_scores_map[label] for label in filtered_labels]
-risk_levels = [
-    "高風險" if score >= 0.7 else
-    "中風險" if score >= 0.5 else
-    "低風險"
-    for score in filtered_risk_scores
-]
+# 計算風險等級與對應顏色
+risk_levels = []
+colors = []
+for lbl in filtered_labels:
+    score = risk_scores_map.get(lbl, 0.5)
+    if score >= 0.7:
+        level = "高風險"
+        color = "#FF4C4C"
+    elif score >= 0.5:
+        level = "中風險"
+        color = "#FFA500"
+    else:
+        level = "低風險"
+        color = "#8BC34A"
+    risk_levels.append(level)
+    colors.append(color)
 
-# 顏色對應
-color_map = {"高風險": "#FF4C4C", "中風險": "#FFA500", "低風險": "#8BC34A"}
-
-# 畫互動式資產結構圖
+# 畫圖
 if filtered_values:
-    df = pd.DataFrame({
-        "資產類別": filtered_labels,
-        "金額": filtered_values,
-        "風險等級": risk_levels
-    })
-    fig = px.pie(
-        df,
-        names="資產類別",
-        values="金額",
-        color="風險等級",
-        color_discrete_map=color_map,
-        title="資產結構與風險熱度",
-        hole=0.3
+    fig1, ax1 = plt.subplots(figsize=(6, 6))
+    wedges, texts, autotexts = ax1.pie(
+        filtered_values,
+        labels=filtered_labels,
+        colors=colors,
+        autopct="%1.1f%%",
+        startangle=140,
+        textprops={"fontsize": 12, "fontproperties": font_prop}
     )
-    st.plotly_chart(fig, use_container_width=True)
+    ax1.set_title("資產結構與風險熱度", fontproperties=font_prop, fontsize=14)
+    ax1.axis('equal')
+    st.pyplot(fig1)
 
-    # 情境模擬滑杆
+    # 市場情境模擬
     st.markdown("---")
     st.markdown("### 🔄 市場情境模擬")
-    drop_pct = st.slider("模擬市場跌幅 (%)", -50, 0, -10)
+    drop_pct = st.slider("模擬市場跌幅 (%)：", -50, 0, -10)
     scenario_values = [v * (1 + drop_pct / 100) for v in filtered_values]
-    scenario_df = pd.DataFrame({
-        "資產類別": filtered_labels,
-        "模擬後金額": scenario_values,
-        "風險等級": risk_levels
-    })
-    fig2 = px.pie(
-        scenario_df,
-        names="資產類別",
-        values="模擬後金額",
-        color="風險等級",
-        color_discrete_map=color_map,
-        title=f"大盤跌 {abs(drop_pct)}% 情境下的資產分布",
-        hole=0.3
+    fig2, ax2 = plt.subplots(figsize=(6, 6))
+    wedges2, texts2, autotexts2 = ax2.pie(
+        scenario_values,
+        labels=filtered_labels,
+        colors=colors,
+        autopct="%1.1f%%",
+        startangle=140,
+        textprops={"fontsize": 12, "fontproperties": font_prop}
     )
-    st.plotly_chart(fig2, use_container_width=True)
+    ax2.set_title(f"大盤跌 {abs(drop_pct)}% 情境下的資產分布", fontproperties=font_prop, fontsize=14)
+    ax2.axis('equal')
+    st.pyplot(fig2)
 else:
     st.info("尚未輸入任何資產，無法顯示圖表")
 
@@ -130,7 +135,7 @@ if total_assets > 0:
     # 匯出 PDF 報告
     st.markdown("### 📥 產出報告")
     chart_buffer = BytesIO()
-    fig.write_image(chart_buffer, format="png")
+    fig1.savefig(chart_buffer, format="png")
     chart_buffer.seek(0)
     pdf_file = generate_asset_map_pdf(labels, values, suggestions, chart_buffer)
     st.download_button(
@@ -146,7 +151,7 @@ if total_assets > 0:
     if st.button("🧮 立即前往 AI秒算遺產稅"):
         st.switch_page("pages/5_estate_tax.py")
 
-# --- 聯絡資訊 ---
+# 聯絡資訊
 st.markdown("---")
 st.markdown("""
 <div style='display: flex; justify-content: center; align-items: center; gap: 1.5em; font-size: 14px; color: gray;'>

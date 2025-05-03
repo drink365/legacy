@@ -21,35 +21,30 @@ st.markdown("---")
 st.markdown("### 🔍 我的傳承探索工具")
 
 with st.expander("#### 🌿 1. 傳承風格探索"):
-
     st.write("透過風格測驗，了解您偏好的溝通方式與規劃重點。")
     if st.button("🌿 開始探索我的風格", key="go_coach_client"):
     st.switch_page("pages/1_coach.py")
 
 
 with st.expander("#### 🛡️ 2. 傳承風險盤點"):
-
     st.write("快速檢視六大潛在風險，讓您知道從哪裡開始規劃最重要。")
     if st.button("🛡️ 檢視我的風險清單", key="go_risk_check_client"):
     st.switch_page("pages/9_risk_check.py")
 
 
 with st.expander("#### 🗺️ 3. 資產結構圖"):
-
     st.write("輸入您的資產分布，系統自動整理結構與風險建議。")
     if st.button("🗺️ 建立我的資產圖", key="go_asset_map_client"):
     st.switch_page("pages/7_asset_map.py")
 
 
 with st.expander("#### 📦 4. 保單策略設計"):
-
     st.write("根據年齡與需求，幫您模擬合適的保障組合與財稅結構。")
     if st.button("📦 啟動我的保單模擬", key="go_insurance_client"):
     st.switch_page("pages/8_insurance_strategy.py")
 
 
 with st.expander("#### 🧮 5. 稅務與退休試算"):
-
     st.write("了解未來的現金缺口與長期退休預備是否充足。")
 col1, col2 = st.columns(2)
 with col1:

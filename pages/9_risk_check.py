@@ -53,10 +53,9 @@ else:
         col1, col2, col3 = st.columns(3)
         with col1:
             if st.button("📊 使用 AI 傳承教練"):
-                st.switch_page("pages/1_coach.py")  # 可更換連結
+                st.switch_page("pages/1_coach.py")
         with col2:
-            if st.button("📞 預約顧問諮詢"):
-                st.switch_page("pages/contact_form.py")  # 若無可改為顯示文字說明
+            st.markdown("[📞 預約顧問諮詢](mailto:123@gracefo.com)", unsafe_allow_html=True)
         with col3:
             st.page_link("pages/9_risk_check.py", label="📎 分享風險清單 ➜")
 
@@ -64,6 +63,5 @@ else:
         st.balloons()
         st.markdown("🎉 恭喜您，目前家族傳承結構相對完整！")
 
-    # --- 重新填寫按鈕 ---
     if st.button("🔁 重新填寫"):
         st.session_state.risk_quiz_done = False

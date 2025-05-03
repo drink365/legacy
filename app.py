@@ -70,10 +70,10 @@ st.markdown("### 🧭 請問您是誰？")
 col1, col2 = st.columns(2)
 with col1:
     if st.button("🙋 我是客戶", use_container_width=True):
-        st.switch_page("pages/client_home.py")
+        st.switch_page("client_home.py")
 with col2:
     if st.button("🧑‍💼 我是顧問", use_container_width=True):
-        st.switch_page("pages/advisor_home.py")
+        st.switch_page("advisor_home.py")
 
 # --- 聯絡資訊 ---
 st.markdown("---")

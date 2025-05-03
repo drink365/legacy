@@ -12,7 +12,8 @@ if "risk_flags" not in st.session_state:
 
 # --- 標題區 ---
 st.markdown("<h1 style='text-align: center;'>🛡️ 傳承風險盤點測驗</h1>", unsafe_allow_html=True)
-st.markdown("請依實際情況回答以下問題，我們將快速協助您辨識家族傳承中的潛在風險。")
+if not st.session_state.risk_quiz_done:
+    st.markdown("請依實際情況回答以下問題，我們將快速協助您辨識家族傳承中的潛在風險。")
 
 # --- 題目與回答輸入 ---
 questions = [

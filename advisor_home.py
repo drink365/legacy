@@ -1,7 +1,6 @@
 
 import streamlit as st
 
-st.set_page_config(
     page_title="顧問工作台｜《影響力》傳承策略平台",
     page_icon="🧑‍💼",
     layout="centered"

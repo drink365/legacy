@@ -1,7 +1,6 @@
 import streamlit as st
 
 # 頁面設定
-st.set_page_config(
     page_title="《影響力》｜傳承案例分享",
     page_icon="📚",
     layout="centered"

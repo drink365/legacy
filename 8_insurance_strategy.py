@@ -6,7 +6,6 @@ from modules.pdf_generator import generate_insurance_strategy_pdf
 from io import BytesIO
 
 # 頁面設定
-st.set_page_config(
     page_title="《影響力》保單策略規劃",
     page_icon="📦",
     layout="centered"

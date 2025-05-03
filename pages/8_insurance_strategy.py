@@ -68,11 +68,13 @@ st.markdown("### 📬 想討論更進一步的保單設計？")
 st.markdown("歡迎預約 1 對 1 專屬對談，讓我們陪您設計最安心的保障架構。")
 st.markdown("👉 <a href='mailto:123@gracefo.com?subject=預約保單策略諮詢' target='_blank'>點我寄信預約對談</a>", unsafe_allow_html=True)
 
-# 頁尾資訊
+# --- 聯絡資訊 ---
 st.markdown("---")
 st.markdown("""
-<div style='text-align: center; font-size: 14px; color: gray;'>
-《影響力》傳承策略平台｜永傳家族辦公室 <a href="https://gracefo.com" target="_blank">https://gracefo.com</a><br>
-聯絡信箱：<a href="mailto:123@gracefo.com">123@gracefo.com</a>
+<div style='display: flex; justify-content: center; align-items: center; gap: 1.5em; font-size: 14px; color: gray;'>
+  <!-- 根路徑“/”會帶回到 app.py -->
+  <a href='/' style='color:#006666; text-decoration: underline;'>《影響力》傳承策略平台</a>
+  <a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>
+  <a href='mailto:123@gracefo.com'>123@gracefo.com</a>
 </div>
 """, unsafe_allow_html=True)

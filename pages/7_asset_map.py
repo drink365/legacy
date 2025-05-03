@@ -20,8 +20,9 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 輸入資產金額
-st.markdown("請輸入各類資產的金額（單位：萬元），並移動下方滑桿進行市場情境模擬")
+# 1. 輸入並顯示現在的情況
+st.markdown("## 1. 目前資產分佈（現在的情況）")
+st.markdown("請輸入各類資產的金額（單位：萬元）以檢視當前結構：")
 company = st.number_input("公司股權", min_value=0, value=0, step=100)
 real_estate = st.number_input("不動產", min_value=0, value=0, step=100)
 financial = st.number_input("金融資產（存款、股票、基金等）", min_value=0, value=0, step=100)
@@ -38,87 +39,60 @@ filtered = [(lbl, val) for lbl, val in zip(labels, values) if val > 0]
 filtered_labels = [lbl for lbl, _ in filtered]
 filtered_values = [val for _, val in filtered]
 
-# 風險評估基準
-risk_scores_map = {
-    "公司股權": 0.7,
-    "不動產": 0.6,
-    "金融資產": 0.5,
-    "保單": 0.3,
-    "海外資產": 0.6,
-    "其他": 0.5,
-}
-
-# 計算風險等級與顏色
-risk_levels = []
-colors = []
-for lbl in filtered_labels:
-    score = risk_scores_map.get(lbl, 0.5)
-    if score >= 0.7:
-        risk_levels.append("高風險")
-        colors.append("#FF4C4C")
-    elif score >= 0.5:
-        risk_levels.append("中風險")
-        colors.append("#FFA500")
-    else:
-        risk_levels.append("低風險")
-        colors.append("#8BC34A")
-
-# 主圖與市場模擬
 if filtered_values:
-    col1, col2 = st.columns(2)
-    with col1:
-        fig1, ax1 = plt.subplots(figsize=(5, 5))
-        ax1.pie(
-            filtered_values,
-            labels=filtered_labels,
-            colors=colors,
-            autopct="%1.1f%%",
-            startangle=140,
-            textprops={"fontsize": 12, "fontproperties": font_prop}
-        )
-        ax1.set_title("資產結構與風險熱度", fontproperties=font_prop, fontsize=14)
-        ax1.axis('equal')
-        st.pyplot(fig1)
+    fig, ax = plt.subplots(figsize=(6, 6))
+    wedges, texts, autotexts = ax.pie(
+        filtered_values,
+        labels=filtered_labels,
+        autopct="%1.1f%%",
+        startangle=140,
+        textprops={"fontsize": 12, "fontproperties": font_prop}
+    )
+    ax.set_title("當前資產結構", fontproperties=font_prop, fontsize=14)
+    ax.axis('equal')
+    st.pyplot(fig)
 
-    with col2:
-        drop_pct = st.slider("模擬市場跌幅（-50% 至 +50%）：", -50, 50, 0)
-        scenario_values = [v * (1 + drop_pct / 100) for v in filtered_values]
-        fig2, ax2 = plt.subplots(figsize=(5, 5))
-        ax2.pie(
-            scenario_values,
-            labels=filtered_labels,
-            colors=colors,
-            autopct="%1.1f%%",
-            startangle=140,
-            textprops={"fontsize": 12, "fontproperties": font_prop}
-        )
-        ax2.set_title(f"市場變動 {drop_pct:+d}% 後的資產分布", fontproperties=font_prop, fontsize=14)
-        ax2.axis('equal')
-        st.pyplot(fig2)
-
-        # 顯示模擬後數據
-        sim_total = sum(scenario_values)
-        sim_percentages = [v / sim_total * 100 if sim_total else 0 for v in scenario_values]
-        st.markdown("**模擬後資產分佈數據**")
-        for lbl, val, pct in zip(filtered_labels, scenario_values, sim_percentages):
-            st.write(f"- {lbl}：{val:,.0f} 萬元 ({pct:.1f}%)")
+    # 資產總覽
+    st.markdown("### 資產總覽")
+    st.write(f"📊 資產總額：**{total_assets:,.0f} 萬元**")
+    percentages = [v / total_assets * 100 if total_assets else 0 for v in values]
+    cols = st.columns(2)
+    for i, (label, val, pct) in enumerate(zip(labels, values, percentages)):
+        with cols[i % 2]:
+            st.markdown(f"◾ **{label}**：{val:,} 萬元（{pct:.1f}%）")
 else:
-    st.info("尚未輸入任何資產，無法顯示圖表")
+    st.info("尚未輸入任何資產，無法顯示當前結構")
 
-# 資產總覽
-percentages = [v / total_assets * 100 if total_assets else 0 for v in values]
-st.markdown("---")
-st.markdown("### 💰 資產總覽")
-st.write(f"📊 資產總額：**{total_assets:,.0f} 萬元**")
-cols = st.columns(2)
-for i, (label, val, pct) in enumerate(zip(labels, values, percentages)):
-    with cols[i % 2]:
-        st.markdown(f"◾ **{label}**：{val:,} 萬元（{pct:.1f}%）")
+# 2. 情境模擬
+if filtered_values:
+    st.markdown("---")
+    st.markdown("## 2. 市場情境模擬")
+    st.markdown("透過滑桿調整整體市場變動幅度，觀察各類資產分佈在不同情境下的變化：")
+    drop_pct = st.slider("模擬市場跌幅（-50% 至 +50%）：", -50, 50, 0)
+    scenario_values = [v * (1 + drop_pct / 100) for v in filtered_values]
+    fig2, ax2 = plt.subplots(figsize=(6, 6))
+    wedges2, texts2, autotexts2 = ax2.pie(
+        scenario_values,
+        labels=filtered_labels,
+        autopct="%1.1f%%",
+        startangle=140,
+        textprops={"fontsize": 12, "fontproperties": font_prop}
+    )
+    ax2.set_title(f"市場變動 {drop_pct:+d}% 後的資產分布", fontproperties=font_prop, fontsize=14)
+    ax2.axis('equal')
+    st.pyplot(fig2)
 
-# 規劃建議
+    # 顯示模擬後數據
+    sim_total = sum(scenario_values)
+    sim_percentages = [v / sim_total * 100 if sim_total else 0 for v in scenario_values]
+    st.markdown("### 模擬後資產分佈數據")
+    for lbl, val, pct in zip(filtered_labels, scenario_values, sim_percentages):
+        st.write(f"- {lbl}：{val:,.0f} 萬元 ({pct:.1f}%)")
+
+# 3. 規劃建議摘要
 if total_assets > 0:
     st.markdown("---")
-    st.markdown("### 📝 規劃建議摘要")
+    st.markdown("## 3. 規劃建議摘要")
     suggestions = []
     if (insurance / total_assets) < 0.2:
         suggestions.append("保單佔比偏低，建議補強稅源工具，以降低未來繳稅與資產分配風險。")
@@ -138,24 +112,25 @@ if total_assets > 0:
     else:
         st.success("目前資產結構整體平衡，仍建議定期檢視傳承架構與稅源預備狀況。")
 
-    # 匯出 PDF 報告
+    # 4. 下載報告
     st.markdown("---")
-    st.markdown("### 📥 產出報告")
+    st.markdown("## 4. 下載我的資產風險報告")
     chart_buffer = BytesIO()
-    fig1.savefig(chart_buffer, format="png")
+    fig.savefig(chart_buffer, format="png")
     chart_buffer.seek(0)
     pdf_file = generate_asset_map_pdf(labels, values, suggestions, chart_buffer)
     st.download_button(
-        label="📄 下載我的資產風險報告",
+        label="📄 下載 PDF 報告",
         data=pdf_file,
         file_name="asset_risk_report.pdf",
         mime="application/pdf"
     )
 
-    # 行動導引
+    # 5. 行動導引
     st.markdown("---")
+    st.markdown("## 5. 進一步規劃")
     st.markdown("📊 想知道這些資產會產生多少遺產稅？")
-    if st.button("🧮 立即前往 AI秒算遺產稅"):
+    if st.button("🧮 前往 AI秒算遺產稅"):
         st.switch_page("pages/5_estate_tax.py")
 
 # 聯絡資訊

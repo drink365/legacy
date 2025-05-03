@@ -50,14 +50,13 @@ else:
         st.markdown("### 🎯 建議行動")
         st.markdown("每一個風險背後，都藏著一次為家族更周全準備的機會。")
 
-        col1, col2, col3 = st.columns(3)
+        col1, col2 = st.columns(2)
         with col1:
             if st.button("📊 使用 AI 傳承教練"):
                 st.switch_page("pages/1_coach.py")
         with col2:
             st.markdown("[📞 預約顧問諮詢](mailto:123@gracefo.com)", unsafe_allow_html=True)
-        with col3:
-            st.page_link("pages/9_risk_check.py", label="📎 分享風險清單 ➜")
+
 
     else:
         st.balloons()

@@ -64,7 +64,7 @@ else:
         # AI 傳承教練
         def go_to_coach():
             st.session_state.navigate = "pages/1_coach.py"
-        st.button("📊 使用 AI 傳承教練", on_click=go_to_coach, use_container_width=True)
+        st.button("📊 探索傳承風格", on_click=go_to_coach, use_container_width=True)
         # 預約顧問
         def make_consult():
             st.session_state.consult = True

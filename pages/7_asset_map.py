@@ -1,19 +1,12 @@
-# --- pages/7_asset_map.py ---
-
 import streamlit as st
-import matplotlib.pyplot as plt
-from matplotlib import font_manager
+import plotly.express as px
+import pandas as pd
 from io import BytesIO
 from modules.pdf_generator import generate_asset_map_pdf
 from modules.config import setup_page  # 共用頁面設定
 
 # 頁面設定
 setup_page("《影響力》資產結構圖與風險建議")
-
-# 中文字型
-font_path = "NotoSansTC-Regular.ttf"
-font_prop = font_manager.FontProperties(fname=font_path)
-plt.rcParams["font.family"] = font_prop.get_name()
 
 # 標題
 st.markdown("""
@@ -35,26 +28,75 @@ labels = ["公司股權", "不動產", "金融資產", "保單", "海外資產",
 values = [company, real_estate, financial, insurance, offshore, others]
 total_assets = sum(values)
 
-# 畫圖與資產總覽
+# 過濾非零資產
 filtered_labels = [label for label, val in zip(labels, values) if val > 0]
 filtered_values = [val for val in values if val > 0]
-fig, ax = plt.subplots(figsize=(6, 6))
 
+# 風險評估基準（示例）
+risk_scores_map = {
+    "公司股權": 0.7,
+    "不動產": 0.6,
+    "金融資產": 0.5,
+    "保單": 0.3,
+    "海外資產": 0.6,
+    "其他": 0.5,
+}
+
+# 計算風險等級
+filtered_risk_scores = [risk_scores_map[label] for label in filtered_labels]
+risk_levels = [
+    "高風險" if score >= 0.7 else
+    "中風險" if score >= 0.5 else
+    "低風險"
+    for score in filtered_risk_scores
+]
+
+# 顏色對應
+color_map = {"高風險": "#FF4C4C", "中風險": "#FFA500", "低風險": "#8BC34A"}
+
+# 畫互動式資產結構圖
 if filtered_values:
-    wedges, texts, autotexts = ax.pie(
-        filtered_values,
-        labels=filtered_labels,
-        autopct="%1.1f%%",
-        startangle=140,
-        textprops={"fontsize": 12, "fontproperties": font_prop}
+    df = pd.DataFrame({
+        "資產類別": filtered_labels,
+        "金額": filtered_values,
+        "風險等級": risk_levels
+    })
+    fig = px.pie(
+        df,
+        names="資產類別",
+        values="金額",
+        color="風險等級",
+        color_discrete_map=color_map,
+        title="資產結構與風險熱度",
+        hole=0.3
     )
-    ax.axis("equal")
-    st.pyplot(fig)
+    st.plotly_chart(fig, use_container_width=True)
+
+    # 情境模擬滑杆
+    st.markdown("---")
+    st.markdown("### 🔄 市場情境模擬")
+    drop_pct = st.slider("模擬市場跌幅 (%)", -50, 0, -10)
+    scenario_values = [v * (1 + drop_pct / 100) for v in filtered_values]
+    scenario_df = pd.DataFrame({
+        "資產類別": filtered_labels,
+        "模擬後金額": scenario_values,
+        "風險等級": risk_levels
+    })
+    fig2 = px.pie(
+        scenario_df,
+        names="資產類別",
+        values="模擬後金額",
+        color="風險等級",
+        color_discrete_map=color_map,
+        title=f"大盤跌 {abs(drop_pct)}% 情境下的資產分布",
+        hole=0.3
+    )
+    st.plotly_chart(fig2, use_container_width=True)
 else:
     st.info("尚未輸入任何資產，無法顯示圖表")
 
+# 資產總覽
 percentages = [v / total_assets * 100 if total_assets else 0 for v in values]
-
 st.markdown("### 💰 資產總覽")
 st.write(f"📊 資產總額：**{total_assets:,.0f} 萬元**")
 cols = st.columns(2)
@@ -62,12 +104,11 @@ for i, (label, val, pct) in enumerate(zip(labels, values, percentages)):
     with cols[i % 2]:
         st.markdown(f"◾ **{label}**：{val:,} 萬元（{pct:.1f}%）")
 
-# 若有資產再顯示後續區塊
+# 規劃建議
 if total_assets > 0:
     st.markdown("---")
     st.markdown("### 📝 規劃建議摘要")
     suggestions = []
-
     if (insurance / total_assets) < 0.2:
         suggestions.append("保單佔比偏低，建議補強稅源工具，以降低未來繳稅與資產分配風險。")
     if (company / total_assets) > 0.3:
@@ -80,7 +121,6 @@ if total_assets > 0:
         suggestions.append("您有海外資產，請留意 CRS、FBAR 等申報義務與相關罰則風險。")
     if total_assets >= 30000:
         suggestions.append("總資產已超過 3 億元，建議進行整體資產保全架構設計。")
-
     if suggestions:
         for s in suggestions:
             st.info(s)
@@ -90,7 +130,7 @@ if total_assets > 0:
     # 匯出 PDF 報告
     st.markdown("### 📥 產出報告")
     chart_buffer = BytesIO()
-    fig.savefig(chart_buffer, format="png")
+    fig.write_image(chart_buffer, format="png")
     chart_buffer.seek(0)
     pdf_file = generate_asset_map_pdf(labels, values, suggestions, chart_buffer)
     st.download_button(
@@ -110,7 +150,6 @@ if total_assets > 0:
 st.markdown("---")
 st.markdown("""
 <div style='display: flex; justify-content: center; align-items: center; gap: 1.5em; font-size: 14px; color: gray;'>
-  <!-- 根路徑“/”會帶回到 app.py -->
   <a href='/' style='color:#006666; text-decoration: underline;'>《影響力》傳承策略平台</a>
   <a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>
   <a href='mailto:123@gracefo.com'>123@gracefo.com</a>

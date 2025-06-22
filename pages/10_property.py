@@ -13,12 +13,12 @@ child_hold = 0
 cash_amount = 0
 
 if owner == "父母":
-    future_plan = st.radio("未來預計如何處置？", ["留待繼承（假設20年後）", "將來贈與給子女"])
+    future_plan = st.radio("未來預計如何處置？", ["留待繼承", "將來贈與給子女"])
     land_value = st.number_input("土地公告現值（萬元）", min_value=0, value=800, key="land_f")
     house_value = st.number_input("房屋評定現值（萬元）", min_value=0, value=200, key="house_f")
     child_hold = st.slider("繼承或贈與後子女預計持有年數", 0, 20, 1)
-    parent_hold = 20 if future_plan == "留待繼承（假設20年後）" else st.slider("父母預計持有年數", 0, 40, 10)
-    mode = "繼承" if future_plan == "留待繼承（假設20年後）" else "贈與房產"
+    parent_hold = 20 if future_plan == "留待繼承" else st.slider("父母預計持有年數", 0, 40, 10)
+    mode = "繼承" if future_plan == "留待繼承" else "贈與房產"
 else:
     source = st.radio("購屋資金來源？", ["子女自備款", "父母贈與現金"])
     land_value = st.number_input("土地公告現值（萬元）", min_value=0, value=800, key="land_c")

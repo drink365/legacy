@@ -6,19 +6,25 @@ st.title("🏠 不動產稅負評估")
 # 使用者輸入區
 st.header("輸入條件")
 with st.form("input_form"):
-    ownership = st.radio("登記持有人", ["子女", "父母"])
-    mode = st.radio("贈與方式（僅限子女名下）", ["贈與房產", "贈與現金讓子女購屋"])
+    owner = st.radio("房屋將登記在誰名下？", ["父母", "子女"])
 
-    land_value = st.number_input("土地公告現值（萬元）", min_value=0, value=800)
-    house_value = st.number_input("房屋評定現值（萬元）", min_value=0, value=200)
-    cash_amount = st.number_input("贈與現金金額（萬元）", min_value=0, value=3000)
+    if owner == "父母":
+        future_plan = st.radio("未來預計如何處置？", ["留待繼承（假設20年後）", "將來贈與給子女"])
+        land_value = st.number_input("土地公告現值（萬元）", min_value=0, value=800)
+        house_value = st.number_input("房屋評定現值（萬元）", min_value=0, value=200)
+        child_hold = st.slider("繼承或贈與後子女預計持有年數", 0, 20, 1)
+        parent_hold = 20 if future_plan == "留待繼承（假設20年後）" else st.slider("父母預計持有年數", 0, 40, 10)
+        mode = "繼承" if future_plan == "留待繼承（假設20年後）" else "贈與房產"
+        cash_amount = 0
 
-    if ownership == "父母":
-        parent_hold = st.slider("父母持有年數", 0, 40, 10)
-        child_hold = st.slider("子女持有年數（繼承後）", 0, 10, 1)
-    else:
-        child_hold = st.slider("子女持有年數", 0, 10, 3)
+    else:  # 子女名下
+        source = st.radio("購屋資金來源？", ["子女自備款", "父母贈與現金"])
+        land_value = st.number_input("土地公告現值（萬元）", min_value=0, value=800)
+        house_value = st.number_input("房屋評定現值（萬元）", min_value=0, value=200)
+        child_hold = st.slider("子女持有年數", 0, 20, 3)
         parent_hold = 0
+        mode = "自備款" if source == "子女自備款" else "贈與現金"
+        cash_amount = st.number_input("父母贈與現金金額（萬元）", min_value=0, value=3000) if source == "父母贈與現金" else 0
 
     is_self_use = st.checkbox("是否為自用住宅", value=True)
 
@@ -61,41 +67,46 @@ def calc_tax(base, exemption):
 if submitted:
     st.header("試算結果")
 
-    if ownership == "子女":
-        if mode == "贈與現金讓子女購屋":
+    if owner == "子女":
+        if mode == "贈與現金":
             gift_base = cash_amount
         else:
-            gift_base = land_value + house_value
+            gift_base = 0
 
-        gift_tax = calc_tax(gift_base, 244)
-        land_gain = land_value * 0.5  # 假設增值 50%
+        gift_tax = calc_tax(gift_base, 244) if gift_base > 0 else 0
+        land_gain = land_value * 0.5
         land_tax = int(land_gain * (0.4 if not is_self_use else 0.2) * 10000)
 
         house_sale_price = land_value + house_value * 1.5
-        cost_basis = cash_amount if mode == "贈與現金讓子女購屋" else (land_value + house_value)
+        cost_basis = cash_amount if mode == "贈與現金" else (land_value + house_value)
         profit = house_sale_price - cost_basis
         ho_rate = get_land_tax_rate(child_hold, is_self_use)
         ho_tax = int(profit * ho_rate * 10000)
 
-        st.markdown(f"- 🎁 預估贈與稅：**{gift_tax:,} 元**")
+        if gift_tax > 0:
+            st.markdown(f"- 🎁 預估贈與稅：**{gift_tax:,} 元**")
         st.markdown(f"- 🧾 預估土地增值稅：**{land_tax:,} 元**")
         st.markdown(f"- 🏠 預估房地合一稅（未來售屋）：**{ho_tax:,} 元**")
 
-    else:  # 父母名下（遺產＋房地合一稅）
+    else:  # 父母名下
         estate_base = land_value + house_value
-        estate_tax = calc_tax(estate_base, 1333)
-        ho_years = parent_hold + child_hold
+        if mode == "繼承":
+            estate_tax = calc_tax(estate_base, 1333)
+            ho_years = parent_hold + child_hold
+        else:  # 贈與房產
+            estate_tax = calc_tax(estate_base, 244)
+            ho_years = child_hold
 
         house_sale_price = land_value + house_value * 1.5
         profit = house_sale_price - (land_value + house_value)
         ho_rate = get_land_tax_rate(ho_years, is_self_use)
         ho_tax = int(profit * ho_rate * 10000)
 
-        st.markdown(f"- 🧾 預估遺產稅：**{estate_tax:,} 元**")
+        st.markdown(f"- {'🧾 遺產稅' if mode == '繼承' else '🎁 贈與稅'}：**{estate_tax:,} 元**")
         st.markdown(f"- 🏠 預估房地合一稅（未來售屋）：**{ho_tax:,} 元**")
-        st.markdown("- 💡 備註：繼承可延續持有年限，有助於降低未來房地合一稅率。")
+        st.markdown(f"- 💡 {'繼承可延續持有年限，有助於降低未來稅率。' if mode == '繼承' else '贈與會重置年限，可能稅負較重。'}")
 
-    st.info("本工具採用105年新制房地合一課稅邏輯，並假設贈與土地已有增值。")
+    st.info("本工具採用105年新制房地合一課稅邏輯，並假設土地有增值。")
     st.caption("※ 試算僅供參考，實際稅負請洽稅務專業人員。")
 
 # --- 聯絡資訊 ---

@@ -12,16 +12,28 @@ current_land_value = st.number_input("土地公告現值（萬元）", min_value
 current_price = st.number_input("市價（萬元）", min_value=0.0, value=3800.0)
 current_house_value = st.number_input("房屋評定現值（萬元）", min_value=0.0, value=200.0)
 
+# 資產登記與資金來源
+st.header("🏷️ 資產登記與資金來源")
+owner = st.radio("目前登記在誰名下？", ["父母", "子女"])
+
+if owner == "父母":
+    transfer_type = st.radio("將來打算如何移轉給子女？", ["留待繼承", "贈與房產"])
+else:
+    fund_source = st.radio("子女購屋資金來源為？", ["自行購屋", "父母贈與現金"])
+
+# 預估未來出售資料
+st.header("📈 預估未來出售資訊")
 future_price = st.number_input("預估未來出售價格（萬元）", min_value=0.0, value=3800.0)
 future_land_value = st.number_input("預估未來土地公告現值（萬元）", min_value=0.0, value=600.0)
 future_house_value = st.number_input("預估未來房屋評定現值（萬元）", min_value=0.0, value=320.0)
 
-holding_years = st.number_input("持有年數", min_value=0, value=2)
+# 基本參數
+st.header("⏳ 其他基本條件")
+holding_years = st.number_input("子女持有年數", min_value=0, value=2)
 is_self_use = st.checkbox("是否為自用住宅", value=False)
 
-# 土增稅計算
+# 土地增值稅
 increased_value = future_land_value - current_land_value
-
 if is_self_use:
     land_tax_rate = 0.10
     land_increment_tax = increased_value * land_tax_rate
@@ -40,16 +52,16 @@ stamp_formula = f"{future_price:.1f} × 0.1%"
 contract_tax = future_price * 0.06
 contract_formula = f"{future_price:.1f} × 6%"
 
-# 房地合一稅（以35%固定稅率）
+# 房地合一稅
 acquisition_cost = current_price - current_land_value + current_house_value
 real_estate_tax_base = future_price - acquisition_cost
 real_estate_tax = real_estate_tax_base * 0.35
 real_estate_formula = f"({future_price:.1f} - {acquisition_cost:.1f}) × 35%"
 
-# 顯示稅負結果
+# 顯示稅負試算總表
 st.header("📊 稅負試算總表")
 st.markdown(f"""
-📍 **土地增值稅**：約 **{land_increment_tax:.1f} 萬元**（{'自用優惠稅率10%' if is_self_use else '一般用地累進稅率20~40%'}，持有 {holding_years} 年）  
+📍 **土地增值稅**：約 **{land_increment_tax:.1f} 萬元**（{'自用優惠稅率10%' if is_self_use else '一般用地累進稅率20~40%'}）  
 - 計算式：{formula_land_tax}
 
 📄 **印花稅**：約 **{stamp_tax:.1f} 萬元**（0.1%）  

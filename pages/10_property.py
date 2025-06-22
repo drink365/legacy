@@ -55,6 +55,9 @@ real_estate_tax_base = future_price - acquisition_cost
 real_estate_tax = real_estate_tax_base * 0.35
 real_estate_formula = f"({future_price:.1f} - {acquisition_cost:.1f}) × 35%"
 
+# 總稅負
+total_tax = land_increment_tax + stamp_tax + contract_tax + real_estate_tax
+
 # 顯示稅負試算總表
 st.header("📊 稅負試算總表")
 st.markdown(f"""
@@ -69,6 +72,8 @@ st.markdown(f"""
 
 🏢 **房地合一稅**：約 **{real_estate_tax:.1f} 萬元**（預估獲利 × 35%）  
 - 計算式：{real_estate_formula}
+
+💰 **總稅負合計**：**{total_tax:.1f} 萬元**
 """)
 
 # 頁尾

@@ -65,10 +65,29 @@ contract_tax = transfer_price * 0.06
 contract_formula = f"{transfer_price:.1f} × 6%"
 
 # ✅ 房地合一稅
-acquisition_cost = transfer_land_value + transfer_house_value
-real_estate_profit = future_price - acquisition_cost
-real_estate_tax = real_estate_profit * 0.35
-real_estate_formula = f"({future_price:.1f} - {acquisition_cost:.1f}) × 35%"
+def calculate_real_estate_tax(future_price, acquisition_cost, holding_years, is_self_use):
+    """
+    計算房地合一稅
+    """
+    gain = future_price - acquisition_cost
+
+    if is_self_use and holding_years >= 6:
+        rate = 0.10
+        explanation = "持有超過6年且為自用住宅，稅率10%"
+    elif holding_years <= 2:
+        rate = 0.45
+        explanation = "持有未滿2年，稅率45%"
+    elif holding_years <= 5:
+        rate = 0.35
+        explanation = "持有2~5年，稅率35%"
+    else:
+        rate = 0.20
+        explanation = "持有超過5年，非自用住宅，稅率20%"
+
+    tax = gain * rate
+    formula = f"({future_price:.1f} - {acquisition_cost:.1f}) × {int(rate*100)}%"
+
+    return tax, formula, explanation
 
 # ✅ 贈與／遺產稅計算函數（含免稅額）
 def calc_gift_tax(amount):

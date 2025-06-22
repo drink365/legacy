@@ -3,7 +3,12 @@ import streamlit as st
 st.set_page_config(page_title="不動產稅負評估", page_icon="🏠")
 st.title("🏠 不動產稅負評估")
 
-st.header("輸入條件")
+st.header("房屋基本資訊")
+market_price = st.number_input("房屋市價（萬元）", min_value=0, value=3000)
+land_value = st.number_input("土地公告現值（萬元）", min_value=0, value=1000)
+house_value = st.number_input("房屋評定現值（萬元）", min_value=0, value=200)
+
+st.header("登記與資金來源")
 owner = st.radio("房屋將登記在誰名下？", ["父母", "子女"])
 
 # 初始化變數
@@ -14,15 +19,11 @@ cash_amount = 0
 
 if owner == "父母":
     future_plan = st.radio("未來預計如何處置？", ["留待繼承", "將來贈與給子女"])
-    land_value = st.number_input("土地公告現值（萬元）", min_value=0, value=800, key="land_f")
-    house_value = st.number_input("房屋評定現值（萬元）", min_value=0, value=200, key="house_f")
     child_hold = st.slider("繼承或贈與後子女預計持有年數", 0, 20, 1)
     parent_hold = 20 if future_plan == "留待繼承" else st.slider("父母預計持有年數", 0, 40, 10)
     mode = "繼承" if future_plan == "留待繼承" else "贈與房產"
 else:
     source = st.radio("購屋資金來源？", ["子女自備款", "父母贈與現金"])
-    land_value = st.number_input("土地公告現值（萬元）", min_value=0, value=800, key="land_c")
-    house_value = st.number_input("房屋評定現值（萬元）", min_value=0, value=200, key="house_c")
     child_hold = st.slider("子女持有年數", 0, 20, 3)
     mode = "自備款" if source == "子女自備款" else "贈與現金"
     cash_amount = st.number_input("父母贈與現金金額（萬元）", min_value=0, value=3000) if source == "父母贈與現金" else 0
@@ -78,9 +79,8 @@ if submitted:
         land_gain = land_value * 0.5
         land_tax = int(land_gain * (0.4 if not is_self_use else 0.2) * 10000)
 
-        house_sale_price = land_value + house_value * 1.5
         cost_basis = cash_amount if mode == "贈與現金" else (land_value + house_value)
-        profit = house_sale_price - cost_basis
+        profit = market_price - cost_basis
         ho_rate = get_land_tax_rate(child_hold, is_self_use)
         ho_tax = int(profit * ho_rate * 10000)
 
@@ -98,8 +98,7 @@ if submitted:
             estate_tax = calc_tax(estate_base, 244)
             ho_years = child_hold
 
-        house_sale_price = land_value + house_value * 1.5
-        profit = house_sale_price - (land_value + house_value)
+        profit = market_price - (land_value + house_value)
         ho_rate = get_land_tax_rate(ho_years, is_self_use)
         ho_tax = int(profit * ho_rate * 10000)
 

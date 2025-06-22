@@ -23,6 +23,7 @@ if registration_target == "父母":
     parent_hold_years = st.number_input("父母持有年數", value=10)
     transfer_announcement_value = st.number_input("移轉當時土地公告現值（萬元）", value=1100)
     transfer_market_value = st.number_input("移轉當時房屋市價（萬元）", value=3200)
+    transfer_building_value = st.number_input("移轉當時房屋評定現值（萬元）", value=220)
     if transfer_plan == "留待繼承":
         child_hold_years = st.number_input("繼承後子女持有年數", value=2)
     else:
@@ -32,6 +33,7 @@ elif registration_target == "子女":
     child_hold_years = st.number_input("子女持有年數", value=2)
     transfer_announcement_value = st.number_input("當時土地公告現值（萬元）", value=1000)
     transfer_market_value = st.number_input("當時房屋市價（萬元）", value=3000)
+    transfer_building_value = st.number_input("當時房屋評定現值（萬元）", value=200)
 
 st.markdown("---")
 
@@ -43,7 +45,6 @@ is_self_use = st.radio("是否為自用住宅？", ["是", "否"], index=0)
 
 # 土地增值額
 if registration_target == "父母" and transfer_plan == "留待繼承":
-    # 起點為繼承當下公告現值
     increment_amount = (sale_announcement_value - transfer_announcement_value) * multiplier
     hold_years = child_hold_years
     land_note = f"子女繼承後重新起算，持有 {hold_years} 年"
@@ -79,9 +80,8 @@ stamp_tax = sale_price * 0.001  # 印花稅 0.1%
 deed_tax = sale_price * 0.06    # 契稅 6%
 
 if registration_target == "父母" and transfer_plan == "未來贈與給子女":
-    # 贈與稅：用公告值估算贈與
-    gift_base = transfer_announcement_value + building_value
-    tax_exempt = 2444  # 二人免稅額
+    gift_base = transfer_announcement_value + transfer_building_value
+    tax_exempt = 2444
     taxable_amount = max(0, gift_base - tax_exempt)
     if taxable_amount <= 256:
         gift_tax = taxable_amount * 0.10
@@ -91,9 +91,8 @@ if registration_target == "父母" and transfer_plan == "未來贈與給子女":
         gift_tax = 256 * 0.10 + 256 * 0.15 + (taxable_amount - 512) * 0.20
     inherit_tax = 0
 elif registration_target == "父母" and transfer_plan == "留待繼承":
-    # 遺產稅：用公告值估算
-    estate_base = transfer_announcement_value + building_value
-    basic_deduction = 1333 + 56 * 1 + 138 * 2  # 一子女+雙親扣除額
+    estate_base = transfer_announcement_value + transfer_building_value
+    basic_deduction = 1333 + 56 * 1 + 138 * 2
     taxable_amount = max(0, estate_base - basic_deduction)
     if taxable_amount <= 5000:
         inherit_tax = taxable_amount * 0.10
@@ -102,7 +101,7 @@ elif registration_target == "父母" and transfer_plan == "留待繼承":
     else:
         inherit_tax = 5000 * 0.10 + 5000 * 0.15 + (taxable_amount - 10000) * 0.20
 
-# 房地合一稅：以實際交易價差計算
+# 房地合一稅計算邏輯
 cost_basis = transfer_market_value
 capital_gain = sale_price - cost_basis
 if hold_years < 2:

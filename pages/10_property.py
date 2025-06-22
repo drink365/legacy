@@ -20,8 +20,14 @@ registration_target = st.radio("房屋登記於誰名下？", ["父母", "子女
 
 if registration_target == "父母":
     transfer_plan = st.radio("未來規劃為何？", ["留待繼承", "未來贈與給子女"], index=0)
-else:
+    parent_hold_years = st.number_input("父母持有年數", value=10)
+    if transfer_plan == "留待繼承":
+        child_hold_years = st.number_input("繼承後子女持有年數", value=2)
+    else:
+        child_hold_years = st.number_input("贈與後子女持有年數", value=2)
+elif registration_target == "子女":
     transfer_plan = st.radio("資金來源為何？", ["子女自備購屋款", "父母贈與現金購屋"], index=0)
+    child_hold_years = st.number_input("子女持有年數", value=2)
 
 st.markdown("---")
 
@@ -33,12 +39,20 @@ st.info("說明：依是否符合自用住宅稅率（10%）或一般用地累�
 col3, col4 = st.columns(2)
 with col3:
     original_land_value = st.number_input("原始公告現值（萬元）", value=500)
-    hold_years = st.number_input("實際持有年數", value=6)
-with col4:
     adjusted_land_value = st.number_input("未來公告現值（萬元）", value=1200)
+with col4:
     multiplier = st.number_input("政府調整倍率", value=3.0, step=0.1)
+    is_self_use = st.radio("是否符合自用住宅條件？", ["是", "否"], index=0)
 
-is_self_use = st.radio("是否符合自用住宅條件？", ["是", "否"], index=0)
+# 決定實際持有年數
+if registration_target == "父母" and transfer_plan == "留待繼承":
+    hold_years = parent_hold_years + child_hold_years
+elif registration_target == "父母" and transfer_plan == "未來贈與給子女":
+    hold_years = child_hold_years
+elif registration_target == "子女":
+    hold_years = child_hold_years
+else:
+    hold_years = 0
 
 increment_amount = (adjusted_land_value - original_land_value) * multiplier
 
@@ -46,7 +60,7 @@ increment_amount = (adjusted_land_value - original_land_value) * multiplier
 land_tax = 0
 if is_self_use == "是" and hold_years >= 6:
     land_tax = increment_amount * 0.10
-    tax_note = "符合自用條件，適用稅率10%"
+    tax_note = f"符合自用條件，實際持有 {hold_years} 年，適用稅率10%"
 else:
     if increment_amount <= 400:
         land_tax = increment_amount * 0.20
@@ -54,7 +68,7 @@ else:
         land_tax = 400 * 0.20 + (increment_amount - 400) * 0.30
     else:
         land_tax = 400 * 0.20 + 400 * 0.30 + (increment_amount - 800) * 0.40
-    tax_note = "一般用地，依增值級距套用20~40%累進稅率"
+    tax_note = f"一般用地，持有 {hold_years} 年，依增值級距套用20~40%累進稅率"
 
 st.success(f"土地漲價總數額：約 {increment_amount:.1f} 萬元\n\n{tax_note} → 土地增值稅：約 {land_tax:.1f} 萬元")
 

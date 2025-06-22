@@ -64,30 +64,49 @@ stamp_formula = f"{transfer_price:.1f} × 0.1%"
 contract_tax = transfer_price * 0.06
 contract_formula = f"{transfer_price:.1f} × 6%"
 
-# ✅ 房地合一稅
+# 房地合一稅率邏輯
 def calculate_real_estate_tax(future_price, acquisition_cost, holding_years, is_self_use):
-    """
-    計算房地合一稅
-    """
     gain = future_price - acquisition_cost
+    tax_rate = 0.45
+    deduction = 0
+    explanation = ""
 
-    if is_self_use and holding_years >= 6:
-        rate = 0.10
-        explanation = "持有超過6年且為自用住宅，稅率10%"
-    elif holding_years <= 2:
-        rate = 0.45
-        explanation = "持有未滿2年，稅率45%"
+    if holding_years <= 2:
+        tax_rate = 0.45
+        explanation = "持有≦2年 → 稅率45%"
     elif holding_years <= 5:
-        rate = 0.35
-        explanation = "持有2~5年，稅率35%"
-    else:
-        rate = 0.20
-        explanation = "持有超過5年，非自用住宅，稅率20%"
+        tax_rate = 0.35
+        explanation = "持有>2年 且≦5年 → 稅率35%"
+    elif holding_years > 5 and holding_years <= 10 and not is_self_use:
+        tax_rate = 0.20
+        explanation = "持有>5年 且≦10年 非自用 → 稅率20%"
+    elif holding_years > 10 and not is_self_use:
+        tax_rate = 0.15
+        explanation = "持有>10年 非自用 → 稅率15%"
+    elif holding_years > 6 and is_self_use:
+        deduction = min(400, gain)
+        gain -= deduction
+        tax_rate = 0.10
+        explanation = "持有>6年 且自用 → 先扣除400萬後 ×10%"
 
-    tax = gain * rate
-    formula = f"({future_price:.1f} - {acquisition_cost:.1f}) × {int(rate*100)}%"
-
+    tax = gain * tax_rate
+    formula = f"({future_price:.1f} - {acquisition_cost:.1f}{f' - {deduction} 萬扣除' if deduction > 0 else ''}) × {int(tax_rate*100)}%"
     return tax, formula, explanation
+
+# 房地合一稅計算
+acquisition_cost = current_land_value + current_house_value
+real_estate_tax, real_estate_formula, real_estate_expl = calculate_real_estate_tax(
+    future_price, acquisition_cost, holding_years, is_self_use
+)
+
+# 顯示結果
+st.subheader("🏢 房地合一稅試算")
+st.markdown(f"""
+📘 **稅率說明**：{real_estate_expl}  
+📄 **計算式**：{real_estate_formula}  
+💰 **預估稅額**：**{real_estate_tax:.1f} 萬元**
+""")
+
 
 # ✅ 贈與／遺產稅計算函數（含免稅額）
 def calc_gift_tax(amount):

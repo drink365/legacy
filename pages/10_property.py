@@ -99,13 +99,7 @@ real_estate_tax, real_estate_formula, real_estate_expl = calculate_real_estate_t
     future_price, acquisition_cost, holding_years, is_self_use
 )
 
-# 顯示結果
-st.subheader("🏢 房地合一稅試算")
-st.markdown(f"""
-📘 **稅率說明**：{real_estate_expl}  
-📄 **計算式**：{real_estate_formula}  
-💰 **預估稅額**：**{real_estate_tax:.1f} 萬元**
-""")
+
 
 
 # ✅ 贈與／遺產稅計算函數（含免稅額）

@@ -41,22 +41,28 @@ sale_announcement_value = st.number_input("未來土地公告現值（萬元）"
 multiplier = st.number_input("政府公告調整倍率", value=3.0, step=0.1)
 is_self_use = st.radio("是否為自用住宅？", ["是", "否"], index=0)
 
-# 決定持有總年數與漲價
+# 土地增值額
 if registration_target == "父母" and transfer_plan == "留待繼承":
-    hold_years = parent_hold_years + child_hold_years
-elif registration_target == "父母" and transfer_plan == "未來贈與給子女":
+    # 起點為繼承當下公告現值
+    increment_amount = (sale_announcement_value - transfer_announcement_value) * multiplier
     hold_years = child_hold_years
-elif registration_target == "子女":
-    hold_years = child_hold_years
+    land_note = f"子女繼承後重新起算，持有 {hold_years} 年"
 else:
-    hold_years = 0
-
-increment_amount = (sale_announcement_value - land_current_value) * multiplier
+    increment_amount = (sale_announcement_value - land_current_value) * multiplier
+    if registration_target == "父母" and transfer_plan == "未來贈與給子女":
+        hold_years = child_hold_years
+        land_note = f"贈與後起算，子女持有 {hold_years} 年"
+    elif registration_target == "子女":
+        hold_years = child_hold_years
+        land_note = f"子女持有 {hold_years} 年"
+    else:
+        hold_years = 0
+        land_note = "無法判斷持有年數"
 
 # 土增稅
 if is_self_use == "是" and hold_years >= 6:
     land_tax = increment_amount * 0.10
-    land_note = f"自用住宅，持有 {hold_years} 年 → 稅率10%"
+    land_note += "，自用住宅，適用10%稅率"
 else:
     if increment_amount <= 400:
         land_tax = increment_amount * 0.20
@@ -64,7 +70,7 @@ else:
         land_tax = 400 * 0.20 + (increment_amount - 400) * 0.30
     else:
         land_tax = 400 * 0.20 + 400 * 0.30 + (increment_amount - 800) * 0.40
-    land_note = f"一般用地，持有 {hold_years} 年 → 累進稅率20~40%"
+    land_note += "，一般用地累進稅率20~40%"
 
 # 契稅、贈與稅、遺產稅、印花稅
 gift_tax = 0

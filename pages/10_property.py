@@ -19,8 +19,10 @@ transfer_type = ""
 fund_source = ""
 if owner == "父母":
     transfer_type = st.radio("將來打算如何移轉給子女？", ["留待繼承", "贈與房產"], key="transfer_type")
+    context_summary = f"目前資產登記在【父母】名下，預計未來以【{transfer_type}】方式移轉。"
 else:
     fund_source = st.radio("子女購屋資金來源為？", ["自行購屋", "父母贈與現金"], key="fund_source")
+    context_summary = f"目前資產已登記在【子女】名下，購屋資金來源為【{fund_source}】。"
 
 # 贈與／繼承當下的三種價格（若父母持有）
 gift_price = gift_land = gift_house = 0.0
@@ -41,10 +43,7 @@ st.header("⏳ 其他基本條件")
 holding_years = st.number_input("子女持有年數", min_value=0, value=2, key="holding_year")
 is_self_use = st.checkbox("是否為自用住宅", value=False, key="self_use")
 
-# ---------------------------------------------
-# 試算邏輯函式定義
-# ---------------------------------------------
-
+# --------- 試算邏輯定義 ---------
 def calc_gift_tax(amount):
     amount -= 244  # 贈與免稅額
     if amount <= 0:
@@ -77,16 +76,11 @@ def calc_land_tax(start, end, self_use=False):
     total = first * 0.2 + second * 0.3 + third * 0.4
     return total, f"{first:.1f}×20% + {second:.1f}×30% + {third:.1f}×40%"
 
-# ---------------------------------------------
-# 根據情境進行試算
-# ---------------------------------------------
-
-st.header("📊 稅負試算結果")
-
+# --------- 計算區 ---------
 gift_tax = estate_tax = land_tax = stamp_tax = contract_tax = realty_tax = 0
 gift_formula = estate_formula = land_formula = stamp_formula = contract_formula = realty_formula = ""
 
-# 成本以取得時的價格為準
+# 成本以取得時價格為準
 if owner == "子女":
     cost = current_land_value + current_house_value
 elif transfer_type == "贈與房產":
@@ -122,10 +116,12 @@ if owner == "父母":
     elif transfer_type == "留待繼承":
         estate_tax, estate_formula = calc_estate_tax(total_value)
 
-# 總稅負
+# --------- 顯示區 ---------
 total_tax = land_tax + realty_tax + stamp_tax + contract_tax + gift_tax + estate_tax
 
-# 顯示結果
+st.markdown("### 📘 資產背景條件")
+st.info(context_summary)
+
 st.markdown(f"""
 ### 💰 總稅負：約 **{total_tax:.1f} 萬元**
 

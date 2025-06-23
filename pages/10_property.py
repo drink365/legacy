@@ -21,7 +21,9 @@ fund_source = ""
 if owner == "父母":
     transfer_type = st.radio("將來打算如何移轉給子女？", ["留待繼承", "贈與房產"])
 else:
-    fund_source = st.radio("子女購屋資金來源為？", ["自行購屋", "父母贈與現金"])
+    elif owner == "父母" and transfer_type == "留待繼承":
+    real_estate_cost = transfer_land_value + transfer_house_value
+
 
 # 繼承或贈與當時的價格（僅父母持有時顯示）
 if owner == "父母":

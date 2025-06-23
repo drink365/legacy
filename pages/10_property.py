@@ -1,8 +1,58 @@
-[完整程式碼太長，我將分段貼上（第1段）]
-
 import streamlit as st
 
-# 頁面設定
+# ------------------------------
+# 計算函式定義
+# ------------------------------
+def calc_deed_tax(house_value):
+    rate = 0.015
+    tax = house_value * rate
+    formula = f"{house_value} * {rate}"
+    return tax, formula
+
+def calc_stamp_tax(price):
+    rate = 0.001
+    tax = price * rate
+    formula = f"{price} * {rate}"
+    return tax, formula
+
+def calc_land_increment_tax(old_value, new_value, is_self_use):
+    gain = max(new_value - old_value, 0)
+    rate = 0.2
+    tax = gain * rate
+    formula = f"({new_value} - {old_value}) * {rate}"
+    return tax, formula
+
+def calc_real_estate_tax(sell_price, cost, holding_years, is_self_use):
+    if is_self_use:
+        tax = 0.0
+        formula = "self-use exempt"
+    else:
+        profit = max(sell_price - cost, 0)
+        if holding_years <= 2:
+            rate = 0.45
+        elif holding_years <= 10:
+            rate = 0.35
+        else:
+            rate = 0.2
+        tax = profit * rate
+        formula = f"({sell_price} - {cost}) * {rate}"
+    return tax, formula
+
+def calc_gift_tax(value):
+    rate = 0.1
+    tax = value * rate
+    formula = f"{value} * {rate}"
+    return tax, formula
+
+def calc_estate_tax(value):
+    rate = 0.1
+    tax = value * rate
+    formula = f"{value} * {rate}"
+    return tax, formula
+
+# ------------------------------
+# Streamlit UI
+# ------------------------------
 st.set_page_config(page_title="不動產稅負評估工具", layout="wide")
 
 st.title("🏠 不動產稅負評估工具")
@@ -14,8 +64,8 @@ current_price = st.number_input("現在市價（萬元）", min_value=0.0, value
 current_land_value = st.number_input("現在土地公告現值（萬元）", min_value=0.0, value=1000.0)
 current_house_value = st.number_input("現在房屋評定現值（萬元）", min_value=0.0, value=200.0)
 
-# 贈與或繼承時的價格
-st.header("🎁 贈與或繼承時的公告價格")
+# 🎁 贈與／繼承時的公告價格
+st.header("🎁 贈與／繼承時的公告價格")
 transfer_land_value = st.number_input("贈與／繼承時土地公告現值（萬元）", min_value=0.0, value=1100.0)
 transfer_house_value = st.number_input("贈與／繼承時房屋評定現值（萬元）", min_value=0.0, value=180.0)
 
@@ -25,7 +75,7 @@ future_price = st.number_input("未來出售價格（萬元）", min_value=0.0, 
 future_land_value = st.number_input("未來土地公告現值（萬元）", min_value=0.0, value=1200.0)
 future_house_value = st.number_input("未來房屋評定現值（萬元）", min_value=0.0, value=190.0)
 
-# ⏳ 基本參數
+# ⏳ 基本條件
 st.header("⏳ 基本條件")
 holding_years = st.number_input("子女持有年數", min_value=0, value=2)
 is_self_use = st.checkbox("是否符合自用住宅條件", value=False)
@@ -38,59 +88,19 @@ if owner == "父母":
 else:
     fund_source = st.radio("子女資金來源為？", ["自行購屋", "父母贈與現金"])
 
-[完整程式碼太長，我將分段貼上（第1段）]
-
-import streamlit as st
-
-# 頁面設定
-st.set_page_config(page_title="不動產稅負評估工具", layout="wide")
-
-st.title("🏠 不動產稅負評估工具")
-st.markdown("根據不同取得方式與出售情境，評估整體稅負。")
-
-# 📌 房屋與土地資訊
-st.header("📌 房屋與土地資訊")
-current_price = st.number_input("現在市價（萬元）", min_value=0.0, value=3000.0)
-current_land_value = st.number_input("現在土地公告現值（萬元）", min_value=0.0, value=1000.0)
-current_house_value = st.number_input("現在房屋評定現值（萬元）", min_value=0.0, value=200.0)
-
-# 贈與或繼承時的價格
-st.header("🎁 贈與或繼承時的公告價格")
-transfer_land_value = st.number_input("贈與／繼承時土地公告現值（萬元）", min_value=0.0, value=1100.0)
-transfer_house_value = st.number_input("贈與／繼承時房屋評定現值（萬元）", min_value=0.0, value=180.0)
-
-# 📈 預估未來出售資料
-st.header("📈 預估未來出售資料")
-future_price = st.number_input("未來出售價格（萬元）", min_value=0.0, value=3800.0)
-future_land_value = st.number_input("未來土地公告現值（萬元）", min_value=0.0, value=1200.0)
-future_house_value = st.number_input("未來房屋評定現值（萬元）", min_value=0.0, value=190.0)
-
-# ⏳ 基本參數
-st.header("⏳ 基本條件")
-holding_years = st.number_input("子女持有年數", min_value=0, value=2)
-is_self_use = st.checkbox("是否符合自用住宅條件", value=False)
-
-# 🏷️ 資產登記與資金來源
-st.header("🏷️ 資產登記與資金來源")
-owner = st.radio("目前房產登記在誰名下？", ["父母", "子女"])
-if owner == "父母":
-    transfer_type = st.radio("將來如何移轉給子女？", ["留待繼承", "贈與房產"])
-else:
-    fund_source = st.radio("子女資金來源為？", ["自行購屋", "父母贈與現金"])
-
-# 請將此程式與前兩段合併
-import streamlit as st
+# 定義贈與與繼承變數
+gift_land_value = transfer_land_value
+gift_house_value = transfer_house_value
+inherit_land_value = transfer_land_value
+inherit_house_value = transfer_house_value
 
 # ------------------------------
 # 情境判斷與計算邏輯
 # ------------------------------
-
-# 初始化稅負結果變數
 section1_taxes = []  # 取得時稅負
 section2_taxes = []  # 贈與或繼承時稅負
 section3_taxes = []  # 出售時稅負
 
-# 模擬情境分類
 if owner == "子女":
     # 子女自行購屋
     deed_tax, deed_formula = calc_deed_tax(current_house_value)
@@ -168,10 +178,8 @@ if section3_taxes:
 # ------------------------------
 # 顯示總稅負
 # ------------------------------
-total_tax = sum([x[1] for x in section1_taxes + section2_taxes + section3_taxes])
-st.markdown(f"""
-## 💰 預估總稅負：**{total_tax:.1f} 萬元**
-""")
+total_tax = sum(x[1] for x in section1_taxes + section2_taxes + section3_taxes)
+st.markdown(f"## 💰 預估總稅負：**{total_tax:.1f} 萬元**")
 
 # 頁尾
 st.markdown("---")

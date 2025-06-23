@@ -56,7 +56,6 @@ def calc_real_estate_tax(sell_price, cost, holding_years, is_self_use, is_reside
 
     # 境內居住者
     if is_self_use and holding_years > 6:
-        # 自用住宅扣除400萬
         taxable = max(profit - 400, 0)
         rate = 0.10
         tax = taxable * rate
@@ -89,7 +88,6 @@ def calc_estate_tax(value):
     formula = f"{value} * {rate}"
     return tax, formula
 
-
 # ------------------------------
 # Streamlit UI
 # ------------------------------
@@ -105,7 +103,7 @@ owner = st.radio("目前房產登記在誰名下？", ["父母", "子女"])
 if owner == "父母":
     transfer_type = st.radio("將來如何移轉給子女？", ["留待繼承", "贈與房產"])
 else:
-    fund_source = st.radio("子女資金來源為？", ["自行購屋", "父母贈與現金"]])
+    fund_source = st.radio("子女資金來源為？", ["自行購屋", "父母贈與現金"])
 
 # ⏳ 基本條件
 st.header("⏳ 基本條件")

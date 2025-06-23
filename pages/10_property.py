@@ -1,109 +1,184 @@
-# 以下是整合後完整、可執行的 Streamlit 程式碼，包含三種情境稅負計算：
-# 1. 子女自行購屋
-# 2. 父母贈與房產
-# 3. 父母留待繼承
-# 請將本程式貼上於 Streamlit 環境中執行
+[完整程式碼太長，我將分段貼上（第1段）]
 
 import streamlit as st
 
-st.set_page_config(page_title="不動產稅負分析", layout="wide")
-st.title("📊 不動產情境稅負分析工具")
+# 頁面設定
+st.set_page_config(page_title="不動產稅負評估工具", layout="wide")
 
-# --- 基本資訊輸入 ---
-scenario_label = st.selectbox("選擇情境", ["子女自行購屋", "父母贈與房產", "父母留待繼承"])
+st.title("🏠 不動產稅負評估工具")
+st.markdown("根據不同取得方式與出售情境，評估整體稅負。")
 
-st.header("🏠 房屋與土地價格設定")
-market_price = st.number_input("市價（萬元）", min_value=0.0, value=3000.0)
-land_value = st.number_input("原始土地公告現值（萬元）", min_value=0.0, value=600.0)
-house_value = st.number_input("原始房屋評定現值（萬元）", min_value=0.0, value=300.0)
+# 📌 房屋與土地資訊
+st.header("📌 房屋與土地資訊")
+current_price = st.number_input("現在市價（萬元）", min_value=0.0, value=3000.0)
+current_land_value = st.number_input("現在土地公告現值（萬元）", min_value=0.0, value=1000.0)
+current_house_value = st.number_input("現在房屋評定現值（萬元）", min_value=0.0, value=200.0)
 
-if scenario_label == "父母贈與房產":
-    gift_land_value = st.number_input("贈與時土地公告現值（萬元）", min_value=0.0, value=700.0)
-    gift_house_value = st.number_input("贈與時房屋評定現值（萬元）", min_value=0.0, value=280.0)
-elif scenario_label == "父母留待繼承":
-    inherit_land_value = st.number_input("繼承時土地公告現值（萬元）", min_value=0.0, value=750.0)
-    inherit_house_value = st.number_input("繼承時房屋評定現值（萬元）", min_value=0.0, value=250.0)
+# 贈與或繼承時的價格
+st.header("🎁 贈與或繼承時的公告價格")
+transfer_land_value = st.number_input("贈與／繼承時土地公告現值（萬元）", min_value=0.0, value=1100.0)
+transfer_house_value = st.number_input("贈與／繼承時房屋評定現值（萬元）", min_value=0.0, value=180.0)
 
-future_price = st.number_input("未來出售價格（萬元）", min_value=0.0, value=3600.0)
-holding_years = st.number_input("持有年數", min_value=0, value=5)
-is_self_use = st.checkbox("是否為自用住宅", value=True)
+# 📈 預估未來出售資料
+st.header("📈 預估未來出售資料")
+future_price = st.number_input("未來出售價格（萬元）", min_value=0.0, value=3800.0)
+future_land_value = st.number_input("未來土地公告現值（萬元）", min_value=0.0, value=1200.0)
+future_house_value = st.number_input("未來房屋評定現值（萬元）", min_value=0.0, value=190.0)
 
-# --- 稅率與計算函數 ---
-def calc_gift_tax(amount):
-    deduction = 244
-    taxable = max(amount - deduction, 0)
-    if taxable <= 2811:
-        return taxable * 0.10, f"({amount} - 244) × 10%"
-    elif taxable <= 5621:
-        return taxable * 0.15 - 140.55, f"({amount} - 244) × 15% - 140.55"
-    else:
-        return taxable * 0.20 - 421.6, f"({amount} - 244) × 20% - 421.6"
+# ⏳ 基本參數
+st.header("⏳ 基本條件")
+holding_years = st.number_input("子女持有年數", min_value=0, value=2)
+is_self_use = st.checkbox("是否符合自用住宅條件", value=False)
 
-def calc_estate_tax(amount):
-    deduction = 1333
-    taxable = max(amount - deduction, 0)
-    if taxable <= 5621:
-        return taxable * 0.10, f"({amount} - 1333) × 10%"
-    elif taxable <= 11242:
-        return taxable * 0.15 - 281.05, f"({amount} - 1333) × 15% - 281.05"
-    else:
-        return taxable * 0.20 - 842.3, f"({amount} - 1333) × 20% - 842.3"
+# 🏷️ 資產登記與資金來源
+st.header("🏷️ 資產登記與資金來源")
+owner = st.radio("目前房產登記在誰名下？", ["父母", "子女"])
+if owner == "父母":
+    transfer_type = st.radio("將來如何移轉給子女？", ["留待繼承", "贈與房產"])
+else:
+    fund_source = st.radio("子女資金來源為？", ["自行購屋", "父母贈與現金"])
 
-def calc_real_estate_tax(acquired_price, sell_price, holding_years, is_self_use):
-    gain = sell_price - acquired_price
-    if holding_years <= 2:
-        return gain * 0.45, f"({sell_price} - {acquired_price}) × 45%"
-    elif holding_years <= 5:
-        return gain * 0.35, f"({sell_price} - {acquired_price}) × 35%"
-    elif holding_years <= 10 and not is_self_use:
-        return gain * 0.20, f"({sell_price} - {acquired_price}) × 20%"
-    elif holding_years > 10 and not is_self_use:
-        return gain * 0.15, f"({sell_price} - {acquired_price}) × 15%"
-    elif holding_years > 6 and is_self_use:
-        gain = max(gain - 400, 0)
-        return gain * 0.10, f"({sell_price} - {acquired_price} - 400) × 10%"
-    return gain * 0.35, f"({sell_price} - {acquired_price}) × 35%"
+[完整程式碼太長，我將分段貼上（第1段）]
 
-# --- 各稅試算 ---
-st.header("📘 稅負彙整明細")
+import streamlit as st
 
-if scenario_label == "子女自行購屋":
-    stamp_tax = market_price * 0.001
-    contract_tax = house_value * 0.06
-    land_tax = (future_price - land_value) * 0.2
-    real_tax, real_formula = calc_real_estate_tax(market_price, future_price, holding_years, is_self_use)
-    st.markdown("**🔹 子女自行購屋情境**")
-    st.markdown(f"- 契稅：{contract_tax:.1f} 萬元\n- 印花稅：{stamp_tax:.1f} 萬元\n- 土地增值稅：{land_tax:.1f} 萬元\n- 房地合一稅：{real_tax:.1f} 萬元（{real_formula}）")
+# 頁面設定
+st.set_page_config(page_title="不動產稅負評估工具", layout="wide")
 
-elif scenario_label == "父母贈與房產":
-    parent_stamp = market_price * 0.001
-    parent_contract = house_value * 0.06
-    gift_val = gift_land_value + gift_house_value
-    gift_tax, gift_formula = calc_gift_tax(gift_val)
-    gift_stamp = gift_val * 0.001
-    gift_contract = gift_house_value * 0.06
-    gift_land_tax = (gift_land_value - land_value) * 0.2
-    real_tax, real_formula = calc_real_estate_tax(gift_land_value + gift_house_value, future_price, holding_years, is_self_use)
-    st.markdown("**🔹 父母贈與房產情境**")
-    st.markdown(f"""
-- 父母購屋：契稅 {parent_contract:.1f} 萬元、印花稅 {parent_stamp:.1f} 萬元
-- 贈與階段：贈與稅 {gift_tax:.1f} 萬元（{gift_formula}）、印花稅 {gift_stamp:.1f} 萬元、契稅 {gift_contract:.1f} 萬元、土增稅 {gift_land_tax:.1f} 萬元
-- 子女出售：房地合一稅 {real_tax:.1f} 萬元（{real_formula}）
-    """)
+st.title("🏠 不動產稅負評估工具")
+st.markdown("根據不同取得方式與出售情境，評估整體稅負。")
 
-elif scenario_label == "父母留待繼承":
-    parent_stamp = market_price * 0.001
-    parent_contract = house_value * 0.06
-    estate_val = inherit_land_value + inherit_house_value
-    estate_tax, estate_formula = calc_estate_tax(estate_val)
-    real_tax, real_formula = calc_real_estate_tax(estate_val, future_price, holding_years, is_self_use)
-    land_tax = (future_price - inherit_land_value) * 0.2
-    st.markdown("**🔹 父母留待繼承情境**")
-    st.markdown(f"""
-- 父母購屋：契稅 {parent_contract:.1f} 萬元、印花稅 {parent_stamp:.1f} 萬元
-- 繼承階段：遺產稅 {estate_tax:.1f} 萬元（{estate_formula}）
-- 子女出售：土地增值稅 {land_tax:.1f} 萬元、房地合一稅 {real_tax:.1f} 萬元（{real_formula}）
-    """)
+# 📌 房屋與土地資訊
+st.header("📌 房屋與土地資訊")
+current_price = st.number_input("現在市價（萬元）", min_value=0.0, value=3000.0)
+current_land_value = st.number_input("現在土地公告現值（萬元）", min_value=0.0, value=1000.0)
+current_house_value = st.number_input("現在房屋評定現值（萬元）", min_value=0.0, value=200.0)
 
+# 贈與或繼承時的價格
+st.header("🎁 贈與或繼承時的公告價格")
+transfer_land_value = st.number_input("贈與／繼承時土地公告現值（萬元）", min_value=0.0, value=1100.0)
+transfer_house_value = st.number_input("贈與／繼承時房屋評定現值（萬元）", min_value=0.0, value=180.0)
+
+# 📈 預估未來出售資料
+st.header("📈 預估未來出售資料")
+future_price = st.number_input("未來出售價格（萬元）", min_value=0.0, value=3800.0)
+future_land_value = st.number_input("未來土地公告現值（萬元）", min_value=0.0, value=1200.0)
+future_house_value = st.number_input("未來房屋評定現值（萬元）", min_value=0.0, value=190.0)
+
+# ⏳ 基本參數
+st.header("⏳ 基本條件")
+holding_years = st.number_input("子女持有年數", min_value=0, value=2)
+is_self_use = st.checkbox("是否符合自用住宅條件", value=False)
+
+# 🏷️ 資產登記與資金來源
+st.header("🏷️ 資產登記與資金來源")
+owner = st.radio("目前房產登記在誰名下？", ["父母", "子女"])
+if owner == "父母":
+    transfer_type = st.radio("將來如何移轉給子女？", ["留待繼承", "贈與房產"])
+else:
+    fund_source = st.radio("子女資金來源為？", ["自行購屋", "父母贈與現金"])
+
+# 請將此程式與前兩段合併
+import streamlit as st
+
+# ------------------------------
+# 情境判斷與計算邏輯
+# ------------------------------
+
+# 初始化稅負結果變數
+section1_taxes = []  # 取得時稅負
+section2_taxes = []  # 贈與或繼承時稅負
+section3_taxes = []  # 出售時稅負
+
+# 模擬情境分類
+if owner == "子女":
+    # 子女自行購屋
+    deed_tax, deed_formula = calc_deed_tax(current_house_value)
+    stamp_tax, stamp_formula = calc_stamp_tax(current_price)
+    section1_taxes.append(("契稅", deed_tax, deed_formula))
+    section1_taxes.append(("印花稅", stamp_tax, stamp_formula))
+
+    land_tax, land_formula = calc_land_increment_tax(current_land_value, future_land_value, is_self_use)
+    re_tax, re_formula = calc_real_estate_tax(future_price, current_price, holding_years, is_self_use)
+    section3_taxes.append(("土地增值稅", land_tax, land_formula))
+    section3_taxes.append(("房地合一稅", re_tax, re_formula))
+
+    if fund_source == "父母贈與現金":
+        gift_value = current_price  # 假設全額贈與
+        gift_tax, gift_formula = calc_gift_tax(gift_value)
+        section2_taxes.append(("贈與稅", gift_tax, gift_formula))
+
+elif owner == "父母":
+    # 父母購屋階段
+    deed_tax, deed_formula = calc_deed_tax(current_house_value)
+    stamp_tax, stamp_formula = calc_stamp_tax(current_price)
+    section1_taxes.append(("契稅", deed_tax, deed_formula))
+    section1_taxes.append(("印花稅", stamp_tax, stamp_formula))
+
+    if transfer_type == "贈與房產":
+        # 贈與階段
+        gift_base = gift_land_value + gift_house_value
+        gift_tax, gift_formula = calc_gift_tax(gift_base)
+        deed_tax2, deed_formula2 = calc_deed_tax(gift_house_value)
+        stamp_tax2, stamp_formula2 = calc_stamp_tax(gift_base)
+        land_tax2, land_formula2 = calc_land_increment_tax(current_land_value, gift_land_value, is_self_use)
+        section2_taxes.append(("贈與稅", gift_tax, gift_formula))
+        section2_taxes.append(("契稅（受贈人）", deed_tax2, deed_formula2))
+        section2_taxes.append(("印花稅", stamp_tax2, stamp_formula2))
+        section2_taxes.append(("土地增值稅（由受贈人繳）", land_tax2, land_formula2))
+
+        # 子女售出階段
+        land_tax, land_formula = calc_land_increment_tax(gift_land_value, future_land_value, is_self_use)
+        re_tax, re_formula = calc_real_estate_tax(future_price, gift_base, holding_years, is_self_use)
+        section3_taxes.append(("土地增值稅", land_tax, land_formula))
+        section3_taxes.append(("房地合一稅", re_tax, re_formula))
+
+    elif transfer_type == "留待繼承":
+        # 繼承階段
+        estate_base = inherit_land_value + inherit_house_value
+        estate_tax, estate_formula = calc_estate_tax(estate_base)
+        section2_taxes.append(("遺產稅", estate_tax, estate_formula))
+
+        # 子女售出階段
+        land_tax, land_formula = calc_land_increment_tax(inherit_land_value, future_land_value, is_self_use)
+        re_tax, re_formula = calc_real_estate_tax(future_price, estate_base, holding_years, is_self_use)
+        section3_taxes.append(("土地增值稅", land_tax, land_formula))
+        section3_taxes.append(("房地合一稅", re_tax, re_formula))
+
+# ------------------------------
+# 顯示稅負明細
+# ------------------------------
+st.header("📋 稅負明細報告")
+
+if section1_taxes:
+    st.subheader("1️⃣ 取得時應繳稅負")
+    for label, amount, formula in section1_taxes:
+        st.markdown(f"- **{label}**：{amount:.1f} 萬元（{formula}）")
+
+if section2_taxes:
+    st.subheader("2️⃣ 贈與或繼承時應繳稅負")
+    for label, amount, formula in section2_taxes:
+        st.markdown(f"- **{label}**：{amount:.1f} 萬元（{formula}）")
+
+if section3_taxes:
+    st.subheader("3️⃣ 未來出售時應繳稅負")
+    for label, amount, formula in section3_taxes:
+        st.markdown(f"- **{label}**：{amount:.1f} 萬元（{formula}）")
+
+# ------------------------------
+# 顯示總稅負
+# ------------------------------
+total_tax = sum([x[1] for x in section1_taxes + section2_taxes + section3_taxes])
+st.markdown(f"""
+## 💰 預估總稅負：**{total_tax:.1f} 萬元**
+""")
+
+# 頁尾
 st.markdown("---")
-st.caption("《影響力》傳承策略平台｜永傳家族辦公室")
+st.markdown("""
+<div style='display: flex; justify-content: center; align-items: center; gap: 1.5em; font-size: 14px; color: gray;'>
+  <a href='/' style='color:#006666; text-decoration: underline;'>《影響力》傳承策略平台</a>
+  <a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>
+  <a href='mailto:123@gracefo.com'>123@gracefo.com</a>
+</div>
+""", unsafe_allow_html=True)

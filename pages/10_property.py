@@ -20,8 +20,7 @@ transfer_type = ""
 fund_source = ""
 if owner == "父母":
     transfer_type = st.radio("將來打算如何移轉給子女？", ["留待繼承", "贈與房產"])
-else:
-    elif owner == "父母" and transfer_type == "留待繼承":
+elif owner == "父母" and transfer_type == "留待繼承":
     real_estate_cost = transfer_land_value + transfer_house_value
 
 

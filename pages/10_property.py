@@ -25,7 +25,10 @@ def calc_stamp_tax(house_value, land_value):
     return tax, formula
 
 
-def calc_land_increment_tax(old_value, new_value, is_self_use):
+def calc_land_increment_tax(old_value, new_value):
+    """
+    土地增值稅：增值部分 * 20%
+    """
     gain = max(new_value - old_value, 0)
     rate = 0.20
     tax = gain * rate
@@ -49,10 +52,7 @@ def calc_real_estate_tax(sell_price, cost, holding_years, is_self_use, is_reside
     profit = max(sell_price - cost, 0)
     # 非境內居住者
     if not is_resident:
-        if holding_years <= 2:
-            rate = 0.45
-        else:
-            rate = 0.35
+        rate = 0.45 if holding_years <= 2 else 0.35
         tax = profit * rate
         formula = f"({sell_price} - {cost}) * {rate}"
         return tax, formula
@@ -117,7 +117,6 @@ is_resident = st.checkbox("是否為境內居住者", value=True)
 
 # 📌 房屋與土地資訊
 st.header("📌 房屋與土地資訊")
-current_price = st.number_input("現在市價（萬元）", min_value=0.0, value=3000.0)
 current_land_value = st.number_input("現在土地公告現值（萬元）", min_value=0.0, value=1000.0)
 current_house_value = st.number_input("現在房屋評定現值（萬元）", min_value=0.0, value=200.0)
 
@@ -132,48 +131,86 @@ future_price = st.number_input("未來出售價格（萬元）", min_value=0.0, 
 future_land_value = st.number_input("未來土地公告現值（萬元）", min_value=0.0, value=1200.0)
 future_house_value = st.number_input("未來房屋評定現值（萬元）", min_value=0.0, value=190.0)
 
-# 定義贈與與繼承用值
-gift_land_value = transfer_land_value
-gift_house_value = transfer_house_value
-inherit_land_value = transfer_land_value
-inherit_house_value = transfer_house_value
-
-# ------------------------------
-# 情境判斷與計算邏輯
-# ------------------------------
+# 初始化稅負列表
 section1_taxes = []
 section2_taxes = []
 section3_taxes = []
 
-if owner == "子女":
-    # 取得時稅負 (契稅 + 印花稅)
+# 計算 section1: 取得時稅負 (契稅 + 印花稅)
+if owner in ["父母", "子女"]:
     deed_tax, deed_formula = calc_deed_tax(current_house_value)
     stamp_tax, stamp_formula = calc_stamp_tax(current_house_value, current_land_value)
     section1_taxes.append(("契稅", deed_tax, deed_formula))
     section1_taxes.append(("印花稅", stamp_tax, stamp_formula))
 
-    # 出售時 (土地增值稅 + 房地合一稅)
-    land_tax, land_formula = calc_land_increment_tax(current_land_value, future_land_value, is_self_use)
-    re_tax, re_formula = calc_real_estate_tax(future_price, current_price, holding_years, is_self_use, is_resident)
+# 根據 owner 情境處理 section2, section3
+if owner == "子女":
+    # 子女自行購屋，僅在 section3 計算出售稅負
+    land_tax, land_formula = calc_land_increment_tax(current_land_value, future_land_value)
+    re_tax, re_formula = calc_real_estate_tax(future_price, current_house_value + current_land_value, holding_years, is_self_use, is_resident)
     section3_taxes.append(("土地增值稅", land_tax, land_formula))
     section3_taxes.append(("房地合一稅", re_tax, re_formula))
-
     if fund_source == "父母贈與現金":
-        gift_value = current_price
-        gift_tax, gift_formula = calc_gift_tax(gift_value)
+        gift_tax, gift_formula = calc_gift_tax(current_house_value + current_land_value)
         section2_taxes.append(("贈與稅", gift_tax, gift_formula))
-
 elif owner == "父母":
-    # 父母購屋階段
-    deed_tax, deed_formula = calc_deed_tax(current_house_value)
-    stamp_tax, stamp_formula = calc_stamp_tax(current_house_value, current_land_value)
-    section1_taxes.append(("契稅", deed_tax, deed_formula))
-    section1_taxes.append(("印花稅", stamp_tax, stamp_formula))
-
     if transfer_type == "贈與房產":
-        # 贈與階段稅負
-        gift_base = gift_land_value + gift_house_value
-        gift_tax, gift_formula = calc_gift_tax(gift_base)
-        deed_tax2, deed_formula2 = calc_deed_tax(gift_house_value)
-        stamp_tax2, stamp_formula2 = calc_stamp_tax(gift_house_value, gift_land_value)
-        land_tax2, land_formula2 = calc_land_increment_tax(current_land_value, gift_land
+        # section2: 贈與階段稅負
+        base_value = transfer_house_value + transfer_land_value
+        gift_tax, gift_formula = calc_gift_tax(base_value)
+        deed2_tax, deed2_formula = calc_deed_tax(transfer_house_value)
+        stamp2_tax, stamp2_formula = calc_stamp_tax(transfer_house_value, transfer_land_value)
+        land2_tax, land2_formula = calc_land_increment_tax(current_land_value, transfer_land_value)
+        section2_taxes.extend([
+            ("贈與稅", gift_tax, gift_formula),
+            ("契稅（受贈人）", deed2_tax, deed2_formula),
+            ("印花稅", stamp2_tax, stamp2_formula),
+            ("土地增值稅（受贈人）", land2_tax, land2_formula),
+        ])
+        # section3: 子女出售階段
+        sale_cost = base_value
+        land3_tax, land3_formula = calc_land_increment_tax(transfer_land_value, future_land_value)
+        re3_tax, re3_formula = calc_real_estate_tax(future_price, sale_cost, holding_years, is_self_use, is_resident)
+        section3_taxes.append(("土地增值稅", land3_tax, land3_formula))
+        section3_taxes.append(("房地合一稅", re3_tax, re3_formula))
+    else:
+        # 留待繼承
+        base_value = transfer_house_value + transfer_land_value
+        estate_tax, estate_formula = calc_estate_tax(base_value)
+        section2_taxes.append(("遺產稅", estate_tax, estate_formula))
+        land3_tax, land3_formula = calc_land_increment_tax(transfer_land_value, future_land_value)
+        re3_tax, re3_formula = calc_real_estate_tax(future_price, base_value, holding_years, is_self_use, is_resident)
+        section3_taxes.append(("土地增值稅", land3_tax, land3_formula))
+        section3_taxes.append(("房地合一稅", re3_tax, re3_formula))
+
+# 顯示稅負明細
+st.header("📋 稅負明細報告")
+if section1_taxes:
+    st.subheader("1️⃣ 取得時應繳稅負")
+    for label, amount, formula in section1_taxes:
+        st.markdown(f"- **{label}**：{amount:.2f} 萬元（{formula}）")
+if section2_taxes:
+    st.subheader("2️⃣ 贈與或繼承時應繳稅負")
+    for label, amount, formula in section2_taxes:
+        st.markdown(f"- **{label}**：{amount:.2f} 萬元（{formula}）")
+if section3_taxes:
+    st.subheader("3️⃣ 未來出售時應繳稅負")
+    for label, amount, formula in section3_taxes:
+        st.markdown(f"- **{label}**：{amount:.2f} 萬元（{formula}）")
+
+# 顯示總稅負
+total_tax = sum(x[1] for x in section1_taxes + section2_taxes + section3_taxes)
+st.markdown(f"## 💰 預估總稅負：**{total_tax:.2f} 萬元**")
+
+# 頁尾
+st.markdown("---")
+st.markdown(
+    """
+    <div style='display:flex;justify-content:center;align-items:center;gap:1.5em;font-size:14px;color:gray;'>
+      <a href='/' style='color:#006666;text-decoration:underline;'>《影響力》傳承策略平台</a>
+      <a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>
+      <a href='mailto:123@gracefo.com'>123@gracefo.com</a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)

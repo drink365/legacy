@@ -64,42 +64,69 @@ stamp_formula = f"{transfer_price:.1f} × 0.1%"
 contract_tax = transfer_price * 0.06
 contract_formula = f"{transfer_price:.1f} × 6%"
 
-# 房地合一稅率邏輯
-def calculate_real_estate_tax(future_price, acquisition_cost, holding_years, is_self_use):
-    gain = future_price - acquisition_cost
-    tax_rate = 0.45
-    deduction = 0
-    explanation = ""
+# === 房地合一稅試算 ===
 
-    if holding_years <= 2:
-        tax_rate = 0.45
-        explanation = "持有≦2年 → 稅率45%"
-    elif holding_years <= 5:
-        tax_rate = 0.35
-        explanation = "持有>2年 且≦5年 → 稅率35%"
-    elif holding_years > 5 and holding_years <= 10 and not is_self_use:
-        tax_rate = 0.20
-        explanation = "持有>5年 且≦10年 非自用 → 稅率20%"
-    elif holding_years > 10 and not is_self_use:
-        tax_rate = 0.15
-        explanation = "持有>10年 非自用 → 稅率15%"
-    elif holding_years > 6 and is_self_use:
-        deduction = min(400, gain)
-        gain -= deduction
-        tax_rate = 0.10
-        explanation = "持有>6年 且自用 → 先扣除400萬後 ×10%"
+# 情境判斷（設定取得成本）
+if owner == "子女" and fund_source == "自行購屋":
+    # 情境1：子女自行購屋
+    acquisition_cost = current_price
 
-    tax = gain * tax_rate
-    formula = f"({future_price:.1f} - {acquisition_cost:.1f}{f' - {deduction} 萬扣除' if deduction > 0 else ''}) × {int(tax_rate*100)}%"
-    return tax, formula, explanation
+elif owner == "父母" and transfer_type == "留待繼承":
+    # 情境2：繼承取得，成本為繼承時公告價
+    acquisition_cost = future_land_value + future_house_value
 
-# 房地合一稅計算
-acquisition_cost = current_land_value + current_house_value
-real_estate_tax, real_estate_formula, real_estate_expl = calculate_real_estate_tax(
-    future_price, acquisition_cost, holding_years, is_self_use
-)
+elif owner == "父母" and transfer_type == "贈與房產":
+    # 情境3：贈與取得，成本為父母原始取得成本
+    acquisition_cost = current_land_value + current_house_value
 
+elif owner == "子女" and fund_source == "父母贈與現金":
+    # 情境4：贈與現金購屋，成本為當初市價購買
+    acquisition_cost = current_price
 
+# 獲利計算
+real_estate_gain = future_price - acquisition_cost
+
+# 稅率與優惠邏輯
+if holding_years <= 2:
+    rate = 0.45
+    real_estate_tax = real_estate_gain * rate
+    real_estate_formula = f"({future_price:.1f} - {acquisition_cost:.1f}) × 45%"
+elif holding_years <= 5:
+    rate = 0.35
+    real_estate_tax = real_estate_gain * rate
+    real_estate_formula = f"({future_price:.1f} - {acquisition_cost:.1f}) × 35%"
+elif holding_years <= 10:
+    if is_self_use:
+        if holding_years > 6 and real_estate_gain > 400:
+            rate = 0.10
+            taxable_gain = real_estate_gain - 400
+            real_estate_tax = taxable_gain * rate
+            real_estate_formula = f"({real_estate_gain:.1f} - 400) × 10%"
+        elif holding_years > 6:
+            real_estate_tax = 0.0
+            real_estate_formula = f"({real_estate_gain:.1f} - 400) × 10% = 0"
+        else:
+            rate = 0.20
+            real_estate_tax = real_estate_gain * rate
+            real_estate_formula = f"({future_price:.1f} - {acquisition_cost:.1f}) × 20%"
+    else:
+        rate = 0.20
+        real_estate_tax = real_estate_gain * rate
+        real_estate_formula = f"({future_price:.1f} - {acquisition_cost:.1f}) × 20%"
+else:
+    if is_self_use and holding_years > 6:
+        if real_estate_gain > 400:
+            rate = 0.10
+            taxable_gain = real_estate_gain - 400
+            real_estate_tax = taxable_gain * rate
+            real_estate_formula = f"({real_estate_gain:.1f} - 400) × 10%"
+        else:
+            real_estate_tax = 0.0
+            real_estate_formula = f"({real_estate_gain:.1f} - 400) × 10% = 0"
+    else:
+        rate = 0.15
+        real_estate_tax = real_estate_gain * rate
+        real_estate_formula = f"({future_price:.1f} - {acquisition_cost:.1f}) × 15%"
 
 
 # ✅ 贈與／遺產稅計算函數（含免稅額）

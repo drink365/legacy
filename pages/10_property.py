@@ -1,159 +1,129 @@
 import streamlit as st
+import pandas as pd
 
 # 頁面設定
-st.set_page_config(page_title="不動產稅負評估工具", layout="wide")
-st.title("🏠 不動產稅負評估工具")
-st.markdown("請依據實際情境輸入資料，系統將自動試算各類稅負。")
+st.set_page_config(page_title="不動產三種取得情境稅負比較", layout="wide")
 
-# 房產基本資訊輸入
-st.header("📌 房產基本資訊（取得時）")
-current_price = st.number_input("市價（萬元）", min_value=0.0, value=3000.0)
-current_land_value = st.number_input("土地公告現值（萬元）", min_value=0.0, value=1000.0)
-current_house_value = st.number_input("房屋評定現值（萬元）", min_value=0.0, value=250.0)
+st.title("🏡 三種不動產取得方式稅負比較")
+st.markdown("比較房地產以三種方式取得（自行購屋、父母贈與、父母繼承）時的稅負差異。")
 
-# 資產登記與未來規劃
-st.header("🏷️ 資產登記與未來規劃")
-owner = st.radio("目前房產登記在誰名下？", ["父母", "子女"])
-if owner == "父母":
-    transfer_type = st.radio("未來打算如何移轉？", ["留待繼承", "贈與房產"])
-else:
-    transfer_type = "自行購屋"
+# 輸入參數
+st.header("📌 基本資料輸入")
+col1, col2, col3 = st.columns(3)
+with col1:
+    current_price = st.number_input("市價（萬元）", value=3000.0, min_value=0.0)
+with col2:
+    land_value = st.number_input("土地公告現值（萬元）", value=1000.0, min_value=0.0)
+with col3:
+    house_value = st.number_input("房屋評定現值（萬元）", value=200.0, min_value=0.0)
 
-# 移轉時資訊
-if transfer_type in ["贈與房產", "留待繼承"]:
-    st.header("📦 移轉時資產價值（預估）")
-    transfer_land_value = st.number_input("贈與／繼承時 土地公告現值（萬元）", min_value=0.0, value=1100.0)
-    transfer_house_value = st.number_input("贈與／繼承時 房屋評定現值（萬元）", min_value=0.0, value=240.0)
-else:
-    transfer_land_value = current_land_value
-    transfer_house_value = current_house_value
+col4, col5 = st.columns(2)
+with col4:
+    future_price = st.number_input("預估未來出售價格（萬元）", value=3800.0, min_value=0.0)
+with col5:
+    holding_years = st.number_input("持有年數", value=3, min_value=0)
 
-# 出售資訊
-st.header("📈 未來出售資訊")
-sell_price = st.number_input("預估未來出售價格（萬元）", min_value=0.0, value=3800.0)
-sell_land_value = st.number_input("未來出售時 土地公告現值（萬元）", min_value=0.0, value=1200.0)
-sell_house_value = st.number_input("未來出售時 房屋評定現值（萬元）", min_value=0.0, value=230.0)
+is_self_use = st.checkbox("是否為自用住宅", value=False)
 
-# 其他條件
-st.header("⏳ 其他條件")
-holding_years = st.number_input("子女持有年數", min_value=0, value=2)
-is_self_use = st.checkbox("是否為自用住宅", value=True)
-
-# ⬇️ 稅負計算邏輯區 ⬇️
-
-# ➤ 房地合一稅（賣方）
-if transfer_type == "自行購屋":
-    cost_basis = current_price  # 自行購屋：成本為購買市價
-elif transfer_type == "贈與房產":
-    cost_basis = transfer_land_value + transfer_house_value  # 贈與：視為原持有價值
-else:  # 留待繼承
-    cost_basis = transfer_land_value + transfer_house_value  # 繼承起算
-
-capital_gain = sell_price - cost_basis
-rgh_tax_rate = 0.45 if holding_years <= 2 else (
-    0.35 if holding_years <= 5 else (
-        0.10 if is_self_use and holding_years >= 6 else (
-            0.20 if holding_years <= 10 else 0.15)))
-deduct = 400 if is_self_use and holding_years >= 6 else 0
-rgh_taxable = max(capital_gain - deduct, 0)
-real_estate_tax = rgh_taxable * rgh_tax_rate
-real_estate_note = f"({sell_price:.1f} - {cost_basis:.1f}" + (f" - 400" if deduct else "") + f") × {int(rgh_tax_rate*100)}%"
-
-# ➤ 土地增值稅（賣方或贈與人）
-land_increase = sell_land_value - current_land_value
-if transfer_type == "留待繼承":
-    land_tax = 0
-    land_tax_note = "繼承免繳"
-else:
-    if is_self_use:
-        land_tax = land_increase * 0.10
-        land_tax_note = f"{land_increase:.1f} × 10%"
+# 稅率與級距設定
+def 房地合一稅率(holding_years, is_self_use):
+    if holding_years <= 2:
+        return 0.45
+    elif holding_years <= 5:
+        return 0.35
+    elif holding_years <= 10 and not is_self_use:
+        return 0.20
+    elif holding_years > 10 and not is_self_use:
+        return 0.15
+    elif holding_years >= 6 and is_self_use:
+        return 0.10
     else:
-        a = min(land_increase, 400)
-        b = min(max(land_increase - 400, 0), 400)
-        c = max(land_increase - 800, 0)
-        land_tax = a * 0.2 + b * 0.3 + c * 0.4
-        land_tax_note = f"{a}×20% + {b}×30% + {c}×40%"
+        return 0.35
 
-# ➤ 契稅（買方或受贈人）
-if transfer_type == "贈與房產":
-    deed_tax = transfer_house_value * 0.06
-    deed_tax_note = f"{transfer_house_value:.1f} × 6%"
-elif transfer_type == "自行購屋":
-    deed_tax = current_house_value * 0.06
-    deed_tax_note = f"{current_house_value:.1f} × 6%"
-else:
-    deed_tax = 0
-    deed_tax_note = "繼承免繳"
+def 房地合一稅額(成本, 未來市價, holding_years, is_self_use):
+    利得 = 未來市價 - 成本
+    if holding_years >= 6 and is_self_use:
+        利得 -= 400
+        利得 = max(利得, 0)
+    稅率 = 房地合一稅率(holding_years, is_self_use)
+    return 利得 * 稅率
 
-# ➤ 印花稅（買方或受贈人）
-if transfer_type in ["贈與房產", "自行購屋"]:
-    stamp_tax = sell_price * 0.001
-    stamp_tax_note = f"{sell_price:.1f} × 0.1%"
-else:
-    stamp_tax = 0
-    stamp_tax_note = "繼承免繳"
+def 土地增值稅(土地現值, 原公告, 是否自用):
+    增值 = 土地現值 - 原公告
+    if 是否自用:
+        return 增值 * 0.10
+    first = min(增值, 400)
+    second = min(max(增值 - 400, 0), 400)
+    third = max(增值 - 800, 0)
+    return first * 0.2 + second * 0.3 + third * 0.4
 
-# ➤ 贈與稅（贈與者）
-def calc_gift_tax(value):
-    base = max(value - 244, 0)
-    if base <= 2811:
-        return base * 0.10, f"({value} - 244) × 10%"
-    elif base <= 5621:
-        return base * 0.15 - 140.55, f"({value} - 244) × 15% - 140.55"
+def 贈與稅(公告總值):
+    扣除額 = 244
+    淨贈與 = max(公告總值 - 扣除額, 0)
+    if 淨贈與 <= 2811:
+        return 淨贈與 * 0.10
+    elif 淨贈與 <= 5621:
+        return 淨贈與 * 0.15 - 140.55
     else:
-        return base * 0.20 - 421.6, f"({value} - 244) × 20% - 421.6"
+        return 淨贈與 * 0.20 - 421.6
 
-gift_tax = 0
-gift_note = "無"
-if transfer_type == "贈與房產":
-    gift_tax, gift_note = calc_gift_tax(transfer_land_value + transfer_house_value)
-
-# ➤ 遺產稅（繼承人）
-def calc_estate_tax(value):
-    base = max(value - 1333, 0)
-    if base <= 5621:
-        return base * 0.10, f"({value} - 1333) × 10%"
-    elif base <= 11242:
-        return base * 0.15 - 281.05, f"({value} - 1333) × 15% - 281.05"
+def 遺產稅(公告總值):
+    扣除額 = 1333
+    淨遺產 = max(公告總值 - 扣除額, 0)
+    if 淨遺產 <= 5621:
+        return 淨遺產 * 0.10
+    elif 淨遺產 <= 11242:
+        return 淨遺產 * 0.15 - 281.05
     else:
-        return base * 0.20 - 842.3, f"({value} - 1333) × 20% - 842.3"
+        return 淨遺產 * 0.20 - 842.3
 
-estate_tax = 0
-estate_note = "無"
-if transfer_type == "留待繼承":
-    estate_tax, estate_note = calc_estate_tax(transfer_land_value + transfer_house_value)
+def 契稅(房屋現值):
+    return 房屋現值 * 0.06
 
-# ⬇️ 顯示區域 ⬇️
-st.header("📊 稅負明細與說明")
+def 印花稅(成交價):
+    return 成交價 * 0.001
 
-# 條件摘要
-st.markdown(f"**目前登記**：{owner}｜**規劃方式**：{transfer_type}｜**是否自用**：{'是' if is_self_use else '否'}｜**子女持有年數**：{holding_years}年")
+# 情境一：自行購屋
+成本1 = current_price
+房地合一1 = 房地合一稅額(成本1, future_price, holding_years, is_self_use)
+土地增值1 = 土地增值稅(land_value, land_value, is_self_use)
+契稅1 = 契稅(house_value)
+印花1 = 印花稅(current_price)
+贈與1 = 0
+遺產1 = 0
 
-# 明細表
-st.markdown(f"""
-### 💼 賣方／贈與人／被繼承人 應繳稅負
+# 情境二：父母贈與
+贈與公告總值 = land_value + house_value
+成本2 = 贈與公告總值
+房地合一2 = 房地合一稅額(成本2, future_price, holding_years, is_self_use)
+土地增值2 = 土地增值稅(land_value, land_value * 0.8, is_self_use)
+契稅2 = 契稅(house_value)
+印花2 = 印花稅(current_price)
+贈與2 = 贈與稅(贈與公告總值)
+遺產2 = 0
 
-- 房地合一稅：約 **{real_estate_tax:.1f} 萬元**（{real_estate_note}）
-- 土地增值稅：約 **{land_tax:.1f} 萬元**（{land_tax_note}）
-- 贈與稅：約 **{gift_tax:.1f} 萬元**（{gift_note}）
-- 遺產稅：約 **{estate_tax:.1f} 萬元**（{estate_note}）
+# 情境三：父母繼承
+繼承公告總值 = land_value + house_value
+成本3 = 繼承公告總值
+房地合一3 = 房地合一稅額(成本3, future_price, holding_years, is_self_use)
+土地增值3 = 0
+契稅3 = 0
+印花3 = 0
+贈與3 = 0
+遺產3 = 遺產稅(繼承公告總值)
 
-### 🧾 買方／受贈人 應繳稅負
+# 顯示表格
+df = pd.DataFrame({
+    "情境": ["自行購屋", "父母贈與", "父母繼承"],
+    "房地合一稅": [房地合一1, 房地合一2, 房地合一3],
+    "土地增值稅": [土地增值1, 土地增值2, 土地增值3],
+    "契稅": [契稅1, 契稅2, 契稅3],
+    "印花稅": [印花1, 印花2, 印花3],
+    "贈與稅": [贈與1, 贈與2, 贈與3],
+    "遺產稅": [遺產1, 遺產2, 遺產3],
+})
 
-- 契稅：約 **{deed_tax:.1f} 萬元**（{deed_tax_note}）
-- 印花稅：約 **{stamp_tax:.1f} 萬元**（{stamp_tax_note}）
+df["總稅負"] = df[["房地合一稅", "土地增值稅", "契稅", "印花稅", "贈與稅", "遺產稅"]].sum(axis=1)
 
----
-
-💰 **總稅負合計**（含雙方）：約 **{real_estate_tax + land_tax + gift_tax + estate_tax + deed_tax + stamp_tax:.1f} 萬元**
-""")
-
-# 頁尾
-st.markdown("---")
-st.markdown("""
-<div style='text-align:center; font-size:14px; color:gray;'>
-由《影響力》傳承策略平台｜永傳家族辦公室 提供
-｜ https://gracefo.com ｜ 聯絡信箱：123@gracefo.com
-</div>
-""", unsafe_allow_html=True)
+st.header("📊 各情境稅負比較表")
+st.dataframe(df.style.format("{:.1f}"))

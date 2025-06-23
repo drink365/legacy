@@ -5,7 +5,10 @@ import streamlit as st
 # ------------------------------
 
 def calc_deed_tax(house_value):
-    rate = 0.015
+    """
+    契稅：以房屋評定現值的6%計算
+    """
+    rate = 0.06
     tax = house_value * rate
     formula = f"{house_value} * {rate}"
     return tax, formula
@@ -173,60 +176,4 @@ elif owner == "父母":
         gift_tax, gift_formula = calc_gift_tax(gift_base)
         deed_tax2, deed_formula2 = calc_deed_tax(gift_house_value)
         stamp_tax2, stamp_formula2 = calc_stamp_tax(gift_house_value, gift_land_value)
-        land_tax2, land_formula2 = calc_land_increment_tax(current_land_value, gift_land_value, is_self_use)
-        section2_taxes.extend([
-            ("贈與稅", gift_tax, gift_formula),
-            ("契稅（受贈人）", deed_tax2, deed_formula2),
-            ("印花稅", stamp_tax2, stamp_formula2),
-            ("土地增值稅（由受贈人繳）", land_tax2, land_formula2),
-        ])
-        # 子女出售階段
-        land_tax, land_formula = calc_land_increment_tax(gift_land_value, future_land_value, is_self_use)
-        re_tax, re_formula = calc_real_estate_tax(future_price, gift_base, holding_years, is_self_use, is_resident)
-        section3_taxes.append(("土地增值稅", land_tax, land_formula))
-        section3_taxes.append(("房地合一稅", re_tax, re_formula))
-
-    else:  # 留待繼承
-        estate_base = inherit_land_value + inherit_house_value
-        estate_tax, estate_formula = calc_estate_tax(estate_base)
-        section2_taxes.append(("遺產稅", estate_tax, estate_formula))
-        land_tax, land_formula = calc_land_increment_tax(inherit_land_value, future_land_value, is_self_use)
-        re_tax, re_formula = calc_real_estate_tax(future_price, estate_base, holding_years, is_self_use, is_resident)
-        section3_taxes.append(("土地增值稅", land_tax, land_formula))
-        section3_taxes.append(("房地合一稅", re_tax, re_formula))
-
-# ------------------------------
-# 顯示稅負明細
-# ------------------------------
-st.header("📋 稅負明細報告")
-if section1_taxes:
-    st.subheader("1️⃣ 取得時應繳稅負")
-    for label, amount, formula in section1_taxes:
-        st.markdown(f"- **{label}**：{amount:.1f} 萬元（{formula}）")
-if section2_taxes:
-    st.subheader("2️⃣ 贈與或繼承時應繳稅負")
-    for label, amount, formula in section2_taxes:
-        st.markdown(f"- **{label}**：{amount:.1f} 萬元（{formula}）")
-if section3_taxes:
-    st.subheader("3️⃣ 未來出售時應繳稅負")
-    for label, amount, formula in section3_taxes:
-        st.markdown(f"- **{label}**：{amount:.1f} 萬元（{formula}）")
-
-# ------------------------------
-# 顯示預估總稅負
-# ------------------------------
-total_tax = sum(x[1] for x in section1_taxes + section2_taxes + section3_taxes)
-st.markdown(f"## 💰 預估總稅負：**{total_tax:.1f} 萬元**")
-
-# 頁尾
-st.markdown("---")
-st.markdown(
-    """
-    <div style='display: flex; justify-content: center; align-items: center; gap: 1.5em; font-size: 14px; color: gray;'>
-      <a href='/' style='color:#006666; text-decoration: underline;'>《影響力》傳承策略平台</a>
-      <a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>
-      <a href='mailto:123@gracefo.com'>123@gracefo.com</a>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+        land_tax2, land_formula2 = calc_land_increment_tax(current_land_value, gift_land

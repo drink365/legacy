@@ -128,7 +128,7 @@ if owner == "子女":
 elif owner == "父母" and transfer_type == "贈與房產":
     real_estate_cost = transfer_land_value + transfer_house_value
 else:
-    real_estate_cost = future_land_value + future_house_value  # 繼承視同從公告現值繼承
+    real_estate_cost = transfer_land_value + transfer_house_value  # 繼承視同從公告現值繼承
 
 real_estate_tax, real_estate_formula = calc_real_estate_tax(real_estate_cost)
 

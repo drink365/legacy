@@ -115,10 +115,12 @@ is_self_use = st.checkbox("是否符合自用住宅條件", value=False)
 # 新增：稅務身分判斷
 is_resident = st.checkbox("是否為境內居住者", value=True)
 
-# 📌 房屋與土地資訊
-st.header("📌 房屋與土地資訊")
-current_land_value = st.number_input("現在土地公告現值（萬元）", min_value=0.0, value=1000.0)
-current_house_value = st.number_input("現在房屋評定現值（萬元）", min_value=0.0, value=200.0)
+# 📌 買進的房產資訊
+st.header("📌 買進的房產資訊")
+# 三個價格輸入
+buy_price = st.number_input("買進總價（萬元）", min_value=0.0, value=3000.0)
+current_land_value = st.number_input("土地公告現值（萬元）", min_value=0.0, value=1000.0)
+current_house_value = st.number_input("房屋評定現值（萬元）", min_value=0.0, value=200.0)
 
 # 🎁 贈與／繼承時的公告價格
 st.header("🎁 贈與／繼承時的公告價格")

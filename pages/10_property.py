@@ -173,7 +173,7 @@ transfer_house_value = st.number_input("贈與／繼承時房屋評定現值（�
 st.header("📈 預估未來出售資料")
 future_price = st.number_input("未來出售價格（萬元）", min_value=0.0, value=3800.0)
 future_land_value = st.number_input("未來土地公告現值（萬元）", min_value=0.0, value=1200.0)
-future_house_value = st.number_input("未來房屋評定現值（萬元）", min_value=0.0, value=190.0)
+future_house_value = st.number_input("未來房屋評定現值（萬元）", min_value=0.0, value=160.0)
 
 # 計算稅負列表
 section1, section2, section3 = [], [], []

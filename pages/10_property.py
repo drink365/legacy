@@ -39,15 +39,15 @@ def calc_land_increment_tax(old_value, new_value):
 def calc_real_estate_tax(sell_price, cost, holding_years, is_self_use, is_resident):
     """
     房地合一稅計算：
+    - 非境內居住者:
+      * 持有2年內：45%
+      * >2年：35%
     - 境內居住者:
+      * 自用住宅且持有>6年：利潤扣除400萬後10%
       * 持有2年內：45%
       * >2至5年：35%
       * >5至10年：20%
       * >10年：15%
-      * 自用住宅且持有>6年：總利潤扣除400萬後10%
-    - 非境內居住者:
-      * 持有2年內：45%
-      * >2年：35%
     """
     profit = max(sell_price - cost, 0)
     # 非境內居住者
@@ -59,9 +59,9 @@ def calc_real_estate_tax(sell_price, cost, holding_years, is_self_use, is_reside
 
     # 境內居住者
     if is_self_use and holding_years > 6:
-        taxable = max(profit - 400, 0)
+        taxable_profit = max(profit - 400, 0)
         rate = 0.10
-        tax = taxable * rate
+        tax = taxable_profit * rate
         formula = f"({sell_price} - {cost} - 400) * {rate}"
         return tax, formula
     else:
@@ -80,32 +80,52 @@ def calc_real_estate_tax(sell_price, cost, holding_years, is_self_use, is_reside
 
 def calc_gift_tax(value):
     """
-    贈與稅：超過年度免稅額 244 萬元部分，以 10% 計算
+    贈與稅：年度免稅額244萬，超過部分適用累進稅率
+    累進差額公式：
+      - 免稅額後金額<=2811：税率10%
+      - <=5621：税率15%，進位扣除140.55
+      - >5621：税率20%，進位扣除421.6
     """
-    rate = 0.10
     exemption = 244
     taxable = max(value - exemption, 0)
-    tax = taxable * rate
-    if taxable > 0:
-        formula = f"({value} - {exemption}) * {rate}"
+    # 台灣贈與稅閾值 (單位：萬元)
+    thr1, thr2 = 2811, 5621
+    if taxable <= thr1:
+        tax = taxable * 0.10
+        formula = f"{taxable} * 0.10"
+    elif taxable <= thr2:
+        # progressive diff 140.55 萬元
+        tax = taxable * 0.15 - 140.55
+        formula = f"{taxable} * 0.15 - 140.55"
     else:
-        formula = f"0 (免稅額: {exemption} 萬元)"
-    return tax, formula
+        # progressive diff 421.6 萬元
+        tax = taxable * 0.20 - 421.6
+        formula = f"{taxable} * 0.20 - 421.6"
+    return max(tax, 0), formula
 
 
 def calc_estate_tax(value):
     """
-    遺產稅：超過基本免稅額 1333 萬元部分，以 10% 計算
+    遺產稅：基本免稅額1333萬，超過部分適用累進稅率
+    累進差額公式：
+      - 免稅額後金額<=5621：税率10%
+      - <=11242：税率15%，扣除281.05
+      - >11242：税率20%，扣除843.15
     """
-    rate = 0.10
     exemption = 1333
     taxable = max(value - exemption, 0)
-    tax = taxable * rate
-    if taxable > 0:
-        formula = f"({value} - {exemption}) * {rate}"
+    # 台灣遺產稅閾值 (單位：萬元)
+    thr1_e, thr2_e = 5621, 11242
+    if taxable <= thr1_e:
+        tax = taxable * 0.10
+        formula = f"{taxable} * 0.10"
+    elif taxable <= thr2_e:
+        tax = taxable * 0.15 - 281.05
+        formula = f"{taxable} * 0.15 - 281.05"
     else:
-        formula = f"0 (免稅額: {exemption} 萬元)"
-    return tax, formula
+        tax = taxable * 0.20 - 843.15
+        formula = f"{taxable} * 0.20 - 843.15"
+    return max(tax, 0), formula
 
 # ------------------------------
 # Streamlit UI
@@ -154,79 +174,17 @@ section1_taxes = []
 section2_taxes = []
 section3_taxes = []
 
+def add_tax(lst, label, func, *args):
+    tax, formula = func(*args)
+    lst.append((label, tax, formula))
+
 # Section1: 取得時稅負
-deed_tax, deed_formula = calc_deed_tax(current_house_value)
-stamp_tax, stamp_formula = calc_stamp_tax(current_house_value, current_land_value)
-section1_taxes.append(("契稅", deed_tax, deed_formula))
-section1_taxes.append(("印花稅", stamp_tax, stamp_formula))
+def compute_section1():
+    add_tax(section1_taxes, "契稅", calc_deed_tax, current_house_value)
+    add_tax(section1_taxes, "印花稅", calc_stamp_tax, current_house_value, current_land_value)
 
 # Section2 & Section3 根據情境
-if owner == "子女":
-    # Section2: 贈與現金
-    if fund_source == "父母贈與現金":
-        gift_tax, gift_formula = calc_gift_tax(buy_price)
-        section2_taxes.append(("贈與稅", gift_tax, gift_formula))
-    # Section3: 出售稅負
-    land_tax, land_formula = calc_land_increment_tax(current_land_value, future_land_value)
-    re_tax, re_formula = calc_real_estate_tax(future_price, buy_price, holding_years, is_self_use, is_resident)
-    section3_taxes.append(("土地增值稅", land_tax, land_formula))
-    section3_taxes.append(("房地合一稅", re_tax, re_formula))
-else:
-    if transfer_type == "贈與房產":
-        base = transfer_house_value + transfer_land_value
-        gift_tax, gift_formula = calc_gift_tax(base)
-        deed2_tax, deed2_formula = calc_deed_tax(transfer_house_value)
-        stamp2_tax, stamp2_formula = calc_stamp_tax(transfer_house_value, transfer_land_value)
-        land2_tax, land2_formula = calc_land_increment_tax(current_land_value, transfer_land_value)
-        section2_taxes.extend([
-            ("贈與稅", gift_tax, gift_formula),
-            ("契稅（受贈人）", deed2_tax, deed2_formula),
-            ("印花稅", stamp2_tax, stamp2_formula),
-            ("土地增值稅（受贈人）", land2_tax, land2_formula),
-        ])
-        land3_tax, land3_formula = calc_land_increment_tax(transfer_land_value, future_land_value)
-        re3_tax, re3_formula = calc_real_estate_tax(future_price, transfer_house_value + transfer_land_value, holding_years, is_self_use, is_resident)
-        section3_taxes.append(("土地增值稅", land3_tax, land3_formula))
-        section3_taxes.append(("房地合一稅", re3_tax, re3_formula))
-    else:
-        base = transfer_house_value + transfer_land_value
-        estate_tax, estate_formula = calc_estate_tax(base)
-        section2_taxes.append(("遺產稅", estate_tax, estate_formula))
-        land3_tax, land3_formula = calc_land_increment_tax(transfer_land_value, future_land_value)
-        re3_tax, re3_formula = calc_real_estate_tax(future_price, base, holding_years, is_self_use, is_resident)
-        section3_taxes.append(("土地增值稅", land3_tax, land3_formula))
-        section3_taxes.append(("房地合一稅", re3_tax, re3_formula))
-
-# 顯示明細
-total = 0
-st.header("📋 稅負明細報告")
-if section1_taxes:
-    st.subheader("1️⃣ 取得時應繳稅負")
-    for label, amount, formula in section1_taxes:
-        st.markdown(f"- **{label}**：{amount:.2f} 萬元（{formula}）")
-        total += amount
-if section2_taxes:
-    st.subheader("2️⃣ 贈與或繼承時應繳稅負")
-    for label, amount, formula in section2_taxes:
-        st.markdown(f"- **{label}**：{amount:.2f} 萬元（{formula}）")
-        total += amount
-if section3_taxes:
-    st.subheader("3️⃣ 未來出售時應繳稅負")
-    for label, amount, formula in section3_taxes:
-        st.markdown(f"- **{label}**：{amount:.2f} 萬元（{formula}）")
-        total += amount
-
-st.markdown(f"## 💰 預估總稅負：**{total:.2f} 萬元**")
-
-# 頁尾
-st.markdown("---")
-st.markdown(
-    """
-    <div style='display:flex;justify-content:center;align-items:center;gap:1.5em;font-size:14px;color:gray;'>
-      <a href='/' style='color:#006666;text-decoration:underline;'>《影響力》傳承策略平台</a>
-      <a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>
-      <a href='mailto:123@gracefo.com'>123@gracefo.com</a>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+def compute_sections():
+    if owner == "子女":
+        if fund_source == "父母贈與現金":
+            add_tax(section -->

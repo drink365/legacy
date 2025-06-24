@@ -154,7 +154,7 @@ else:
 # 基本條件
 st.header("⏳ 基本條件")
 holding_years = st.number_input("子女持有年數", min_value=0, value=2)
-is_self_use = st.checkbox("是否符合自用住宅條件 (買賣適用)", value=False)
+is_self_use = st.checkbox("是否符合自用住宅條件", value=False)
 is_resident = st.checkbox("是否為境內居住者", value=True)
 
 # 買進的房產資訊

@@ -173,7 +173,7 @@ transfer_house_value = st.number_input("贈與／繼承時房屋評定現值（�
 st.header("📈 預估未來出售資料")
 future_price = st.number_input("未來出售價格（萬元）", min_value=0.0, value=3800.0)
 future_land_value = st.number_input("未來土地公告現值（萬元）", min_value=0.0, value=1200.0)
-future_house_value = st.number_input("未來房屋評定現值（萬元）", min_value=0.0, value=160.0)
+future_house_value = st.number_input("未來房屋評定現值（萬元）", min_value=0.0, value=190.0)
 
 # 計算稅負列表
 section1, section2, section3 = [], [], []
@@ -197,7 +197,7 @@ else:
         add_tax("贈與稅", *calc_gift_tax(base), section2)
         add_tax("契稅（受贈人）", *calc_deed_tax(transfer_house_value), section2)
         add_tax("印花稅", *calc_stamp_tax(transfer_house_value, transfer_land_value), section2)
-        add_tax("土地增值稅（受贈人）", *calc_land_increment_tax(current_land_value, transfer_land_value, holding_years, is_self_use), section2)
+        add_tax("土地增值稅（受贈人）", *calc_land_increment_tax(current_land_value, transfer_land_value, holding_years, False), section2), section2)
         add_tax("土地增值稅", *calc_land_increment_tax(transfer_land_value, future_land_value, holding_years, is_self_use), section3)
         add_tax("房地合一稅", *calc_real_estate_tax(future_price, base, holding_years, is_self_use, is_resident), section3)
     else:

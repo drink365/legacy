@@ -25,45 +25,54 @@ def calc_stamp_tax(house_value, land_value):
     return tax, formula
 
 
-def calc_land_increment_tax(old_value, new_value, holding_years):
+def calc_land_increment_tax(old_value, new_value, holding_years, is_self_use):
     """
-    土地增值稅（依持有年限累進稅率）：
-      - 持有20年以下：A × 20%
-      - 持有20~30年：A × 28% − B × 8%
-      - 持有30~40年：A × 27% − B × 7%
-      - 持有40年以上：A × 26% − B × 6%
-    其中 A = 漲價總數額 (new_value − old_value)，B = old_value
+    土地增值稅（依持有年限累進稅率，並考慮自用住宅優惠與最低0元限制）
+    - 自用住宅：統一10%
+    - 否則依持有年限：
+      * ≤20年：A × 20%
+      * 20~30年：A × 28% − B × 8%
+      * 30~40年：A × 27% − B × 7%
+      * >40年：A × 26% − B × 6%
+    其中 A = (new_value − old_value)，B = old_value
+    最終稅額不低於0。
     """
     gain = max(new_value - old_value, 0)
-    if holding_years <= 20:
-        rate = 0.20
+    if is_self_use:
+        rate = 0.10
         tax = gain * rate
         formula = f"({gain}) * {rate}"
-    elif holding_years <= 30:
-        rate, ded = 0.28, 0.08
-        tax = gain * rate - old_value * ded
-        formula = f"({gain}) * {rate} - ({old_value}) * {ded}"
-    elif holding_years <= 40:
-        rate, ded = 0.27, 0.07
-        tax = gain * rate - old_value * ded
-        formula = f"({gain}) * {rate} - ({old_value}) * {ded}"
     else:
-        rate, ded = 0.26, 0.06
-        tax = gain * rate - old_value * ded
-        formula = f"({gain}) * {rate} - ({old_value}) * {ded}"
+        if holding_years <= 20:
+            rate, ded = 0.20, 0
+            tax = gain * rate
+            formula = f"({gain}) * {rate}"
+        elif holding_years <= 30:
+            rate, ded = 0.28, 0.08
+            tax = gain * rate - old_value * ded
+            formula = f"({gain}) * {rate} - ({old_value}) * {ded}"
+        elif holding_years <= 40:
+            rate, ded = 0.27, 0.07
+            tax = gain * rate - old_value * ded
+            formula = f"({gain}) * {rate} - ({old_value}) * {ded}"
+        else:
+            rate, ded = 0.26, 0.06
+            tax = gain * rate - old_value * ded
+            formula = f"({gain}) * {rate} - ({old_value}) * {ded}"
+    tax = max(tax, 0)
     return tax, formula
 
 
 def calc_real_estate_tax(sell_price, cost, holding_years, is_self_use, is_resident):
     """
-    房地合一稅計算
-    - 非境內居住者：2年內45%，超過2年35%
+    房地合一稅
+    - 非境內居住者：持有2年內45%，超過2年35%
     - 境內居住者：
-        * 持有2年內45%
-        * >2至5年35%
-        * >5至10年20%
-        * >10年15%
-        * 自用住宅且持有>6年：扣除400萬後10%
+      * ≤2年：45%
+      * 2~5年：35%
+      * 5~10年：20%
+      * >10年：15%
+      * 自用住宅且>6年：扣除400萬後10%
     """
     profit = max(sell_price - cost, 0)
     if not is_resident:
@@ -106,9 +115,6 @@ def calc_progressive_tax(taxable, brackets):
 
 
 def calc_gift_tax(value):
-    """
-    贈與稅：扣除244萬免稅額後，剩餘部分按10%/15%/20%累進計算
-    """
     exemption = 244
     taxable = max(value - exemption, 0)
     brackets = [(5000, 0.10), (10000, 0.15), (float('inf'), 0.20)]
@@ -119,9 +125,6 @@ def calc_gift_tax(value):
 
 
 def calc_estate_tax(value):
-    """
-    遺產稅：扣除1333萬免稅額後，剩餘部分按10%/15%/20%累進計算
-    """
     exemption = 1333
     taxable = max(value - exemption, 0)
     brackets = [(5000, 0.10), (10000, 0.15), (float('inf'), 0.20)]
@@ -168,7 +171,6 @@ transfer_house_value = st.number_input("贈與／繼承時房屋評定現值（�
 st.header("📈 預估未來出售資料")
 future_price = st.number_input("未來出售價格（萬元）", min_value=0.0, value=3800.0)
 future_land_value = st.number_input("未來土地公告現值（萬元）", min_value=0.0, value=1200.0)
-future_house_value = st.number_input("未來房屋評定現值（萬元）", min_value=0.0, value=190.0)
 
 # 計算稅負列表
 section1, section2, section3 = [], [], []
@@ -184,7 +186,7 @@ add_tax("印花稅", *calc_stamp_tax(current_house_value, current_land_value), s
 if owner == "子女":
     if fund_source == "父母贈與現金":
         add_tax("贈與稅", *calc_gift_tax(buy_price), section2)
-    add_tax("土地增值稅", *calc_land_increment_tax(current_land_value, future_land_value, holding_years), section3)
+    add_tax("土地增值稅", *calc_land_increment_tax(current_land_value, future_land_value, holding_years, is_self_use), section3)
     add_tax("房地合一稅", *calc_real_estate_tax(future_price, buy_price, holding_years, is_self_use, is_resident), section3)
 else:
     base = transfer_house_value + transfer_land_value
@@ -192,26 +194,22 @@ else:
         add_tax("贈與稅", *calc_gift_tax(base), section2)
         add_tax("契稅（受贈人）", *calc_deed_tax(transfer_house_value), section2)
         add_tax("印花稅", *calc_stamp_tax(transfer_house_value, transfer_land_value), section2)
-        add_tax("土地增值稅（受贈人）", *calc_land_increment_tax(current_land_value, transfer_land_value, holding_years), section2)
-        add_tax("土地增值稅", *calc_land_increment_tax(transfer_land_value, future_land_value, holding_years), section3)
+        add_tax("土地增值稅（受贈人）", *calc_land_increment_tax(current_land_value, transfer_land_value, holding_years, is_self_use), section2)
+        add_tax("土地增值稅", *calc_land_increment_tax(transfer_land_value, future_land_value, holding_years, is_self_use), section3)
         add_tax("房地合一稅", *calc_real_estate_tax(future_price, base, holding_years, is_self_use, is_resident), section3)
     else:
         add_tax("遺產稅", *calc_estate_tax(base), section2)
-        add_tax("土地增值稅", *calc_land_increment_tax(transfer_land_value, future_land_value, holding_years), section3)
+        add_tax("土地增值稅", *calc_land_increment_tax(transfer_land_value, future_land_value, holding_years, is_self_use), section3)
         add_tax("房地合一稅", *calc_real_estate_tax(future_price, base, holding_years, is_self_use, is_resident), section3)
 
 # 顯示稅負明細
 st.header("📋 稅負明細報告")
 total = 0
-for title, section in [
-    ("1️⃣ 取得時應繳稅負", section1),
-    ("2️⃣ 贈與或繼承時應繳稅負", section2),
-    ("3️⃣ 未來出售時應繳稅負", section3),
-]:
-    if section:
+for title, sec in [("1️⃣ 取得時應繳稅負", section1), ("2️⃣ 贈與或繼承時應繳稅負", section2), ("3️⃣ 未來出售時應繳稅負", section3)]:
+    if sec:
         st.subheader(title)
-        for label, amt, frm in section:
-            st.markdown(f"- **{label}**：{amt:.2f} 萬元（{frm}）")
+        for lbl, amt, frm in sec:
+            st.markdown(f"- **{lbl}**：{amt:.2f} 萬元（{frm}）")
             total += amt
 
 st.markdown(f"## 💰 預估總稅負：**{total:.2f} 萬元**")

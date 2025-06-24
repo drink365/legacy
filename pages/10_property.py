@@ -197,12 +197,12 @@ else:
         add_tax("贈與稅", *calc_gift_tax(base), section2)
         add_tax("契稅（受贈人）", *calc_deed_tax(transfer_house_value), section2)
         add_tax("印花稅", *calc_stamp_tax(transfer_house_value, transfer_land_value), section2)
-        add_tax("土地增值稅（受贈人）", *calc_land_increment_tax(current_land_value, transfer_land_value, holding_years, False), section2), section2)
+        add_tax("土地增值稅（受贈人）", *calc_land_increment_tax(current_land_value, transfer_land_value, holding_years, False), section2)
         add_tax("土地增值稅", *calc_land_increment_tax(transfer_land_value, future_land_value, holding_years, is_self_use), section3)
         add_tax("房地合一稅", *calc_real_estate_tax(future_price, base, holding_years, is_self_use, is_resident), section3)
     else:
         add_tax("遺產稅", *calc_estate_tax(base), section2)
-        add_tax("土地增值稅", *calc_land_increment_tax(transfer_land_value, future_land_value, holding_years, is_self_use), section3)
+        add_tax("土地增值稅", *calc_land_increment_tax(transfer_land_value, future_land_value, holding_years, False), section3)
         add_tax("房地合一稅", *calc_real_estate_tax(future_price, base, holding_years, is_self_use, is_resident), section3)
 
 # 顯示稅負明細

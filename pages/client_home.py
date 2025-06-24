@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 st.set_page_config(
@@ -50,12 +49,18 @@ with col2:
     if st.button("💰 樂活退休試算", key="go_retire_client"):
         st.switch_page("pages/6_retirement.py")
 
+# --- 新增: 不動產稅負試算 ---
+st.markdown("#### 🏠 6. 不動產稅負試算")
+st.write("協助您試算未來不動產買賣或贈與/繼承的稅負情境。")
+if st.button("🏠 不動產稅負試算", key="go_real_estate_tax_client"):
+    st.switch_page("pages/real_estate_tax.py")
+
 # --- 聯絡資訊 ---
 st.markdown("---")
 st.markdown(
     """
     <div style='display: flex; justify-content: center; align-items: center; gap: 1.5em; font-size: 14px; color: gray;'>
-      <a href='?' style='color:#006666; text-decoration: underline;'>《影響力》傳承策略平台</a>
+      <a href='/' style='color:#006666; text-decoration: underline;'>《影響力》傳承策略平台</a>
       <a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>
       <a href='mailto:123@gracefo.com'>123@gracefo.com</a>
     </div>

@@ -77,11 +77,15 @@ def calc_real_estate_tax(sell_price, cost, holding_years, is_self_use, is_reside
     profit = max(sell_price - cost, 0)
     if not is_resident:
         rate = 0.45 if holding_years <= 2 else 0.35
-        return profit * rate, f"({sell_price} - {cost}) * {rate}"
+        tax = profit * rate
+        formula = f"({sell_price} - {cost}) * {rate}"
+        return tax, formula
     if is_self_use and holding_years > 6:
         taxable = max(profit - 400, 0)
         rate = 0.10
-        return taxable * rate, f"({sell_price} - {cost} - 400) * {rate}"
+        tax = taxable * rate
+        formula = f"({sell_price} - {cost} - 400) * {rate}"
+        return tax, formula
     if holding_years <= 2:
         rate = 0.45
     elif holding_years <= 5:
@@ -90,14 +94,12 @@ def calc_real_estate_tax(sell_price, cost, holding_years, is_self_use, is_reside
         rate = 0.20
     else:
         rate = 0.15
-    return profit * rate, f"({sell_price} - {cost}) * {rate}"
+    tax = profit * rate
+    formula = f"({sell_price} - {cost}) * {rate}"
+    return tax, formula
 
 
 def calc_progressive_tax(taxable, brackets):
-    """
-    通用累進稅率計算
-    brackets: list of (upper_limit, rate)
-    """
     tax = 0.0
     remaining = taxable
     lower = 0
@@ -171,6 +173,7 @@ transfer_house_value = st.number_input("贈與／繼承時房屋評定現值（�
 st.header("📈 預估未來出售資料")
 future_price = st.number_input("未來出售價格（萬元）", min_value=0.0, value=3800.0)
 future_land_value = st.number_input("未來土地公告現值（萬元）", min_value=0.0, value=1200.0)
+future_house_value = st.number_input("未來房屋評定現值（萬元）", min_value=0.0, value=190.0)
 
 # 計算稅負列表
 section1, section2, section3 = [], [], []
@@ -182,7 +185,7 @@ def add_tax(label, tax, formula, container):
 add_tax("契稅", *calc_deed_tax(current_house_value), section1)
 add_tax("印花稅", *calc_stamp_tax(current_house_value, current_land_value), section1)
 
-# Section2 & Section3
+# Section2 & Section3: 根據情境處理
 if owner == "子女":
     if fund_source == "父母贈與現金":
         add_tax("贈與稅", *calc_gift_tax(buy_price), section2)

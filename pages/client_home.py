@@ -50,6 +50,12 @@ with col2:
     if st.button("💰 樂活退休試算", key="go_retire_client"):
         st.switch_page("pages/6_retirement.py")
 
+# 6. 不動產稅負試算
+st.markdown("#### 🏠 6. 不動產稅負試算")
+st.write("協助您試算未來不動產買賣或贈與/繼承的稅負情境。")
+if st.button("🏠 不動產稅負試算", key="go_real_estate_tax_client"):
+        st.switch_page("pages/10_property.py")
+
 # --- 聯絡資訊 ---
 st.markdown("---")
 st.markdown(

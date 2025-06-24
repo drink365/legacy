@@ -1,18 +1,5 @@
 import streamlit as st
 
-# 自動尋找不動產稅負評估頁的 script key
-pages = st.experimental_get_pages()
-target_property_page = None
-for script_path, page in pages.items():
-    # 假設 page.page_name 是頁籤顯示名稱
-    if hasattr(page, "page_name") and page.page_name == "不動產稅負評估工具":
-        target_property_page = script_path
-        break
-    # 或若物件是 dict，可以如下取用：
-    if isinstance(page, dict) and page.get("page_name") == "不動產稅負評估工具":
-        target_property_page = script_path
-        break
-
 st.set_page_config(
     page_title="我是客戶｜《影響力》傳承策略平台",
     page_icon="🙋",
@@ -71,10 +58,12 @@ with col2:
 st.markdown("#### 🏠 6. 不動產稅負試算")
 st.write("協助您試算未來不動產買賣或贈與/繼承的稅負情境。")
 if st.button("🏠 不動產稅負試算", key="go_real_estate_tax_client"):
-    if target_property_page:
-        st.switch_page(target_property_page)
-    else:
-        st.error("無法找到不動產稅負評估工具頁面，請確認配置。")
+    try:
+        # 先嘗試使用頁籤名稱
+        st.switch_page("不動產稅負評估工具")
+    except Exception:
+        # 若失敗，再嘗試使用檔案名稱參考
+        st.switch_page("10_property")
 
 # --- 聯絡資訊 ---
 st.markdown("---")

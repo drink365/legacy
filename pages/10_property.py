@@ -100,7 +100,7 @@ trans_house_ann = st.number_input("移轉公告房屋評定現值", value=180.0)
 # 出售階段
 sell_market = st.number_input("出售市價", value=3800.0)
 sell_land_ann = st.number_input("出售公告土地現值", value=1200.0)
-sell_house_ann = st.number_input("出售公告房屋評定現值", value=190.0)
+sell_house_ann = st.number_input("出售公告房屋評定現值", value=160.0)
 
 # 通用條件
 st.header("⏳ 持有與自用/居住條件")

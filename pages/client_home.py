@@ -53,7 +53,7 @@ with col2:
 # 6. 不動產稅負試算
 st.markdown("#### 🏠 6. 不動產稅負試算")
 st.write("協助您試算未來不動產買賣或贈與/繼承的稅負情境。")
-if st.button("🏠 AI秒算房產稅負", key="go_real_estate_tax_client"):
+if st.button("🏠 AI秒算房產傳承稅負", key="go_real_estate_tax_client"):
         st.switch_page("pages/10_property.py")
 
 # --- 聯絡資訊 ---

@@ -50,9 +50,9 @@ with col2:
         st.switch_page("pages/6_retirement.py")
 
 # 新增: 不動產稅負試算連結
-st.markdown("#### 🏠 6. AI秒算房產傳承稅負")
+st.markdown("#### 🏠 6. 不動產稅負試算")
 st.write("協助客戶快速試算未來不動產買賣或贈與/繼承的稅負情境。")
-if st.button("🏠 不動產稅負試算", key="go_real_estate_tax_advisor"):
+if st.button("🏠 AI秒算房產傳承稅負", key="go_real_estate_tax_advisor"):
     st.switch_page("pages/10_property.py")
 
 # --- 聯絡資訊 ---

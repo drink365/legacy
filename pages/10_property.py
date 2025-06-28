@@ -123,8 +123,8 @@ sell_house_ann = st.number_input("出售公告房屋評定現值", value=260.0)
 
 # 通用條件
 st.header("⏳ 持有與自用/居住條件")
-hold_years = st.number_input("持有年數", min_value=0, value=2)
-is_self = st.checkbox("自用住宅", value=False)
+hold_years = st.number_input("持有年數", min_value=0, value=6)
+is_self = st.checkbox("自用住宅", value=True)
 is_res = st.checkbox("境內居住者", value=True)
 
 # 計算各情境

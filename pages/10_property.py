@@ -9,13 +9,11 @@ def calc_deed_tax(house_value):
     tax = house_value * 0.06
     return tax, f"{house_value} * 0.06"
 
-
 def calc_stamp_tax(house_value, land_value):
     rate = 0.001
     base = house_value + land_value
     tax = base * rate
     return tax, f"({house_value} + {land_value}) * {rate}"
-
 
 def calc_land_increment_tax(old_announced, new_announced, holding_years, is_self_use):
     gain = max(new_announced - old_announced, 0)
@@ -37,7 +35,6 @@ def calc_land_increment_tax(old_announced, new_announced, holding_years, is_self
             rate, b = 0.26, 0.06
         tax = max(gain * rate - old_announced * b, 0)
         return tax, f"{gain} * {rate} - {old_announced} * {b}"
-    # 第三級
     if holding_years <= 20:
         rate, b = 0.40, 0.30
     elif holding_years <= 30:
@@ -48,7 +45,6 @@ def calc_land_increment_tax(old_announced, new_announced, holding_years, is_self
         rate, b = 0.32, 0.18
     tax = max(gain * rate - old_announced * b, 0)
     return tax, f"{gain} * {rate} - {old_announced} * {b}"
-
 
 def calc_real_estate_tax(sell_market, cost_basis, holding_years, is_self_use, is_resident):
     profit = max(sell_market - cost_basis, 0)
@@ -68,7 +64,6 @@ def calc_real_estate_tax(sell_market, cost_basis, holding_years, is_self_use, is
         rate = 0.15
     return profit * rate, f"{profit} * {rate}"
 
-
 def calc_progressive_tax(val, brackets):
     tax = 0
     rem = val
@@ -83,7 +78,6 @@ def calc_progressive_tax(val, brackets):
         rem -= p
         low = up
     return tax, " + ".join(parts) if parts else "0"
-
 
 def calc_gift_tax(val):
     ex = 244
@@ -115,17 +109,17 @@ st.header("📌 市價與公告價輸入（萬元）")
 # 買進
 st.subheader("買進階段")
 buy_market = st.number_input("買進市價", value=3000.0)
-buy_land_ann = st.number_input("買進公告土地現值", value=1000.0)
-buy_house_ann = st.number_input("買進公告房屋評定現值", value=200.0)
+buy_land_ann = st.number_input("買進公告土地現值", value=900.0)
+buy_house_ann = st.number_input("買進公告房屋評定現值", value=300.0)
 # 移轉
 st.subheader("移轉階段")
-trans_land_ann = st.number_input("移轉公告土地現值", value=1100.0)
-trans_house_ann = st.number_input("移轉公告房屋評定現值", value=180.0)
+trans_land_ann = st.number_input("移轉公告土地現值", value=1400.0)
+trans_house_ann = st.number_input("移轉公告房屋評定現值", value=280.0)
 # 出售
 st.subheader("出售階段")
-sell_market = st.number_input("出售市價", value=3800.0)
-sell_land_ann = st.number_input("出售公告土地現值", value=1200.0)
-sell_house_ann = st.number_input("出售公告房屋評定現值", value=160.0)
+sell_market = st.number_input("出售市價", value=4000.0)
+sell_land_ann = st.number_input("出售公告土地現值", value=2000.0)
+sell_house_ann = st.number_input("出售公告房屋評定現值", value=260.0)
 
 # 通用條件
 st.header("⏳ 持有與自用/居住條件")

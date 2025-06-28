@@ -94,7 +94,6 @@ def calc_gift_tax(val):
         fmt = f"0 (免稅額{ex}萬元)"
     return tax, fmt
 
-
 def calc_estate_tax(val):
     ex = 1333
     txbl = max(val - ex, 0)
@@ -113,14 +112,17 @@ st.markdown("比較三種情境與各階段市價/公告價稅負，並顯示明
 
 # 使用者輸入
 st.header("📌 市價與公告價輸入（萬元）")
-# 買進階段
+# 買進
+st.subheader("買進階段")
 buy_market = st.number_input("買進市價", value=3000.0)
 buy_land_ann = st.number_input("買進公告土地現值", value=1000.0)
 buy_house_ann = st.number_input("買進公告房屋評定現值", value=200.0)
-# 移轉階段
+# 移轉
+st.subheader("移轉階段")
 trans_land_ann = st.number_input("移轉公告土地現值", value=1100.0)
 trans_house_ann = st.number_input("移轉公告房屋評定現值", value=180.0)
-# 出售階段
+# 出售
+st.subheader("出售階段")
 sell_market = st.number_input("出售市價", value=3800.0)
 sell_land_ann = st.number_input("出售公告土地現值", value=1200.0)
 sell_house_ann = st.number_input("出售公告房屋評定現值", value=160.0)
@@ -131,7 +133,7 @@ hold_years = st.number_input("持有年數", min_value=0, value=2)
 is_self = st.checkbox("自用住宅", value=False)
 is_res = st.checkbox("境內居住者", value=True)
 
-# 計算每種情境
+# 計算各情境
 
 def compute(acq_mkt, acq_land, acq_house, tr_land, tr_house, sell_mkt, sell_land, sell_house, sc):
     sec = {"取得時": [], "移轉時": [], "出售時": []}
@@ -156,16 +158,15 @@ def compute(acq_mkt, acq_land, acq_house, tr_land, tr_house, sell_mkt, sell_land
         t, f = calc_gift_tax(tr_land + tr_house)
         sec["移轉時"].append(("贈與稅", t, f))
     # 出售
-    # 舊公告值依情境選擇
     old_land_ann = tr_land if sc in [1, 2] else acq_land
     t, f = calc_land_increment_tax(old_land_ann, sell_land, hold_years, is_self)
     sec["出售時"].append(("土地增值稅", t, f))
-    # 房地合一稅
     basis = (tr_land + tr_house) if sc in [1, 2] else acq_mkt
     t, f = calc_real_estate_tax(sell_mkt, basis, hold_years, is_self, is_res)
     sec["出售時"].append(("房地合一稅", t, f))
     return sec
 
+# 處理
 scenarios = {
     "情境1：買進→繼承→出售": compute(buy_market, buy_land_ann, buy_house_ann,
                                 trans_land_ann, trans_house_ann,
@@ -178,7 +179,7 @@ scenarios = {
                                 sell_market, sell_land_ann, sell_house_ann, 3)
 }
 
-# 彙整比較表
+# 比較表格
 rows = []
 for name, data in scenarios.items():
     s1 = sum(t for _, t, _ in data["取得時"])
@@ -189,7 +190,7 @@ df = pd.DataFrame(rows, columns=["情境", "取得時稅負", "移轉時稅負",
 st.subheader("📊 稅負比較表")
 st.table(df)
 
-# 展開明細
+# 明細展開
 for name, data in scenarios.items():
     with st.expander(f"🔍 {name} 明細"):
         for stage, items in data.items():

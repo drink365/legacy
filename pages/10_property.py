@@ -22,63 +22,86 @@ def calc_land_increment_tax(old_announced, new_announced, holding_years, is_self
     if is_self_use:
         tax = gain * 0.10
         return tax, f"{gain} * 0.10"
-    ratio = gain / old_announced if old_announced>0 else float('inf')
-    # 分級計算略，使用原邏輯
+    ratio = gain / old_announced if old_announced > 0 else float('inf')
     if ratio < 1:
         tax = gain * 0.20
         return tax, f"{gain} * 0.20"
     if ratio < 2:
-        if holding_years <= 20: rate, b=0.30,0.10
-        elif holding_years <= 30: rate, b=0.28,0.08
-        elif holding_years <= 40: rate, b=0.27,0.07
-        else: rate, b=0.26,0.06
-        tax = max(gain*rate - old_announced*b,0)
+        if holding_years <= 20:
+            rate, b = 0.30, 0.10
+        elif holding_years <= 30:
+            rate, b = 0.28, 0.08
+        elif holding_years <= 40:
+            rate, b = 0.27, 0.07
+        else:
+            rate, b = 0.26, 0.06
+        tax = max(gain * rate - old_announced * b, 0)
         return tax, f"{gain} * {rate} - {old_announced} * {b}"
     # 第三級
-    if holding_years <= 20: rate, b = 0.40,0.30
-    elif holding_years <= 30: rate, b = 0.36,0.24
-    elif holding_years <= 40: rate, b = 0.34,0.21
-    else: rate, b = 0.32,0.18
-    tax = max(gain*rate - old_announced*b,0)
+    if holding_years <= 20:
+        rate, b = 0.40, 0.30
+    elif holding_years <= 30:
+        rate, b = 0.36, 0.24
+    elif holding_years <= 40:
+        rate, b = 0.34, 0.21
+    else:
+        rate, b = 0.32, 0.18
+    tax = max(gain * rate - old_announced * b, 0)
     return tax, f"{gain} * {rate} - {old_announced} * {b}"
 
 
 def calc_real_estate_tax(sell_market, cost_basis, holding_years, is_self_use, is_resident):
     profit = max(sell_market - cost_basis, 0)
     if not is_resident:
-        rate = 0.45 if holding_years<=2 else 0.35
-        return profit*rate, f"{profit} * {rate}"
-    if is_self_use and holding_years>6:
-        taxable = max(profit-400,0)
-        return taxable*0.10, f"{taxable} * 0.10"
-    if holding_years<=2: rate=0.45
-    elif holding_years<=5: rate=0.35
-    elif holding_years<=10: rate=0.20
-    else: rate=0.15
-    return profit*rate, f"{profit} * {rate}"
+        rate = 0.45 if holding_years <= 2 else 0.35
+        return profit * rate, f"{profit} * {rate}"
+    if is_self_use and holding_years > 6:
+        taxable = max(profit - 400, 0)
+        return taxable * 0.10, f"{taxable} * 0.10"
+    if holding_years <= 2:
+        rate = 0.45
+    elif holding_years <= 5:
+        rate = 0.35
+    elif holding_years <= 10:
+        rate = 0.20
+    else:
+        rate = 0.15
+    return profit * rate, f"{profit} * {rate}"
 
 
 def calc_progressive_tax(val, brackets):
-    tax=0; rem=val; low=0; parts=[]
+    tax = 0
+    rem = val
+    low = 0
+    parts = []
     for up, r in brackets:
-        p = max(min(rem, up-low),0)
-        if p<=0: break
-        tax+=p*r; parts.append(f"{p} * {r}"); rem-=p; low=up
+        p = max(min(rem, up - low), 0)
+        if p <= 0:
+            break
+        tax += p * r
+        parts.append(f"{p} * {r}")
+        rem -= p
+        low = up
     return tax, " + ".join(parts) if parts else "0"
 
 
 def calc_gift_tax(val):
-    ex=244; txbl=max(val-ex,0)
-    br=[(5000,0.10),(10000,0.15),(float('inf'),0.20)]
+    ex = 244
+    txbl = max(val - ex, 0)
+    br = [(5000, 0.10), (10000, 0.15), (float('inf'), 0.20)]
     tax, fmt = calc_progressive_tax(txbl, br)
-    if txbl==0: fmt = f"0 (免稅額{ex}萬元)"
+    if txbl == 0:
+        fmt = f"0 (免稅額{ex}萬元)"
     return tax, fmt
 
+
 def calc_estate_tax(val):
-    ex=1333; txbl=max(val-ex,0)
-    br=[(5000,0.10),(10000,0.15),(float('inf'),0.20)]
+    ex = 1333
+    txbl = max(val - ex, 0)
+    br = [(5000, 0.10), (10000, 0.15), (float('inf'), 0.20)]
     tax, fmt = calc_progressive_tax(txbl, br)
-    if txbl==0: fmt = f"0 (免稅額{ex}萬元)"
+    if txbl == 0:
+        fmt = f"0 (免稅額{ex}萬元)"
     return tax, fmt
 
 # ------------------------------
@@ -111,64 +134,67 @@ is_res = st.checkbox("境內居住者", value=True)
 # 計算每種情境
 
 def compute(acq_mkt, acq_land, acq_house, tr_land, tr_house, sell_mkt, sell_land, sell_house, sc):
-    sec = {"取得時":[],"移轉時":[],"出售時":[]}
+    sec = {"取得時": [], "移轉時": [], "出售時": []}
     # 取得
-    if sc in [1,2]:
-        t,f=calc_deed_tax(acq_house)
-        sec["取得時"].append(("契稅",t,f))
-        t,f=calc_stamp_tax(acq_house,acq_land)
-        sec["取得時"].append(("印花稅",t,f))
+    if sc in [1, 2]:
+        t, f = calc_deed_tax(acq_house)
+        sec["取得時"].append(("契稅", t, f))
+        t, f = calc_stamp_tax(acq_house, acq_land)
+        sec["取得時"].append(("印花稅", t, f))
     else:
-        t,f=calc_gift_tax(acq_mkt)
-        sec["取得時"].append(("現金贈與稅",t,f))
-        t,f=calc_deed_tax(acq_house)
-        sec["取得時"].append(("契稅",t,f))
-        t,f=calc_stamp_tax(acq_house,acq_land)
-        sec["取得時"].append(("印花稅",t,f))
+        t, f = calc_gift_tax(acq_mkt)
+        sec["取得時"].append(("現金贈與稅", t, f))
+        t, f = calc_deed_tax(acq_house)
+        sec["取得時"].append(("契稅", t, f))
+        t, f = calc_stamp_tax(acq_house, acq_land)
+        sec["取得時"].append(("印花稅", t, f))
     # 移轉
-    if sc==1:
-        t,f=calc_estate_tax(tr_land+tr_house)
-        sec["移轉時"].append(("遺產稅",t,f))
-    elif sc==2:
-        t,f=calc_gift_tax(tr_land+tr_house)
-        sec["移轉時"].append(("贈與稅",t,f))
+    if sc == 1:
+        t, f = calc_estate_tax(tr_land + tr_house)
+        sec["移轉時"].append(("遺產稅", t, f))
+    elif sc == 2:
+        t, f = calc_gift_tax(tr_land + tr_house)
+        sec["移轉時"].append(("贈與稅", t, f))
     # 出售
-    basis = (tr_land+tr_house) if sc in [1,2] else acq_mkt
-    t,f=calc_land_increment_tax(tr_land, sell_land, hold_years, is_self)
-    sec["出售時"].append(("土地增值稅",t,f))
-    t,f=calc_real_estate_tax(sell_mkt, basis, hold_years, is_self, is_res)
-    sec["出售時"].append(("房地合一稅",t,f))
+    # 舊公告值依情境選擇
+    old_land_ann = tr_land if sc in [1, 2] else acq_land
+    t, f = calc_land_increment_tax(old_land_ann, sell_land, hold_years, is_self)
+    sec["出售時"].append(("土地增值稅", t, f))
+    # 房地合一稅
+    basis = (tr_land + tr_house) if sc in [1, 2] else acq_mkt
+    t, f = calc_real_estate_tax(sell_mkt, basis, hold_years, is_self, is_res)
+    sec["出售時"].append(("房地合一稅", t, f))
     return sec
 
 scenarios = {
     "情境1：買進→繼承→出售": compute(buy_market, buy_land_ann, buy_house_ann,
                                 trans_land_ann, trans_house_ann,
-                                sell_market, sell_land_ann, sell_house_ann,1),
+                                sell_market, sell_land_ann, sell_house_ann, 1),
     "情境2：買進→贈與→出售": compute(buy_market, buy_land_ann, buy_house_ann,
                                 trans_land_ann, trans_house_ann,
-                                sell_market, sell_land_ann, sell_house_ann,2),
+                                sell_market, sell_land_ann, sell_house_ann, 2),
     "情境3：贈與現金→買進→出售": compute(buy_market, buy_land_ann, buy_house_ann,
                                 trans_land_ann, trans_house_ann,
-                                sell_market, sell_land_ann, sell_house_ann,3)
+                                sell_market, sell_land_ann, sell_house_ann, 3)
 }
 
 # 彙整比較表
-rows=[]
-for name,data in scenarios.items():
-    s1=sum(t for _,t,_ in data["取得時"])
-    s2=sum(t for _,t,_ in data["移轉時"])
-    s3=sum(t for _,t,_ in data["出售時"])
-    rows.append([name, s1, s2, s3, s1+s2+s3])
-df=pd.DataFrame(rows, columns=["情境","取得時稅負","移轉時稅負","出售時稅負","總稅負"])
+rows = []
+for name, data in scenarios.items():
+    s1 = sum(t for _, t, _ in data["取得時"])
+    s2 = sum(t for _, t, _ in data["移轉時"])
+    s3 = sum(t for _, t, _ in data["出售時"])
+    rows.append([name, s1, s2, s3, s1 + s2 + s3])
+df = pd.DataFrame(rows, columns=["情境", "取得時稅負", "移轉時稅負", "出售時稅負", "總稅負"])
 st.subheader("📊 稅負比較表")
 st.table(df)
 
 # 展開明細
-for name,data in scenarios.items():
+for name, data in scenarios.items():
     with st.expander(f"🔍 {name} 明細"):
-        for stage,items in data.items():
+        for stage, items in data.items():
             st.write(f"**{stage}**")
-            st.table(pd.DataFrame(items, columns=["稅目","金額(萬)","公式"]))
+            st.table(pd.DataFrame(items, columns=["稅目", "金額(萬)", "公式"]))
 
 # 頁尾
 st.markdown("---")
@@ -177,5 +203,6 @@ st.markdown(
     "<a href='/' style='color:#006666;text-decoration:underline;'>《影響力》傳承策略平台</a>"
     "<a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>"
     "<a href='mailto:123@gracefo.com'>123@gracefo.com</a>"
-    "</div>",unsafe_allow_html=True
+    "</div>",
+    unsafe_allow_html=True
 )

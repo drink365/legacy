@@ -9,13 +9,11 @@ def calc_deed_tax(house_value):
     tax = house_value * 0.06
     return tax, f"{house_value} * 0.06"
 
-
 def calc_stamp_tax(house_value, land_value):
     rate = 0.001
     base = house_value + land_value
     tax = base * rate
     return tax, f"({house_value} + {land_value}) * {rate}"
-
 
 def calc_land_increment_tax(old_announced, new_announced, holding_years, is_self_use):
     gain = max(new_announced - old_announced, 0)
@@ -45,7 +43,6 @@ def calc_land_increment_tax(old_announced, new_announced, holding_years, is_self
         rate, b = 0.32, 0.18
     return max(gain * rate - old_announced * b, 0), f"{gain} * {rate} - {old_announced} * {b}"
 
-
 def calc_real_estate_tax(sell_market, cost_basis, holding_years, is_self_use, is_resident):
     profit = max(sell_market - cost_basis, 0)
     if not is_resident:
@@ -64,7 +61,6 @@ def calc_real_estate_tax(sell_market, cost_basis, holding_years, is_self_use, is
         rate = 0.15
     return profit * rate, f"{profit} * {rate}"
 
-
 def calc_progressive_tax(val, brackets):
     tax, rem, low, parts = 0, val, 0, []
     for up, r in brackets:
@@ -77,7 +73,6 @@ def calc_progressive_tax(val, brackets):
         low = up
     return tax, " + ".join(parts) if parts else "0"
 
-
 def calc_gift_tax(val):
     ex = 244
     txbl = max(val - ex, 0)
@@ -86,7 +81,6 @@ def calc_gift_tax(val):
     if txbl == 0:
         fmt = f"0 (免稅額{ex}萬元)"
     return tax, fmt
-
 
 def calc_estate_tax(val):
     ex = 1333
@@ -155,13 +149,11 @@ def compute(acq_mkt, acq_land, acq_house, tr_land, tr_house, sell_mkt, sell_land
     # 出售
     old_land_ann = tr_land if sc in [1, 2] else acq_land
     gain = max(sell_land - old_land_ann, 0)
-    if is_self and one_time:
-        # 一生一次自用住宅優惠
+    if one_time:
         t, f = gain * 0.10, f"{gain} * 0.10"
     else:
         t, f = calc_land_increment_tax(old_land_ann, sell_land, hold_years, is_self)
     sec["出售時"].append(("土地增值稅", t, f))
-    # 房地合一稅
     basis = (tr_land + tr_house) if sc in [1, 2] else acq_mkt
     t, f = calc_real_estate_tax(sell_mkt, basis, hold_years, is_self, is_res)
     sec["出售時"].append(("房地合一稅", t, f))
@@ -187,9 +179,9 @@ for name, data in scenarios.items():
     s2 = sum(t for _, t, _ in data["移轉時"])
     s3 = sum(t for _, t, _ in data["出售時"])
     rows.append([name, s1, s2, s3, s1 + s2 + s3])
-_df = pd.DataFrame(rows, columns=["情境", "取得時稅負", "移轉時稅負", "出售時稅負", "總稅負"])
+df = pd.DataFrame(rows, columns=["情境", "取得時稅負", "移轉時稅負", "出售時稅負", "總稅負"])
 st.subheader("📊 稅負比較表")
-st.table(_df)
+st.table(df)
 
 # 明細展開
 for name, data in scenarios.items():

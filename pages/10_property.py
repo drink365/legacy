@@ -95,7 +95,7 @@ def calc_estate_tax(val):
 # Streamlit UI
 # ------------------------------
 st.set_page_config(page_title="不動產稅負評估工具", layout="wide")
-st.title("🏠 不動產稅負評估工具")
+st.title("🏠 秒算房產傳承稅負")
 # 行銷導向說明文字
 st.markdown(
     """

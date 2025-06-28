@@ -134,7 +134,6 @@ sell_house_ann = st.number_input("出售公告房屋評定現值", value=260.0)
 st.header("⏳ 出售前持有與居住條件")
 hold_years = st.number_input("持有年數", min_value=0, value=6)
 is_self = st.checkbox("自用住宅", value=True)
-one_time = st.checkbox("一生一次", value=False)
 is_res = st.checkbox("境內居住者", value=True)
 
 # 計算各情境
@@ -164,10 +163,7 @@ def compute(acq_mkt, acq_land, acq_house, tr_land, tr_house, sell_mkt, sell_land
     # 出售
     old_land_ann = tr_land if sc in [1, 2] else acq_land
     gain = max(sell_land - old_land_ann, 0)
-    if one_time:
-        t, f = gain * 0.10, f"{gain} * 0.10"
-    else:
-        t, f = calc_land_increment_tax(old_land_ann, sell_land, hold_years, is_self)
+    t, f = calc_land_increment_tax(old_land_ann, sell_land, hold_years, is_self)
     sec["出售時"].append(("土地增值稅", t, f))
     basis = (tr_land + tr_house) if sc in [1, 2] else acq_mkt
     t, f = calc_real_estate_tax(sell_mkt, basis, hold_years, is_self, is_res)

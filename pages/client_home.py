@@ -44,7 +44,7 @@ st.markdown("#### 🧮 5. 稅務與退休試算")
 st.write("了解未來的現金缺口與長期退休預備是否充足。")
 col1, col2 = st.columns(2)
 with col1:
-    if st.button("🧮 遺產稅試算", key="go_tax_client"):
+    if st.button("🧮 AI秒算遺產稅", key="go_tax_client"):
         st.switch_page("pages/5_estate_tax.py")
 with col2:
     if st.button("💰 樂活退休試算", key="go_retire_client"):
@@ -53,7 +53,7 @@ with col2:
 # 6. 不動產稅負試算
 st.markdown("#### 🏠 6. 不動產稅負試算")
 st.write("協助您試算未來不動產買賣或贈與/繼承的稅負情境。")
-if st.button("🏠 不動產稅負試算", key="go_real_estate_tax_client"):
+if st.button("🏠 AI秒算房產稅負", key="go_real_estate_tax_client"):
         st.switch_page("pages/10_property.py")
 
 # --- 聯絡資訊 ---

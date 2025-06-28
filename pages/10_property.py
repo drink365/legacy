@@ -50,7 +50,7 @@ def calc_real_estate_tax(sell_market, cost_basis, holding_years, is_self_use, is
         return profit * rate, f"{profit} * {rate}"
     if is_self_use and holding_years > 6:
         taxable = max(profit - 400, 0)
-        return taxable * 0.10, f"{taxable} * 0.10"
+        return taxable * 0.10, f"{taxable} * {rate}"
     if holding_years <= 2:
         rate = 0.45
     elif holding_years <= 5:
@@ -115,8 +115,8 @@ sell_market = st.number_input("出售市價", value=4000.0)
 sell_land_ann = st.number_input("出售公告土地現值", value=2000.0)
 sell_house_ann = st.number_input("出售公告房屋評定現值", value=260.0)
 
-# 通用條件
-st.header("⏳ 持有與自用/居住條件")
+# 出售前持有與居住條件
+st.header("⏳ 出售前持有與居住條件")
 hold_years = st.number_input("持有年數", min_value=0, value=6)
 is_self = st.checkbox("自用住宅", value=True)
 one_time = st.checkbox("一生一次", value=False)

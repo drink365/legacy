@@ -43,14 +43,14 @@ st.markdown("#### 🧮 5. 遺產稅與退休試算")
 st.write("快速掌握現金缺口與保險／稅源設計依據。")
 col1, col2 = st.columns(2)
 with col1:
-    if st.button("🧮 遺產稅試算", key="go_tax_advisor"):
+    if st.button("🧮 AI秒算遺產稅", key="go_tax_advisor"):
         st.switch_page("pages/5_estate_tax.py")
 with col2:
     if st.button("💰 樂活退休試算", key="go_retire_advisor"):
         st.switch_page("pages/6_retirement.py")
 
 # 新增: 不動產稅負試算連結
-st.markdown("#### 🏠 6. 不動產稅負試算")
+st.markdown("#### 🏠 6. AI秒算房產傳承稅負")
 st.write("協助客戶快速試算未來不動產買賣或贈與/繼承的稅負情境。")
 if st.button("🏠 不動產稅負試算", key="go_real_estate_tax_advisor"):
     st.switch_page("pages/10_property.py")

@@ -46,16 +46,16 @@ def calc_land_increment_tax(old_announced, new_announced, holding_years, is_self
 def calc_real_estate_tax(sell_market, cost_basis, holding_years, is_self_use, is_resident):
     profit = max(sell_market - cost_basis, 0)
     if not is_resident:
-        rate = 0.45 if holding_years <= 2 else 0.35
+        rate = 0.45 if holding_years < 2 else 0.35
         return profit * rate, f"{profit} * {rate}"
-    if is_self_use and holding_years > 6:
+    if is_self_use and holding_years >= 6:
         taxable = max(profit - 400, 0)
         return taxable * 0.10, f"{taxable} * 0.10"
-    if holding_years <= 2:
+    if holding_years < 2:
         rate = 0.45
-    elif holding_years <= 5:
+    elif holding_years < 5:
         rate = 0.35
-    elif holding_years <= 10:
+    elif holding_years < 10:
         rate = 0.20
     else:
         rate = 0.15

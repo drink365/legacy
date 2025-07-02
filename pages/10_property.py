@@ -76,7 +76,7 @@ def calc_progressive_tax(val, brackets):
 def calc_gift_tax(val):
     ex = 244
     txbl = max(val - ex, 0)
-    brackets = [(5000, 0.10), (10000, 0.15), (float('inf'), 0.20)]
+    brackets = [(2811, 0.10), (5621, 0.15), (float('inf'), 0.20)]
     tax, fmt = calc_progressive_tax(txbl, brackets)
     if txbl == 0:
         fmt = f"0 (免稅額{ex}萬元)"
@@ -85,7 +85,7 @@ def calc_gift_tax(val):
 def calc_estate_tax(val):
     ex = 1333
     txbl = max(val - ex, 0)
-    brackets = [(5000, 0.10), (10000, 0.15), (float('inf'), 0.20)]
+    brackets = [(5621, 0.10), (11242, 0.15), (float('inf'), 0.20)]
     tax, fmt = calc_progressive_tax(txbl, brackets)
     if txbl == 0:
         fmt = f"0 (免稅額{ex}萬元)"

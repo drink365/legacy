@@ -1,9 +1,10 @@
 # app.py — 《影響力》傳承策略平台（新版頁面佈局＋隱藏左側欄）
-# 說明：
+# 功能摘要：
 # 1) 完全隱藏左側欄與展開按鈕
 # 2) 置頂品牌導覽列：左 Logo / 右 使用者資訊（😊 姓名｜有效期限）
 # 3) 登入後隱藏登入表單，僅顯示主內容
-# 4) AUTHORIZED_USERS 以 TOML 格式定義（內含日期區間檢核）
+# 4) AUTHORIZED_USERS 以 TOML 格式定義（含有效日期檢核）
+# 5) 隱藏 Streamlit 漢堡選單與頁尾
 
 import os
 from datetime import datetime
@@ -44,7 +45,7 @@ GLOBAL_CSS = """
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
 
-/* 放大主容器寬度與減少邊距，讓畫面更滿 */
+/* 放大主容器寬度與減少邊距 */
 .main .block-container {
     padding-top: 0.6rem;
     padding-bottom: 2rem;
@@ -84,14 +85,14 @@ footer { visibility: hidden; }
     color: #333;
 }
 
-/* Logo 圖片大小控制（自適應，避免擠壓） */
+/* Logo 圖片大小控制 */
 .yc-logo {
     height: 28px;
     width: auto;
     object-fit: contain;
 }
 
-/* 主要內容區塊的卡片風格 */
+/* 卡片風格 */
 .yc-card {
     border: 1px solid rgba(0,0,0,0.08);
     border-radius: 14px;
@@ -114,7 +115,7 @@ footer { visibility: hidden; }
 st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
 # -------------------------
-# 使用者授權名單（可直接改這段 TOML）
+# 使用者授權名單（可直接調整此段 TOML）
 # -------------------------
 AUTHORIZED_USERS = """
 [authorized_users.admin]
@@ -143,7 +144,7 @@ end_date = "2025-10-31"
 """
 
 def parse_authorized_users(toml_str: str) -> Dict[str, Any]:
-    # 盡量使用內建 tomllib（Python 3.11+），否則退回第三方 toml
+    # 盡量用內建 tomllib（Py3.11+），否則退回第三方 toml
     try:
         import tomllib
         data = tomllib.loads(toml_str)
@@ -161,11 +162,11 @@ def is_within_date_range(start: str, end: str, now: Optional[datetime] = None) -
         e = datetime.strptime(end, "%Y-%m-%d")
         return s <= now <= e
     except Exception:
-        # 若日期格式錯誤，謹慎起見視為不通過
+        # 日期格式出錯時視為失敗
         return False
 
 def auth_check(username: str, password: str) -> Optional[Dict[str, Any]]:
-    for key, u in USERS.items():
+    for _, u in USERS.items():
         if username == u.get("username") and password == u.get("password"):
             if is_within_date_range(u.get("start_date", "1900-01-01"), u.get("end_date", "2999-12-31")):
                 return u
@@ -189,13 +190,11 @@ def render_topbar():
     logo_html = ""
     logo_path = Path("logo.png")
     if logo_path.exists():
-        # 將圖片轉成 base64 嵌入
         import base64
         with open(logo_path, "rb") as f:
             b64 = base64.b64encode(f.read()).decode()
         logo_html = f'<img class="yc-logo" src="data:image/png;base64,{b64}" alt="logo" />'
     else:
-        # 沒有檔案時，顯示文字品牌
         logo_html = '<span style="font-weight:700;">《影響力》傳承策略平台</span>'
 
     # 右側使用者區
@@ -203,7 +202,6 @@ def render_topbar():
         u = st.session_state.user
         name = u.get("name", "")
         end_date = u.get("end_date", "")
-        role = u.get("role", "")
         right = f"""
         <div class="yc-user">
             <span>😊 {name}｜有效期限：{end_date}</span>
@@ -271,7 +269,7 @@ def render_main_content():
         "富足退休、富裕一生、富貴傳承的完整解決方案。"
     )
 
-    # 示意：主要功能入口（您可替換為實際模組）
+    # 示意：主要功能入口（可替換為實際模組）
     c1, c2, c3 = st.columns(3)
     with c1:
         with st.container(border=True):
@@ -294,7 +292,7 @@ def render_main_content():
         st.markdown("#### 最新公告")
         st.write(
             "- 若您需要新增使用者或延長到期日，請聯繫管理者。\n"
-            "- Logo 建議尺寸：寬 240~360px（透明 PNG），檔名：`logo.png`。\n"
+            "- Logo 建議尺寸：寬 240–360px（透明 PNG），檔名：`logo.png`。\n"
             "- Favicon 可放 `logo2.png`，系統將自動優先使用。"
         )
 

@@ -1,5 +1,14 @@
 木
 import streamlit as st
+# --- Force-hide Streamlit sidebar & its toggle (applies to this page) ---
+hide_sidebar_style = """
+    <style>
+        [data-testid="stSidebar"] {display: none;}
+        [data-testid="stSidebarNav"] {display: none;}
+        [data-testid="collapsedControl"] {display: none;}
+    </style>
+"""
+st.markdown(hide_sidebar_style, unsafe_allow_html=True)
 
 # --- 頁面設定 ---
 st.set_page_config(

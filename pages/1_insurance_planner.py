@@ -1,4 +1,3 @@
-# pages/1_insurance_planner.py
 import streamlit as st
 from utils.pdf import export_proposal_pdf
 
@@ -20,7 +19,7 @@ with col3:
 
 st.divider()
 
-direction = "提高保額結構，搭配變更要保人與指定受益人" if need == "傳承/保額" else \            "重視現金價值與現金流，搭配保單貸款與分期給付機制" if need == "退休/現金流" else \            "保額 × 現金價值平衡，保留彈性與資產隔離機制"
+direction = "提高保額結構，搭配變更要保人與指定受益人" if need == "傳承/保額" else             "重視現金價值與現金流，搭配保單貸款與分期給付機制" if need == "退休/現金流" else             "保額 × 現金價值平衡，保留彈性與資產隔離機制"
 
 st.success(
     f"**策略摘要**：{direction}\n\n"

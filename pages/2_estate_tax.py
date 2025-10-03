@@ -1,4 +1,3 @@
-# pages/2_estate_tax.py
 import streamlit as st
 
 st.set_page_config(page_title="遺產稅試算與壓縮", page_icon="📊", layout="wide")

@@ -23,3 +23,25 @@ HIDE_DEFAULT_UI = '''
         .topbar .expiry {opacity:.8; font-size:.9rem}
     </style>
 '''
+
+BRAND_COLORS = '''
+    <style>
+      :root {
+          --brand-red: #C8102E;
+          --brand-gold: #B68B2C;
+          --brand-dark: #3A3A3A;
+      }
+      .stButton>button {
+          background-color: var(--brand-red);
+          color: #fff;
+          border-radius: 10px;
+          border: none;
+          padding: 0.65rem 1.2rem;
+          font-weight: 700;
+      }
+      .stButton>button:hover { background-color: var(--brand-gold); color:#fff; }
+      h1, h2, h3, h4 { color: var(--brand-dark); }
+      .value-card { border-color: rgba(200,16,46,.15); }
+      .pill { border-color: rgba(182,139,44,.4); }
+    </style>
+'''

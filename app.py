@@ -1,98 +1,309 @@
-import streamlit as st
-# --- Force-hide Streamlit sidebar & its toggle ---
-hide_sidebar_style = """
-    <style>
-        [data-testid="stSidebar"] {display: none;}
-        [data-testid="stSidebarNav"] {display: none;}
-        [data-testid="collapsedControl"] {display: none;}
-    </style>
-"""
-st.markdown(hide_sidebar_style, unsafe_allow_html=True)
 import base64
+from pathlib import Path
+import streamlit as st
 
-# 設定頁面
-st.set_page_config(
-    page_title="《影響力》 | 高資產家庭的傳承策略入口",
-    page_icon="🌿",
-    layout="centered"
+# ------------------------
+# Page config (must be first Streamlit call)
+# ------------------------
+APP_TITLE = "永傳家族傳承導師｜影響力傳承平台"
+root = Path(__file__).parent
+fav = root / "favicon.png"
+if fav.exists():
+    st.set_page_config(page_title=APP_TITLE, page_icon=str(fav), layout="wide")
+else:
+    st.set_page_config(page_title=APP_TITLE, page_icon="✨", layout="wide")
+
+# ------------------------
+# Global styles: hide sidebar / header widgets, widen layout
+# ------------------------
+st.markdown(
+    """
+<style>
+/***** Hide sidebar & toolbar *****/
+[data-testid="stSidebar"], [data-testid="stSidebarNav"], [data-testid="collapsedControl"] { display: none !important; }
+.stAppDeployButton, button[kind="header"], [data-testid="BaseButton-header"], [data-testid="stToolbar"] { display: none !important; }
+
+/***** Container width *****/
+[data-testid="stAppViewContainer"] .main .block-container { max-width: 1280px; padding-left: 24px; padding-right: 24px; }
+
+/***** Hero *****/
+.hero h1 { font-size: 42px; font-weight: 800; margin: 0 0 8px; color: #004c4c; letter-spacing: .5px; }
+.hero p  { font-size: 20px; color: #333; line-height: 1.8; margin: 0; }
+.hero .cta { display:inline-block; margin-top: 20px; background:#006666; color:#fff; padding:12px 24px; border-radius:10px; text-decoration:none; font-weight:600; }
+
+/***** Section *****/
+.section { margin-top: 40px; }
+.section h2 { font-size: 28px; margin-bottom: 10px; color: #004c4c; }
+.section p  { color:#333; }
+.divider { height: 1px; background: #e9ecef; margin: 36px 0; }
+
+/***** Cards *****/
+.cards { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
+.card { width: 320px; padding: 20px; border-radius: 14px; background: #ffffff; box-shadow: 0 2px 14px rgba(0,0,0,.06); text-align: left; }
+.card h3 { margin: 0 0 8px; }
+.card p  { margin: 0; color:#444; line-height:1.7; }
+
+/* Footer links */
+.footer { display:flex; justify-content:center; align-items:center; gap: 1.25rem; font-size: 14px; color: gray; }
+.footer a { color:#006666; text-decoration: underline; }
+
+/***** Anchors (spacer for fixed offset when linked) *****/
+.anchor { position: relative; top: -80px; visibility: hidden; }
+</style>
+""",
+    unsafe_allow_html=True,
 )
 
-# 讀取 logo
-def load_logo_base64(image_path):
-    with open(image_path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
+# ------------------------
+# Assets helpers
+# ------------------------
+def load_b64(p: Path) -> str | None:
+    try:
+        with p.open("rb") as f:
+            return base64.b64encode(f.read()).decode()
+    except Exception:
+        return None
 
-try:
-    logo_base64 = load_logo_base64("logo.png")
-    st.markdown(f"""
-    <div style='text-align: center;'>
-        <img src='data:image/png;base64,{logo_base64}' width='200'><br>
-    </div>
-    """, unsafe_allow_html=True)
-except:
-    st.warning("⚠️ 無法載入 logo.png，請確認檔案存在")
+logo_b64 = load_b64(root / "logo.png")
+qr_b64 = load_b64(root / "qrcode.png")  # optional contact QR
 
-# --- 品牌標語區 ---
+# ------------------------
+# Header / Brand
+# ------------------------
+with st.container():
+    if logo_b64:
+        st.markdown(
+            f"""
+            <div style='text-align:center;margin-top:8px;'>
+              <img src='data:image/png;base64,{logo_b64}' width='200' alt='logo'/>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown(
+        """
+        <div class='hero' style='text-align:center; margin-top: 10px;'>
+          <h1>讓傳承，成為愛的延續</h1>
+          <p>
+            《影響力》是一個結合 <b>AI</b> 與 <b>專業顧問智慧</b> 的傳承策略平台，
+            專為高資產家庭打造，陪你完成 <b>資產配置</b>、<b>稅務節省</b> 與 <b>跨世代安排</b>。
+          </p>
+          <a href="#get-started" class="cta">了解如何開始規劃</a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# ------------------------
+# Value Proposition – 行銷化的三大核心
+# ------------------------
+st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
+st.markdown("<div class='section' id='value'>", unsafe_allow_html=True)
 st.markdown("""
-<div style='text-align: center; margin-top: 2em;'>
-    <h1 style='font-size: 36px; font-weight: bold;'>《影響力》</h1>
-    <p style='font-size: 24px; color: #333; font-weight: bold; letter-spacing: 0.5px;'>
-        高資產家庭的 <span style="color:#006666;">傳承策略平台</span>
-    </p>
-    <p style='font-size: 18px; color: #888; margin-top: -10px;'>
-        讓每一分資源，都成為你影響力的延伸
-    </p>
+<div class='cards'>
+  <div class='card'>
+    <h3>🏛️ 智慧布局</h3>
+    <p>以家族資產全景視角，兼顧流動性與穩定性，讓每一分資源都各得其所。</p>
+  </div>
+  <div class='card'>
+    <h3>🛡️ 安心防護</h3>
+    <p>從保單、稅源到信託機制，建構風險轉移與法稅合規，預先為不確定做準備。</p>
+  </div>
+  <div class='card'>
+    <h3>🌱 家風永續</h3>
+    <p>不只傳承金錢，更傳遞價值與選擇，設計跨世代的扶持與秩序。</p>
+  </div>
 </div>
 """, unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
 
-# --- 品牌開場語 ---
-st.markdown("""
-<div style='text-align: center; margin-top: 3em; font-size: 18px; line-height: 1.8;'>
-    《影響力》是一個專為高資產家庭打造的傳承策略平台。<br>
-    我們陪你設計每一分資源的去向，<br>
-    讓它能守護最重要的人，延續你真正的價值。
+# ------------------------
+# Who is this for – 首次來訪者的「用途說明」
+# ------------------------
+st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
+st.markdown(
+    """
+<div class='section'>
+  <h2>這個平台能幫你什麼？</h2>
+  <p>我們將顧問經驗數位化，讓你在 10 分鐘內看見方向：</p>
 </div>
-""", unsafe_allow_html=True)
-
-# --- 三大價值主張 ---
-st.markdown("""
-<div style='display: flex; justify-content: center; gap: 40px; margin-top: 3em; flex-wrap: wrap;'>
-    <div style='width: 280px; text-align: center;'>
-        <h3>🏛️ 富足結構</h3>
-        <p>為資產設計流動性與穩定性，讓財富更有效率地守護人生階段。</p>
-    </div>
-    <div style='width: 280px; text-align: center;'>
-        <h3>🛡️ 風險預備</h3>
-        <p>從保單、稅源到信託制度，設計資產的防禦系統與轉移機制。</p>
-    </div>
-    <div style='width: 280px; text-align: center;'>
-        <h3>🌱 價值傳遞</h3>
-        <p>不只是金錢，更是精神、信任與選擇，成就跨世代的連結。</p>
-    </div>
+<div class='cards'>
+  <div class='card'>
+    <h3>🎯 立即診斷</h3>
+    <p>以互動問答快速盤點現況，找出你的關鍵風險與優先解題。</p>
+  </div>
+  <div class='card'>
+    <h3>🧩 規劃藍圖</h3>
+    <p>輸入關鍵參數，即可生成專屬「傳承地圖」與行動建議。</p>
+  </div>
+  <div class='card'>
+    <h3>🤝 顧問陪伴</h3>
+    <p>需要更深入？可直接預約顧問，完成商品配置、法稅與文件安排。</p>
+  </div>
 </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
-# --- 使用者分流 ---
-st.markdown("---")
-st.markdown("### 🧭 請選擇您的身份：")
+# ------------------------
+# Role split – 使用者分流 + CTA（以 anchor 定位）
+# ------------------------
+st.markdown("<span id='get-started' class='anchor'>&nbsp;</span>", unsafe_allow_html=True)
+st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
+st.markdown("<div class='section' id='role'><h2>選擇你的角色，開始專屬旅程</h2></div>", unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 with col1:
-    if st.button("🙋 我是客戶", use_container_width=True):
+    st.markdown(
+        """
+        <div class='card'>
+          <h3>🙋 我是客戶</h3>
+          <p>打造專屬傳承藍圖、試算稅務影響、安排保單與信託結構。</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    if st.button("開始規劃", use_container_width=True):
         st.switch_page("pages/client_home.py")
+
 with col2:
-    if st.button("🧑‍💼 我是顧問", use_container_width=True):
+    st.markdown(
+        """
+        <div class='card'>
+          <h3>🧑‍💼 我是顧問</h3>
+          <p>加入顧問夥伴計畫：用 AI 與模組化工具，提升提案速度與成交率。</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    if st.button("了解合作", use_container_width=True):
         st.switch_page("pages/advisor_home.py")
 
-# --- 聯絡資訊 ---
-st.markdown("---")
+# ------------------------
+# Social Proof / Trust – 信任背書（可改為動態數字）
+# ------------------------
+st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
     """
-    <div style='display: flex; justify-content: center; align-items: center; gap: 1.5em; font-size: 14px; color: gray;'>
-      <a href='?' style='color:#006666; text-decoration: underline;'>《影響力》傳承策略平台</a>
+<div class='section'>
+  <h2>為什麼選擇《影響力》？</h2>
+</div>
+<div class='cards'>
+  <div class='card'>
+    <h3>🏅 專業團隊</h3>
+    <p>永傳家族辦公室整合國際律師、會計師、財稅與保險專家，共同設計家族方案。</p>
+  </div>
+  <div class='card'>
+    <h3>⚡ 提案效率</h3>
+    <p>以模組化與情境模板，縮短 70% 的溝通時間，讓重點一目了然。</p>
+  </div>
+  <div class='card'>
+    <h3>🔐 隱私與合規</h3>
+    <p>以最小必要原則僅蒐集必要資訊，強化數據保護與法稅合規。</p>
+  </div>
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+# ------------------------
+# Mission / PR – 公關使命敘事（可複用於新聞稿與簡報）
+# ------------------------
+st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
+st.markdown(
+    """
+<div class='section'>
+  <h2>品牌使命</h2>
+  <p>
+    我們相信，每個家庭的成功都值得被延續。<br/>
+    《影響力》致力於推動財富傳承教育，以專業顧問與科技工具，
+    協助家族以更低成本、更高效率，完成愛與責任的交棒。
+  </p>
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+# ------------------------
+# Optional: Video / Case Stories – 可放品牌短片或案例見證
+# ------------------------
+with st.expander("▶ 2 分鐘了解《影響力》（可放品牌影片或案例簡介）", expanded=False):
+    st.write("（可嵌入 YouTube 連結，或上傳 mp4 檔案）")
+    # st.video("https://www.youtube.com/watch?v=XXXXXXXX")
+
+with st.expander("💬 來自客戶與顧問的回饋", expanded=False):
+    st.markdown("- \"有結構、有溫度，讓家人快速形成共識。\"")
+    st.markdown("- \"把保單、稅務與信託用同一張圖講清楚，效率大幅提升。\"")
+
+# ------------------------
+# Final CTA – 收斂行動
+# ------------------------
+st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
+st.markdown(
+    """
+<div class='section' style='text-align:center;'>
+  <h2>準備好開始你的家族傳承旅程了嗎？</h2>
+  <p>留下聯繫方式，或直接以右下角 QR code 與我們聯繫。</p>
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+cols = st.columns([1,1,1])
+with cols[1]:
+    st.markdown(
+        """
+        <div style='display:flex;gap:12px;justify-content:center;align-items:center;'>
+          <a href='#role' class='cta' style='background:#006666;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;'>馬上開始</a>
+          <a href='mailto:123@gracefo.com' class='cta' style='background:#004c4c;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;'>預約顧問</a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# Optional QR on the right
+if qr_b64:
+    st.markdown(
+        f"""
+        <div style='text-align:center;margin-top:14px;'>
+          <img src='data:image/png;base64,{qr_b64}' width='120' alt='contact-qr'/>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+# ------------------------
+# Footer – 聯絡資訊
+# ------------------------
+st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
+st.markdown(
+    """
+    <div class='footer'>
+      <a href='?' >《影響力》傳承策略平台</a>
       <a href='https://gracefo.com' target='_blank'>永傳家族辦公室</a>
       <a href='mailto:123@gracefo.com'>123@gracefo.com</a>
     </div>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
+
+# ------------------------
+# Optional Slack notify
+# ------------------------
+def _slack_notify(text: str) -> tuple[bool, str]:
+    try:
+        cfg = st.secrets.get("slack", {})
+        url = cfg.get("webhook")
+        if not url:
+            return False, "未設定 slack.webhook"
+        try:
+            import requests  # type: ignore
+        except Exception:
+            return False, "缺少 requests 套件"
+        resp = requests.post(url, json={"text": text}, timeout=10)
+        if 200 <= resp.status_code < 300:
+            return True, "Slack OK"
+        return False, f"Slack {resp.status_code}: {resp.text[:200]}"
+    except Exception as e:
+        return False, f"Slack 錯誤：{e}"

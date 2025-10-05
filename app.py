@@ -185,7 +185,7 @@ st.markdown(
 )
 
 # ------------------------
-# 品牌使命（置中）
+# 品牌使命
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
@@ -221,7 +221,7 @@ with st.expander("💬 來自客戶與顧問的回饋", expanded=False):
     st.markdown("- 「把保單、稅務與信託用同一張圖講清楚，效率大幅提升。」")
 
 # ------------------------
-# Final CTA
+# Final CTA（兩顆按鈕版）
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
@@ -239,7 +239,14 @@ with cols[1]:
     st.markdown(
         """
         <div style='display:flex;gap:12px;justify-content:center;align-items:center;'>
-          <a href='mailto:123@gracefo.com' class='cta' style='background:#004c4c;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;'>預約顧問</a>
+          <a href='#get-started' class='cta' 
+             style='background:#006666;color:#fff;
+             padding:10px 18px;border-radius:10px;
+             text-decoration:none;'>馬上開始</a>
+          <a href='mailto:123@gracefo.com' class='cta' 
+             style='background:#004c4c;color:#fff;
+             padding:10px 18px;border-radius:10px;
+             text-decoration:none;'>預約顧問</a>
         </div>
         """,
         unsafe_allow_html=True,

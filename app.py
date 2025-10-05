@@ -22,42 +22,25 @@ if fav.exists():
 st.markdown(
     """
 <style>
-/* 隱藏預設側邊與頂部按鈕 */
 [data-testid="stSidebar"], [data-testid="stSidebarNav"], [data-testid="collapsedControl"] { display: none !important; }
 .stAppDeployButton, button[kind="header"], [data-testid="BaseButton-header"], [data-testid="stToolbar"] { display: none !important; }
-
-/* 內容寬度 */
 [data-testid="stAppViewContainer"] .main .block-container { max-width: 1280px; padding-left: 24px; padding-right: 24px; }
-
-/* Hero */
 .hero h1 { font-size: 42px; font-weight: 800; margin: 0 0 8px; color: #004c4c; letter-spacing: .5px; }
 .hero p  { font-size: 20px; color: #333; line-height: 1.8; margin: 0; }
 .hero .cta { display:inline-block; margin-top: 20px; background:#006666; color:#fff; padding:12px 24px; border-radius:10px; text-decoration:none; font-weight:600; }
-
-/* Section */
 .section { margin-top: 40px; }
 .section h2 { font-size: 28px; margin-bottom: 10px; color: #004c4c; }
 .section p  { color:#333; }
-
-/* 置中版型（你指定的四個段落會套用） */
 .section-centered { text-align: center; }
 .section-centered h2 { text-align: center; }
 .section-centered p  { text-align: center; }
-
-/* 分隔線 */
 .divider { height: 1px; background: #e9ecef; margin: 36px 0; }
-
-/* 卡片群 */
 .cards { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
 .card { width: 320px; padding: 20px; border-radius: 14px; background: #ffffff; box-shadow: 0 2px 14px rgba(0,0,0,.06); text-align: left; }
 .card h3 { margin: 0 0 8px; }
 .card p  { margin: 0; color:#444; line-height:1.7; }
-
-/* 頁尾 */
 .footer { display:flex; justify-content:center; align-items:center; gap: 1.25rem; font-size: 14px; color: gray; }
 .footer a { color:#006666; text-decoration: underline; }
-
-/* 錨點 */
 .anchor { position: relative; top: -80px; visibility: hidden; }
 </style>
 """,
@@ -106,21 +89,7 @@ with st.container():
     )
 
 # ------------------------
-# ▶ 2 分鐘了解《影響力》（YouTube封面＋頻道連結）
-# ------------------------
-st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
-with st.expander("▶ 2 分鐘了解《影響力》（永傳科創學院）", expanded=False):
-    st.image(
-        "https://yt3.googleusercontent.com/agR4iDz3j-piTsAW-XGHojMsxxXs6DV3e0pRFV1zEYIYyI4sTmlci3fDtMR0xF3cJwVG_zm5EQ=w2276-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
-        use_container_width=True,
-    )
-    st.markdown(
-        "[前往永傳科創學院 YouTube 頻道 🎥](https://www.youtube.com/@gracefo)",
-        unsafe_allow_html=True,
-    )
-
-# ------------------------
-# 這個平台能幫你什麼？（置中）
+# 這個平台能幫你什麼？
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
@@ -133,7 +102,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Value props（卡片維持置左，整體視覺仍平衡）
 st.markdown("""
 <div class='cards'>
   <div class='card'>
@@ -152,7 +120,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ------------------------
-# 選擇你的角色，開始專屬旅程（置中）
+# 選擇你的角色
 # ------------------------
 st.markdown("<span id='get-started' class='anchor'>&nbsp;</span>", unsafe_allow_html=True)
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
@@ -189,7 +157,7 @@ with col2:
         st.switch_page("pages/advisor_home.py")
 
 # ------------------------
-# 為什麼選擇《影響力》？（置中）
+# 為什麼選擇《影響力》？
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
@@ -233,6 +201,17 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
+
+# ▶ 2 分鐘了解（放品牌使命之後）
+with st.expander("▶ 2 分鐘了解《影響力》（永傳科創學院）", expanded=False):
+    st.image(
+        "https://yt3.googleusercontent.com/agR4iDz3j-piTsAW-XGHojMsxxXs6DV3e0pRFV1zEYIYyI4sTmlci3fDtMR0xF3cJwVG_zm5EQ=w2276-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
+        use_container_width=True,
+    )
+    st.markdown(
+        "[前往永傳科創學院 YouTube 頻道 🎥](https://www.youtube.com/@gracefo)",
+        unsafe_allow_html=True,
+    )
 
 # ------------------------
 # 客戶回饋

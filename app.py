@@ -2,6 +2,8 @@ import base64
 from pathlib import Path
 import streamlit as st
 from app_config import ensure_page_config
+
+# ✅ 統一設定 favicon、版面配置（全站適用）
 ensure_page_config()
 
 # ------------------------
@@ -13,41 +15,29 @@ fav = root / "favicon.png"
 if fav.exists():
     pass
 # favicon handled globally by ensure_page_config()
+
 # ------------------------
 # Global styles: hide sidebar / header widgets, widen layout
 # ------------------------
 st.markdown(
     """
 <style>
-/***** Hide sidebar & toolbar *****/
 [data-testid="stSidebar"], [data-testid="stSidebarNav"], [data-testid="collapsedControl"] { display: none !important; }
 .stAppDeployButton, button[kind="header"], [data-testid="BaseButton-header"], [data-testid="stToolbar"] { display: none !important; }
-
-/***** Container width *****/
 [data-testid="stAppViewContainer"] .main .block-container { max-width: 1280px; padding-left: 24px; padding-right: 24px; }
-
-/***** Hero *****/
 .hero h1 { font-size: 42px; font-weight: 800; margin: 0 0 8px; color: #004c4c; letter-spacing: .5px; }
 .hero p  { font-size: 20px; color: #333; line-height: 1.8; margin: 0; }
 .hero .cta { display:inline-block; margin-top: 20px; background:#006666; color:#fff; padding:12px 24px; border-radius:10px; text-decoration:none; font-weight:600; }
-
-/***** Section *****/
 .section { margin-top: 40px; }
 .section h2 { font-size: 28px; margin-bottom: 10px; color: #004c4c; }
 .section p  { color:#333; }
 .divider { height: 1px; background: #e9ecef; margin: 36px 0; }
-
-/***** Cards *****/
 .cards { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; }
 .card { width: 320px; padding: 20px; border-radius: 14px; background: #ffffff; box-shadow: 0 2px 14px rgba(0,0,0,.06); text-align: left; }
 .card h3 { margin: 0 0 8px; }
 .card p  { margin: 0; color:#444; line-height:1.7; }
-
-/* Footer links */
 .footer { display:flex; justify-content:center; align-items:center; gap: 1.25rem; font-size: 14px; color: gray; }
 .footer a { color:#006666; text-decoration: underline; }
-
-/***** Anchors (spacer for fixed offset when linked) *****/
 .anchor { position: relative; top: -80px; visibility: hidden; }
 </style>
 """,
@@ -65,7 +55,7 @@ def load_b64(p: Path) -> str | None:
         return None
 
 logo_b64 = load_b64(root / "logo.png")
-qr_b64 = load_b64(root / "qrcode.png")  # optional contact QR
+qr_b64 = load_b64(root / "qrcode.png")
 
 # ------------------------
 # Header / Brand
@@ -96,7 +86,7 @@ with st.container():
     )
 
 # ------------------------
-# Value Proposition – 行銷化的三大核心
+# Value Proposition – 三大核心
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown("<div class='section' id='value'>", unsafe_allow_html=True)
@@ -119,7 +109,7 @@ st.markdown("""
 st.markdown("</div>", unsafe_allow_html=True)
 
 # ------------------------
-# Who is this for – 首次來訪者的「用途說明」
+# Who is this for
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
@@ -147,7 +137,7 @@ st.markdown(
 )
 
 # ------------------------
-# Role split – 使用者分流 + CTA（以 anchor 定位）
+# Role split – 使用者分流
 # ------------------------
 st.markdown("<span id='get-started' class='anchor'>&nbsp;</span>", unsafe_allow_html=True)
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
@@ -181,7 +171,7 @@ with col2:
         st.switch_page("pages/advisor_home.py")
 
 # ------------------------
-# Social Proof / Trust – 信任背書（可改為動態數字）
+# Social Proof / Trust
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
@@ -208,7 +198,7 @@ st.markdown(
 )
 
 # ------------------------
-# Mission / PR – 公關使命敘事（可複用於新聞稿與簡報）
+# Mission / PR
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
@@ -226,18 +216,21 @@ st.markdown(
 )
 
 # ------------------------
-# Optional: Video / Case Stories – 可放品牌短片或案例見證
+# ▶ 2 分鐘了解《影響力》 — 改為永傳科創學院
 # ------------------------
-with st.expander("▶ 2 分鐘了解《影響力》（可放品牌影片或案例簡介）", expanded=False):
-    st.write("永傳科創學院")
+with st.expander("▶ 2 分鐘了解《影響力》（永傳科創學院）", expanded=False):
     st.video("https://www.youtube.com/@gracefo")
+    st.markdown(
+        "[前往永傳科創學院查看更多影片 🎥](https://www.youtube.com/@gracefo)",
+        unsafe_allow_html=True,
+    )
 
 with st.expander("💬 來自客戶與顧問的回饋", expanded=False):
     st.markdown("- \"有結構、有溫度，讓家人快速形成共識。\"")
     st.markdown("- \"把保單、稅務與信託用同一張圖講清楚，效率大幅提升。\"")
 
 # ------------------------
-# Final CTA – 收斂行動
+# Final CTA
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
@@ -262,7 +255,6 @@ with cols[1]:
         unsafe_allow_html=True,
     )
 
-# Optional QR on the right
 if qr_b64:
     st.markdown(
         f"""
@@ -274,7 +266,7 @@ if qr_b64:
     )
 
 # ------------------------
-# Footer – 聯絡資訊
+# Footer
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
@@ -287,23 +279,3 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
-# ------------------------
-# Optional Slack notify
-# ------------------------
-def _slack_notify(text: str) -> tuple[bool, str]:
-    try:
-        cfg = st.secrets.get("slack", {})
-        url = cfg.get("webhook")
-        if not url:
-            return False, "未設定 slack.webhook"
-        try:
-            import requests  # type: ignore
-        except Exception:
-            return False, "缺少 requests 套件"
-        resp = requests.post(url, json={"text": text}, timeout=10)
-        if 200 <= resp.status_code < 300:
-            return True, "Slack OK"
-        return False, f"Slack {resp.status_code}: {resp.text[:200]}"
-    except Exception as e:
-        return False, f"Slack 錯誤：{e}"

@@ -229,8 +229,8 @@ st.markdown(
 # Optional: Video / Case Stories – 可放品牌短片或案例見證
 # ------------------------
 with st.expander("▶ 2 分鐘了解《影響力》（可放品牌影片或案例簡介）", expanded=False):
-    st.write("（可嵌入 YouTube 連結，或上傳 mp4 檔案）")
-    # st.video("https://www.youtube.com/watch?v=XXXXXXXX")
+    st.write("永傳科創學院")
+    st.video("https://www.youtube.com/@gracefo")
 
 with st.expander("💬 來自客戶與顧問的回饋", expanded=False):
     st.markdown("- \"有結構、有溫度，讓家人快速形成共識。\"")

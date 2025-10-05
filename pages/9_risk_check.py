@@ -1,4 +1,6 @@
 import streamlit as st
+from app_config import ensure_page_config
+ensure_page_config()
 # --- Force-hide Streamlit sidebar & its toggle (applies to this page) ---
 hide_sidebar_style = """
     <style>
@@ -10,8 +12,6 @@ hide_sidebar_style = """
 st.markdown(hide_sidebar_style, unsafe_allow_html=True)
 
 # --- 頁面設定 ---
-st.set_page_config(page_title="傳承風險盤點測驗", layout="centered")
-
 # --- 初始化狀態變數 ---
 if "risk_quiz_done" not in st.session_state:
     st.session_state.risk_quiz_done = False

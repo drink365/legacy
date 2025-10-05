@@ -1,6 +1,8 @@
 # --- pages/8_insurance_strategy.py ---
 
 import streamlit as st
+from app_config import ensure_page_config
+ensure_page_config()
 # --- Force-hide Streamlit sidebar & its toggle (applies to this page) ---
 hide_sidebar_style = """
     <style>
@@ -15,12 +17,6 @@ from modules.pdf_generator import generate_insurance_strategy_pdf
 from io import BytesIO
 
 # 頁面設定
-st.set_page_config(
-    page_title="《影響力》保單策略規劃",
-    page_icon="📦",
-    layout="centered"
-)
-
 # 標題區
 st.markdown("""
 <div style='text-align: center; margin-top: 1em;'>

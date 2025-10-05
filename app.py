@@ -1,6 +1,8 @@
 import base64
 from pathlib import Path
 import streamlit as st
+from app_config import ensure_page_config
+ensure_page_config()
 
 # ------------------------
 # Page config (must be first Streamlit call)
@@ -9,10 +11,8 @@ APP_TITLE = "永傳家族傳承導師｜影響力傳承平台"
 root = Path(__file__).parent
 fav = root / "favicon.png"
 if fav.exists():
-    st.set_page_config(page_title=APP_TITLE, page_icon=str(fav), layout="wide")
-else:
-    st.set_page_config(page_title=APP_TITLE, page_icon="✨", layout="wide")
-
+    pass
+# favicon handled globally by ensure_page_config()
 # ------------------------
 # Global styles: hide sidebar / header widgets, widen layout
 # ------------------------

@@ -1,4 +1,6 @@
 import streamlit as st
+from app_config import ensure_page_config
+ensure_page_config()
 # --- Force-hide Streamlit sidebar & its toggle (applies to this page) ---
 hide_sidebar_style = """
     <style>

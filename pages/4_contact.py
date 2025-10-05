@@ -1,4 +1,6 @@
 import streamlit as st
+from app_config import ensure_page_config
+ensure_page_config()
 # --- Force-hide Streamlit sidebar & its toggle (applies to this page) ---
 hide_sidebar_style = """
     <style>
@@ -8,13 +10,6 @@ hide_sidebar_style = """
     </style>
 """
 st.markdown(hide_sidebar_style, unsafe_allow_html=True)
-
-st.set_page_config(
-    page_title="聯絡我們｜《影響力》傳承策略平台",
-    page_icon="📬",
-    layout="centered"
-)
-
 # 頁首標題
 st.markdown("""
 <div style='text-align: center;'>

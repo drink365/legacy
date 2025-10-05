@@ -1,4 +1,6 @@
 import streamlit as st
+from app_config import ensure_page_config
+ensure_page_config()
 # --- Force-hide Streamlit sidebar & its toggle (applies to this page) ---
 hide_sidebar_style = """
     <style>
@@ -13,12 +15,6 @@ from modules.pdf_generator import generate_pdf
 from modules.cta_section import render_cta
 
 # 頁面設定
-st.set_page_config(
-    page_title="《影響力》傳承風格探索",
-    page_icon="🌿",
-    layout="centered"
-)
-
 # 頁首標題
 st.markdown("""
 <div style='text-align: center; margin-top: 1em;'>

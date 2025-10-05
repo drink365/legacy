@@ -1,4 +1,6 @@
 import streamlit as st
+from app_config import ensure_page_config
+ensure_page_config()
 # --- Force-hide Streamlit sidebar & its toggle (applies to this page) ---
 hide_sidebar_style = """
     <style>
@@ -14,12 +16,6 @@ from modules.estate_tax_ui import render_estate_tax_ui
 from modules.cta_section import render_cta
 
 # 頁面設定
-st.set_page_config(
-    page_title="AI秒算遺產稅｜《影響力》傳承策略平台",
-    page_icon="🧮",
-    layout="wide"
-)
-
 # 標題與說明
 st.markdown("""
 <div style='text-align: center; margin-top: 1em;'>

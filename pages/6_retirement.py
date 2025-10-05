@@ -1,4 +1,6 @@
 import streamlit as st
+from app_config import ensure_page_config
+ensure_page_config()
 # --- Force-hide Streamlit sidebar & its toggle (applies to this page) ---
 hide_sidebar_style = """
     <style>
@@ -21,12 +23,6 @@ import os
 from modules.cta_section import render_cta
 
 # 頁面設定
-st.set_page_config(
-    page_title="樂活退休試算｜《影響力》傳承策略平台",
-    page_icon="💰",
-    layout="centered"
-)
-
 pdfmetrics.registerFont(TTFont('NotoSansTC', 'NotoSansTC-Regular.ttf'))
 
 # 標題區

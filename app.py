@@ -7,7 +7,7 @@ from app_config import ensure_page_config
 ensure_page_config()
 
 # ------------------------
-# Page config (must be first Streamlit call)
+# Page config
 # ------------------------
 APP_TITLE = "永傳家族傳承導師｜影響力傳承平台"
 root = Path(__file__).parent
@@ -17,7 +17,7 @@ if fav.exists():
 # favicon handled globally by ensure_page_config()
 
 # ------------------------
-# Global styles: hide sidebar / header widgets, widen layout
+# Global styles
 # ------------------------
 st.markdown(
     """
@@ -86,119 +86,21 @@ with st.container():
     )
 
 # ------------------------
-# Value Proposition – 三大核心
+# ▶ 2 分鐘了解《影響力》（YouTube封面＋頻道連結）
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
-st.markdown("<div class='section' id='value'>", unsafe_allow_html=True)
-st.markdown("""
-<div class='cards'>
-  <div class='card'>
-    <h3>🏛️ 智慧布局</h3>
-    <p>以家族資產全景視角，兼顧流動性與穩定性，讓每一分資源都各得其所。</p>
-  </div>
-  <div class='card'>
-    <h3>🛡️ 安心防護</h3>
-    <p>從保單、稅源到信託機制，建構風險轉移與法稅合規，預先為不確定做準備。</p>
-  </div>
-  <div class='card'>
-    <h3>🌱 家風永續</h3>
-    <p>不只傳承金錢，更傳遞價值與選擇，設計跨世代的扶持與秩序。</p>
-  </div>
-</div>
-""", unsafe_allow_html=True)
-st.markdown("</div>", unsafe_allow_html=True)
-
-# ------------------------
-# Who is this for
-# ------------------------
-st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
-st.markdown(
-    """
-<div class='section'>
-  <h2>這個平台能幫你什麼？</h2>
-  <p>我們將顧問經驗數位化，讓你在 10 分鐘內看見方向：</p>
-</div>
-<div class='cards'>
-  <div class='card'>
-    <h3>🎯 立即診斷</h3>
-    <p>以互動問答快速盤點現況，找出你的關鍵風險與優先解題。</p>
-  </div>
-  <div class='card'>
-    <h3>🧩 規劃藍圖</h3>
-    <p>輸入關鍵參數，即可生成專屬「傳承地圖」與行動建議。</p>
-  </div>
-  <div class='card'>
-    <h3>🤝 顧問陪伴</h3>
-    <p>需要更深入？可直接預約顧問，完成商品配置、法稅與文件安排。</p>
-  </div>
-</div>
-""",
-    unsafe_allow_html=True,
-)
-
-# ------------------------
-# Role split – 使用者分流
-# ------------------------
-st.markdown("<span id='get-started' class='anchor'>&nbsp;</span>", unsafe_allow_html=True)
-st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
-st.markdown("<div class='section' id='role'><h2>選擇你的角色，開始專屬旅程</h2></div>", unsafe_allow_html=True)
-
-col1, col2 = st.columns(2)
-with col1:
+with st.expander("▶ 2 分鐘了解《影響力》（永傳科創學院）", expanded=False):
+    st.image(
+        "https://yt3.googleusercontent.com/agR4iDz3j-piTsAW-XGHojMsxxXs6DV3e0pRFV1zEYIYyI4sTmlci3fDtMR0xF3cJwVG_zm5EQ=w2276-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
+        use_container_width=True,
+    )
     st.markdown(
-        """
-        <div class='card'>
-          <h3>🙋 我是客戶</h3>
-          <p>打造專屬傳承藍圖、試算稅務影響、安排保單與信託結構。</p>
-        </div>
-        """,
+        "[前往永傳科創學院 YouTube 頻道 🎥](https://www.youtube.com/@gracefo)",
         unsafe_allow_html=True,
     )
-    if st.button("開始規劃", use_container_width=True):
-        st.switch_page("pages/client_home.py")
-
-with col2:
-    st.markdown(
-        """
-        <div class='card'>
-          <h3>🧑‍💼 我是顧問</h3>
-          <p>加入顧問夥伴計畫：用 AI 與模組化工具，提升提案速度與成交率。</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    if st.button("了解合作", use_container_width=True):
-        st.switch_page("pages/advisor_home.py")
 
 # ------------------------
-# Social Proof / Trust
-# ------------------------
-st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
-st.markdown(
-    """
-<div class='section'>
-  <h2>為什麼選擇《影響力》？</h2>
-</div>
-<div class='cards'>
-  <div class='card'>
-    <h3>🏅 專業團隊</h3>
-    <p>永傳家族辦公室整合國際律師、會計師、財稅與保險專家，共同設計家族方案。</p>
-  </div>
-  <div class='card'>
-    <h3>⚡ 提案效率</h3>
-    <p>以模組化與情境模板，縮短 70% 的溝通時間，讓重點一目了然。</p>
-  </div>
-  <div class='card'>
-    <h3>🔐 隱私與合規</h3>
-    <p>以最小必要原則僅蒐集必要資訊，強化數據保護與法稅合規。</p>
-  </div>
-</div>
-""",
-    unsafe_allow_html=True,
-)
-
-# ------------------------
-# Mission / PR
+# 品牌使命
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
@@ -216,15 +118,8 @@ st.markdown(
 )
 
 # ------------------------
-# ▶ 2 分鐘了解《影響力》 — 改為永傳科創學院
+# 客戶回饋
 # ------------------------
-with st.expander("▶ 2 分鐘了解《影響力》（永傳科創學院）", expanded=False):
-    st.video("https://www.youtube.com/@gracefo")
-    st.markdown(
-        "[前往永傳科創學院查看更多影片 🎥](https://www.youtube.com/@gracefo)",
-        unsafe_allow_html=True,
-    )
-
 with st.expander("💬 來自客戶與顧問的回饋", expanded=False):
     st.markdown("- \"有結構、有溫度，讓家人快速形成共識。\"")
     st.markdown("- \"把保單、稅務與信託用同一張圖講清楚，效率大幅提升。\"")
@@ -248,7 +143,6 @@ with cols[1]:
     st.markdown(
         """
         <div style='display:flex;gap:12px;justify-content:center;align-items:center;'>
-          <a href='#role' class='cta' style='background:#006666;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;'>馬上開始</a>
           <a href='mailto:123@gracefo.com' class='cta' style='background:#004c4c;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;'>預約顧問</a>
         </div>
         """,

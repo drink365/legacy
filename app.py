@@ -86,21 +86,7 @@ with st.container():
     )
 
 # ------------------------
-# ▶ 2 分鐘了解《影響力》（YouTube封面＋頻道連結）
-# ------------------------
-st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
-with st.expander("▶ 2 分鐘了解《影響力》（永傳科創學院）", expanded=False):
-    st.image(
-        "https://yt3.googleusercontent.com/agR4iDz3j-piTsAW-XGHojMsxxXs6DV3e0pRFV1zEYIYyI4sTmlci3fDtMR0xF3cJwVG_zm5EQ=w2276-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
-        use_container_width=True,
-    )
-    st.markdown(
-        "[前往永傳科創學院 YouTube 頻道 🎥](https://www.youtube.com/@gracefo)",
-        unsafe_allow_html=True,
-    )
-
-# ------------------------
-# 品牌使命
+# 品牌使命（含影片封面）
 # ------------------------
 st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 st.markdown(
@@ -118,8 +104,15 @@ st.markdown(
 )
 
 # ------------------------
-# 客戶回饋
+# ▶ 2 分鐘了解《影響力》（使用封面圖＋頻道連結）
 # ------------------------
+with st.expander("▶ 2 分鐘了解《影響力》（永傳科創學院）", expanded=False):
+    st.image("ace3079b-b394-41c4-bc30-f7815a903161.png", use_container_width=True)
+    st.markdown(
+        "[前往永傳科創學院 YouTube 頻道 🎥](https://www.youtube.com/@gracefo)",
+        unsafe_allow_html=True,
+    )
+
 with st.expander("💬 來自客戶與顧問的回饋", expanded=False):
     st.markdown("- \"有結構、有溫度，讓家人快速形成共識。\"")
     st.markdown("- \"把保單、稅務與信託用同一張圖講清楚，效率大幅提升。\"")
@@ -143,6 +136,7 @@ with cols[1]:
     st.markdown(
         """
         <div style='display:flex;gap:12px;justify-content:center;align-items:center;'>
+          <a href='#role' class='cta' style='background:#006666;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;'>馬上開始</a>
           <a href='mailto:123@gracefo.com' class='cta' style='background:#004c4c;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;'>預約顧問</a>
         </div>
         """,

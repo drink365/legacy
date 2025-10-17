@@ -1,4 +1,4 @@
-# app.py — 永傳家族辦公室｜首頁 v4.4J
+# app.py — 永傳家族辦公室｜首頁 v4.4J（頭像微調＋見證段落間距修正）
 # -*- coding: utf-8 -*-
 
 import base64
@@ -26,7 +26,7 @@ st.markdown("<div class='subtitle-tagline'>專家洞見 × 智能科技 × 幸�
 # 2) 本頁專屬樣式（避免覆寫 .stPageLink；僅做內容區塊排版）
 st.markdown("""
 <style>
-  :root{ --brand-navy:#091931; --brand-accent:#00A896; --brand-light:#F4F9FF; --ink:#111827; --muted:#4b5563; --card:#ffffff; --border:#e2e8f0; }
+  :root{ --brand-navy:#091931; --brand-accent:#00A896; --brand-light:#F4F9FF; --ink:#111827; --muted:#4B5563; --card:#ffffff; --border:#e2e8f0; }
   .yc-wrap{ padding:8px 0 32px 0; }
 
   .yc-hero{ position:relative; background:var(--brand-navy); border-radius:12px; padding:60px 24px 50px; text-align:center; box-shadow:0 10px 30px rgba(9,25,49,.25); }
@@ -46,7 +46,11 @@ st.markdown("""
   .yc-step h4{ margin-top:20px; }
 
   .mentor-card{ display:grid; grid-template-columns:140px 1fr; align-items:center; gap:24px; background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px; box-shadow:0 6px 16px rgba(0,0,0,.05); }
-  .mentor-avatar{ width:140px; height:140px; border-radius:50%; object-fit:cover; border:4px solid #E5E7EB !important; box-shadow:0 4px 10px rgba(0,0,0,0.08); }
+  .mentor-avatar{
+    width:140px; height:140px; border-radius:50%; object-fit:cover;
+    border:4px solid #E5E7EB !important; box-shadow:0 4px 10px rgba(0,0,0,0.08);
+    transform: translateY(-8px); /* ✅ 桌機微幅上移，視覺平衡 */
+  }
   .mentor-card h4{ margin:0 0 6px; font-size:24px; color:var(--brand-navy); font-weight:700; }
   .mentor-title{ font-size:16px; color:var(--brand-accent); font-weight:700; margin-bottom:10px; }
   .mentor-card p{ margin:0; font-size:16px; color:#374151; line-height:1.8; }
@@ -54,17 +58,43 @@ st.markdown("""
   .section{ margin:48px 0 16px; }
   .section h3{ font-size:36px; color:var(--brand-navy); margin:0 0 24px 0; text-align:center; font-weight:700; }
 
+  /* ✅ 見證區：內距緊（引言↔署名貼）、外距鬆（各則拉開） */
+  .testi-grid{
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .testi{
+    margin:0 0 36px 0;   /* 各則之間的外距 */
+    padding:0;           /* 避免把署名往下推 */
+    border:none;         /* 用留白，不用分隔線 */
+  }
+  .testi p{
+    margin:0;            /* 引言不額外留白 */
+    line-height:1.85;    /* 放鬆行距，提升可讀性 */
+    font-size:18px;
+    color:#0f172a;
+  }
+  .testi .by{
+    display:block;
+    margin:4px 0 0 0;    /* 署名與上一行只留 4px，貼近自己的引言 */
+    color:#334155;
+    font-weight:600;
+    letter-spacing:.2px;
+  }
+
   /* Metrics：桌機四格；手機橫向滑動（不影響按鈕樣式） */
   .metrics-wrap{ margin-top:0; }
   .metrics-grid{ display:grid; grid-template-columns:repeat(4,minmax(180px,1fr)); gap:24px; }
   .metrics-item{ text-align:center; background:#fff; border:1px solid var(--border); border-radius:8px; padding:20px; }
   .metrics-item .big{ font-size:32px; font-weight:700; color:var(--brand-navy); }
   .metrics-item .sub{ font-size:14px; color:var(--muted); }
+
   @media (max-width: 768px){
     .metrics-grid{ display:flex; gap:16px; overflow-x:auto; padding-bottom:8px; -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; }
     .metrics-item{ min-width:220px; flex:0 0 auto; scroll-snap-align:start; }
     .yc-hero h1{ font-size:42px; }
     .mentor-card{ grid-template-columns:1fr; text-align:center; }
+    .mentor-avatar{ transform:none; } /* ✅ 手機還原，避免裁切 */
   }
 </style>
 """, unsafe_allow_html=True)
@@ -86,9 +116,9 @@ st.markdown("""
 # 中段 CTA（字寬、僅文字範圍淡底；樣式取自 ui_shared.py 的 .stPageLink）
 cta_col1, cta_col2, _ = st.columns([1,1,2])
 with cta_col1:
-    st.page_link("pages/4_contact.py", label="🤝 啟動您的專屬傳承規劃")  # 不帶 use_container_width
+    st.page_link("pages/4_contact.py", label="🤝 啟動您的專屬傳承規劃")
 with cta_col2:
-    st.page_link("pages/blueprint.py", label="💎 了解永續傳承藍圖")      # 不帶 use_container_width
+    st.page_link("pages/blueprint.py", label="💎 了解永續傳承藍圖")
 
 # 4) Metrics（手機可橫滑；第一格文字已調整）
 st.markdown("""
@@ -154,13 +184,22 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# 8) 見證
+# 8) 見證（行距與段落間距已優化）
 st.markdown("""<div class="section"><h3>真實見證：高資產家族的共同選擇</h3></div>""", unsafe_allow_html=True)
 st.markdown("""
 <div class="testi-grid">
-  <div class="testi"><p>「永傳的價值，在於將我們擔憂的複雜風險，轉化為清晰的法律與稅務架構。這份確定性，無價。」</p><div class="by">— 上市電子業 創辦人 / 王董事長</div></div>
-  <div class="testi"><p>「藍圖一出，二代接班的焦慮感瞬間消失。我們從此知道，每一步都是被專業計算過的。」</p><div class="by">— 傳產製造業 二代 / 陳總經理</div></div>
-  <div class="testi"><p>「他們是真正的總管家，將我們原有的會計師、律師資源，高效整合，執行力極強。」</p><div class="by">— 不動產投資家族 / 李先生</div></div>
+  <div class="testi">
+    <p>「永傳的價值，在於將我們擔憂的複雜風險，轉化為清晰的法律與稅務架構。這份確定性，無價。」</p>
+    <div class="by">— 上市電子業 創辦人 / 王董事長</div>
+  </div>
+  <div class="testi">
+    <p>「藍圖一出，二代接班的焦慮感瞬間消失。我們從此知道，每一步都是被專業計算過的。」</p>
+    <div class="by">— 傳產製造業 二代 / 陳總經理</div>
+  </div>
+  <div class="testi">
+    <p>「他們是真正的總管家，將我們原有的會計師、律師資源，高效整合，執行力極強。」</p>
+    <div class="by">— 不動產投資家族 / 李先生</div>
+  </div>
 </div>
 """, unsafe_allow_html=True)
 

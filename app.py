@@ -104,7 +104,7 @@ st.markdown("""
 
 # 5) 首席傳承顧問（版本 C：溫暖故事版，含「勞動部、經濟部」）
 grace_b64 = _img_b64(Path(__file__).parent / "assets" / "grace_huang.jpg")
-grace_img = (f'data:image/jpeg;base64,{grace_b64}' if grace_b64 else "https://via.placeholder.com/150x150.png?text=Grace")
+grace_img = (f'data:image/jpeg;base64,{grace_b64}' if grace_b64 else "https://via.placeholder.com/160x160.png?text=Grace")
 st.markdown(f"""
 <div class="section">
   <h3>您的首席傳承顧問</h3>
